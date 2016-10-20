@@ -1,0 +1,49 @@
+dist: trusty
+language: python
+
+services:
+  - postgresql
+
+python:
+  - '2.7'
+
+addons:
+  postgresql: '9.4'
+  apt:
+    packages:
+      - postgresql-9.4-postgis-2.2
+
+env:
+  - DJANGO='>=1.8,<1.9'
+  - DJANGO='>=1.9,<1.10'
+
+virtualenv:
+  system_site_packages: true
+
+install:
+  - sudo add-apt-repository ppa:ubuntugis/ppa -y
+  - sudo -E apt-get -yq update &>> ~/apt-get-update.log
+  - sudo apt-get install binutils libav-tools
+  - sudo apt-get -yq install libgdal1-dev gdal-bin python-gdal
+  - gdal-config --version
+  - export C_INCLUDE_PATH=/usr/include/gdal
+  - export CPLUS_INCLUDE_PATH=/usr/include/gdal
+
+before_script:
+  - psql template1 postgres -c 'create extension hstore;'
+  - psql -c 'create database geokey;' -U postgres
+  - psql -U postgres -d geokey -c 'create extension postgis;'
+  - pip install --upgrade pip
+  - pip install https://github.com/ExCiteS/geokey/archive/master.tar.gz
+  - pip install django$DJANGO
+  - python -c "import django; print('DJANGO %s ' % django.get_version())"
+  - python -c "from geokey.version import get_version; print('GEOKEY %s' % get_version())"
+  - pip install -r travis/requirements.txt
+  - pip install -e .
+  - python travis/manage.py migrate
+
+script:
+  - coverage run --source=geokey_wegovnow travis/manage.py test geokey_wegovnow
+
+after_success:
+  - coveralls

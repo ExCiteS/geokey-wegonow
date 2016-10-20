@@ -1,3 +1,11 @@
+.. image:: https://img.shields.io/travis/ExCiteS/geokey-wegovnow/master.svg
+    :alt: Travis CI Build Status
+    :target: https://travis-ci.org/ExCiteS/geokey-wegovnow
+
+.. image:: https://img.shields.io/coveralls/ExCiteS/geokey-wegovnow/master.svg
+    :alt: Coveralls Test Coverage
+    :target: https://coveralls.io/r/ExCiteS/geokey-wegovnow
+
 geokey-wegovnow
 ================
 
