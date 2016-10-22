@@ -3,7 +3,7 @@
 from geokey.core.settings.dev import *
 
 
-DEFAULT_FROM_EMAIL = 'no-teply@travis-ci.org'
+DEFAULT_FROM_EMAIL = 'no-reply@travis-ci.org'
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 SECRET_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxx'
