@@ -68,3 +68,19 @@ Update geokey-wegovnow:
 .. code-block:: console
 
     pip install -U git+https://github.com/ExCiteS/geokey-wegovnow.git
+
+Test
+----
+
+Run tests:
+
+.. code-block:: console
+
+    python manage.py test geokey_wegovnow
+
+Check code coverage:
+
+.. code-block:: console
+
+    coverage run --source=geokey_wegovnow manage.py test geokey_wegovnow
+    coverage report -m --omit=*/tests/*,*/migrations/*
