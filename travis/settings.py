@@ -24,6 +24,10 @@ INSTALLED_APPS += (
     'geokey_wegovnow',
 )
 
+MIDDLEWARE_CLASSES += (
+    'geokey_wegovnow.middleware.WeGovNowMiddleware',
+)
+
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = normpath(join(dirname(dirname(abspath(__file__))), 'assets'))
