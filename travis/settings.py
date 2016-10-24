@@ -28,6 +28,12 @@ MIDDLEWARE_CLASSES += (
     'geokey_wegovnow.middleware.WeGovNowMiddleware',
 )
 
+SOCIALACCOUNT_PROVIDERS = {
+    'uwum': {
+        'NAVIGATION_URL': 'https://wegovnow.liquidfeedback.com/api/1/navigation',
+    },
+}
+
 TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.templates.Loader']
 
 STATIC_URL = '/static/'

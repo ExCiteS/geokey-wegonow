@@ -49,6 +49,15 @@ Extend template loaders with a custom WeGovNow one:
 
     TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.loaders.templates.Loader']
 
+Extend UWUM provider settings, add URL for navigation (change URL accordingly):
+
+.. code-block:: python
+
+    'uwum': {
+        ...
+        'NAVIGATION_URL': 'https://uwum.wegovnow.eu/api/1/navigation',
+    }
+
 You're now ready to go!
 
 Update
