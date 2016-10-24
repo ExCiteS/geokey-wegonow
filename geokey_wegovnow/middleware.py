@@ -48,6 +48,8 @@ class WeGovNowMiddleware(object):
 
         refreshed_token = view.adapter.parse_token(refreshed_token)
         access_token.token = refreshed_token.token
+        if refreshed_token.token_secret:
+            access_token.token_secret = refreshed_token.token_secret
         access_token.expires_at = refreshed_token.expires_at
         access_token.save()
 
