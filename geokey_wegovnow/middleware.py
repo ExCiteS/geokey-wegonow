@@ -1,8 +1,6 @@
 """All middleware for the WeGovNow extension."""
 
 from importlib import import_module
-from datetime import datetime
-from pytz import utc
 
 from django.shortcuts import redirect
 from django.http import JsonResponse
@@ -12,6 +10,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from allauth.socialaccount.models import SocialToken
+from allauth.socialaccount.providers.oauth2.client import OAuth2Error
 from allauth_uwum.views import UWUMAdapter, UWUMView
 
 
@@ -28,27 +27,26 @@ class WeGovNowMiddleware(object):
     def __get_access_token(self, request):
         """Get the access token."""
         try:
-            now = datetime.utcnow().replace(tzinfo=utc)
             access_token = SocialToken.objects.filter(
                 account__user=request.user,
                 account__provider='uwum').latest('id')
-            if access_token.expires_at <= now:
-                access_token = self.__refresh_access_token(
-                    request, access_token)
         except SocialToken.DoesNotExist:
             return None
 
-        return access_token
+        return self.__refresh_access_token(request, access_token)
 
     def __refresh_access_token(self, request, access_token):
         """Refresh the access token."""
         view = self.___get_uwum_view(request)
         client = view.get_client(view.request, access_token.app)
 
-        token_secret = access_token.token_secret
-        refreshed_token = client.refresh_access_token(token_secret)
-        refreshed_token = view.adapter.parse_token(refreshed_token)
+        try:
+            refreshed_token = client.refresh_access_token(
+                access_token.token_secret)
+        except OAuth2Error:
+            return None
 
+        refreshed_token = view.adapter.parse_token(refreshed_token)
         access_token.token = refreshed_token.token
         access_token.expires_at = refreshed_token.expires_at
         access_token.save()
