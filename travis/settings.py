@@ -28,6 +28,8 @@ MIDDLEWARE_CLASSES += (
     'geokey_wegovnow.middleware.WeGovNowMiddleware',
 )
 
+TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.templates.Loader']
+
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = normpath(join(dirname(dirname(abspath(__file__))), 'assets'))
