@@ -1,0 +1,76 @@
+<nav class="navbar-fixed">
+    <div class="nav-wrapper">
+        <a href="{% url 'admin:index' %}" class="brand-logo">{{ PLATFORM_NAME }}</a>
+        <a href="#" class="button-collapse" data-activates="nav-mobile"><i class="material-icons">menu</i></a>
+
+        <ul class="right hide-on-med-and-down">
+            {% if not user.is_anonymous %}
+                <li>
+                    <a href="{% url 'admin:dashboard' %}">
+                        <i class="material-icons left" aria-hidden="true">dashboard</i>
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'admin:userprofile' %}">
+                        <i class="material-icons left" aria-hidden="true">person</i>
+                        {{ user }}
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'account_logout' %}">
+                        <i class="material-icons left" aria-hidden="true">settings_power</i>
+                        Sign out
+                    </a>
+                </li>
+            {% endif %}
+
+            <li>
+                <a href="http://geokey.org.uk/help/">
+                    <i class="material-icons left" aria-hidden="true">help</i>
+                    Help
+                </a>
+            </li>
+        </ul>
+
+        <ul id="nav-mobile" class="side-nav">
+            {% if not user.is_anonymous %}
+                <li>
+                    <a href="{% url 'admin:dashboard' %}">
+                        <i class="material-icons left" aria-hidden="true">dashboard</i>
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'admin:userprofile' %}">
+                        <i class="material-icons left" aria-hidden="true">person</i>
+                        {{ user }}
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'account_logout' %}">
+                        <i class="material-icons left" aria-hidden="true">settings_power</i>
+                        Sign out
+                    </a>
+                </li>
+            {% endif %}
+
+            <li>
+                <a href="http://geokey.org.uk/help/">
+                    <i class="material-icons left" aria-hidden="true">help</i>
+                    Help
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+$(function() {
+    $('.button-collapse').sideNav();
+});
+</script>
