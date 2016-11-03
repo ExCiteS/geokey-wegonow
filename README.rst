@@ -24,7 +24,7 @@ Install the extension:
 
 .. code-block:: console
 
-    pip install git+https://github.com/ExCiteS/geokey-wegovnow.git
+    pip install git+https://github.com/ExCiteS/geokey-wegovnow.git --process-dependency-links
 
 Add the package to installed apps:
 
@@ -67,7 +67,7 @@ Update geokey-wegovnow:
 
 .. code-block:: console
 
-    pip install -U git+https://github.com/ExCiteS/geokey-wegovnow.git
+    pip install -U git+https://github.com/ExCiteS/geokey-wegovnow.git --process-dependency-links
 
 Test
 ----
