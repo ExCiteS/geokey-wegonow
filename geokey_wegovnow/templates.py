@@ -7,13 +7,19 @@ from django.template.base import Origin
 from django.template.loaders.filesystem import Loader as FilesystemLoader
 
 
-class Loader(FilesystemLoader):
-    """Custom loader for templates."""
+class BaseLoader(FilesystemLoader):
+    """Custom base loader for templates."""
 
-    def get_template_sources(self, template_name, template_dirs=None):
-        """Override the default GeoKey template with a custom WeGovNow one."""
-        app_dir = dirname(__file__)
-        template_source = join(app_dir, 'templates', template_name)
+    _app_dir = dirname(__file__)
+
+    def _generate_template_source(self, template_name, design):
+        """Generate template source."""
+        template_source = join(
+            self._app_dir,
+            'templates',
+            design,
+            template_name
+        )
 
         if isfile(template_source):
             if VERSION[:2] >= (1, 9):
@@ -21,3 +27,19 @@ class Loader(FilesystemLoader):
             return [template_source]
 
         return []
+
+
+class BootstrapLoader(BaseLoader):
+    """Custom loader for Material templates."""
+
+    def get_template_sources(self, template_name, template_dirs=None):
+        """Override the default GeoKey template with custom Bootstrap UWUM."""
+        return self._generate_template_source(template_name, 'bootsrap')
+
+
+class MaterialLoader(BaseLoader):
+    """Custom loader for Material templates."""
+
+    def get_template_sources(self, template_name, template_dirs=None):
+        """Override the default GeoKey template with custom Material UWUM."""
+        return self._generate_template_source(template_name, 'material')

@@ -50,11 +50,17 @@ Add the custom WeGovNow middleware for requests and responses:
         'geokey_wegovnow.middleware.WeGovNowMiddleware',
     )
 
-Extend template loaders with a custom WeGovNow one:
+Extend template loaders with a custom WeGovNow Material:
 
 .. code-block:: python
 
-    TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.loaders.templates.Loader']
+    TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.loaders.templates.MaterialLoader']
+
+Or a custom WeGovNow Bootstrap:
+
+.. code-block:: python
+
+    TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.loaders.templates.BootstrapLoader']
 
 Extend UWUM provider settings, add URL for navigation (change URL accordingly):
 
