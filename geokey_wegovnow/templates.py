@@ -34,7 +34,7 @@ class BootstrapLoader(BaseLoader):
 
     def get_template_sources(self, template_name, template_dirs=None):
         """Override the default GeoKey template with custom Bootstrap UWUM."""
-        return self._generate_template_source(template_name, 'bootsrap')
+        return self._generate_template_source(template_name, 'bootstrap')
 
 
 class MaterialLoader(BaseLoader):
