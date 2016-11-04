@@ -65,6 +65,12 @@ Extend UWUM provider settings, add URL for navigation (change URL accordingly):
         'NAVIGATION_URL': 'https://uwum.wegovnow.eu/api/1/navigation',
     }
 
+After all GeoKey migrations are initiated, add the UWUM app (client ID must be the one registered by the UWUM Certificate Authority):
+
+.. code-block:: console
+
+    python manage.py add_uwum_app --id=<client_id>
+
 You're now ready to go!
 
 Update
