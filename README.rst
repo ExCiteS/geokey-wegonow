@@ -18,22 +18,29 @@ geokey-wegovnow requires:
 
 - Python version 2.7
 - GeoKey version 1.2 or greater
-- `django-allauth-uwum <https://github.com/ExCiteS/django-allauth-uwum/>`_ 1.0 or greater
 
-Install the extension:
+Install django-allauth-uwum:
+
+.. code-block:: console
+
+    pip install git+https://github.com/ExCiteS/django-allauth-uwum.git
+
+Install geokey-wegovnow:
 
 .. code-block:: console
 
     pip install git+https://github.com/ExCiteS/geokey-wegovnow.git
 
-Add the package to installed apps:
+Add both packages to the installed apps:
 
 .. code-block:: python
 
     INSTALLED_APPS += (
-        ...
+        'allauth_uwum',
         'geokey_wegovnow',
     )
+
+Configure django-allauth-uwum using the `official documentation <https://github.com/ExCiteS/django-allauth-uwum>`_.
 
 Add the custom WeGovNow middleware for requests and responses:
 
