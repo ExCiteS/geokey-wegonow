@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %} | Register a new application{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div class="container">
+        <h1>Applications</h1>
+
+        <ul class="nav nav-tabs header-nav">
+            <li role="presentation" class="active"><a href="{% url 'admin:app_overview' %}">Registered applications</a></li>
+            <li role="presentation"><a href="{% url 'admin:app_connected' %}">Connected applications</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <form class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2" method="POST" action="{% url 'admin:app_register' %}" novalidate>
+            <h3 class="header">Register a new application</h3>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name" class="control-label">Name (required)</label>
+                <input type="text" class="form-control input-lg" id="name" name="name" maxlength="100" required />
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="control-label">Description</label>
+                <textarea class="form-control input-lg" rows="5" id="description" name="description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="download_url" class="control-label">Download (main welcome) page URL (required)</label>
+                <input type="url" class="form-control input-lg" id="download_url" name="download_url" required />
+            </div>
+
+            <div class="form-group">
+                <label for="redirect_uris" class="control-label">Redirect URL (required)</label>
+                <input type="url" class="form-control input-lg" id="redirect_uris" name="redirect_uris" required />
+            </div>
+
+            <div class="form-group hidden">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="authorization_grant_type" value="implicit" checked />
+                        Authorisation type
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a role="button" href="{% url 'admin:app_overview' %}" class="btn btn-link">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block libraries %}
+<script src="/static/js/admin.ui.forms.validate.js"></script>
+{% endblock %}

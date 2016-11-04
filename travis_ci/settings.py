@@ -20,6 +20,8 @@ DATABASES = {
 }
 
 INSTALLED_APPS += (
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.twitter',
     'allauth_uwum',
     'geokey_wegovnow',
 )
