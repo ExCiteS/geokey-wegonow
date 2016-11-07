@@ -62,14 +62,22 @@ Or a custom WeGovNow Bootstrap:
 
     TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.loaders.templates.BootstrapLoader']
 
-Extend UWUM provider settings, add URL for navigation (change URL accordingly):
+Change UWUM provider settings (change URL accordingly):
 
 .. code-block:: python
 
-    'uwum': {
-        ...
-        'NAVIGATION_URL': 'https://uwum.wegovnow.eu/api/1/navigation',
+    SOCIALACCOUNT_PROVIDERS = {
+        'uwum': {
+            'CERT': join(dirname(abspath(__file__)), 'uwum.pem'),
+            'REGULAR_URL': 'https://wegovnow.liquidfeedback.com',
+            'CERT_URL': 'https://wegovnow-cert.liquidfeedback.com',
+        },
     }
+    SOCIALACCOUNT_PROVIDERS['uwum']['AUTHORIZE_URL'] = '%s/api/1/authorization' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
+    SOCIALACCOUNT_PROVIDERS['uwum']['ACCESS_TOKEN_URL'] = '%s/api/1/token' % SOCIALACCOUNT_PROVIDERS['uwum']['CERT_URL']
+    SOCIALACCOUNT_PROVIDERS['uwum']['PROFILE_URL'] = '%s/api/1/info' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
+    SOCIALACCOUNT_PROVIDERS['uwum']['NOTIFY_EMAIL_URL'] = '%s/api/1/notify_email' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
+    SOCIALACCOUNT_PROVIDERS['uwum']['NAVIGATION_URL'] = '%s/api/1/navigation' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
 
 After all GeoKey migrations are initiated, add the UWUM app (client ID must be the one registered by the UWUM Certificate Authority):
 
