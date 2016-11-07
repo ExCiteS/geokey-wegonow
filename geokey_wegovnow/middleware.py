@@ -17,14 +17,14 @@ from allauth_uwum.views import UWUMAdapter, UWUMView
 class WeGovNowMiddleware(object):
     """WeGovNow middleware."""
 
-    def ___get_uwum_view(self, request):
+    def _get_uwum_view(self, request):
         """Get the UWUM view."""
         view = UWUMView()
         view.request = request
         view.adapter = UWUMAdapter(view.request)
         return view
 
-    def __get_access_token(self, request):
+    def _get_access_token(self, request):
         """Get the access token."""
         try:
             access_token = SocialToken.objects.filter(
@@ -33,11 +33,11 @@ class WeGovNowMiddleware(object):
         except SocialToken.DoesNotExist:
             return None
 
-        return self.__refresh_access_token(request, access_token)
+        return self._refresh_access_token(request, access_token)
 
-    def __refresh_access_token(self, request, access_token):
+    def _refresh_access_token(self, request, access_token):
         """Refresh the access token."""
-        view = self.___get_uwum_view(request)
+        view = self._get_uwum_view(request)
         client = view.get_client(view.request, access_token.app)
 
         try:
@@ -60,7 +60,7 @@ class WeGovNowMiddleware(object):
         request.unauthorized = False
 
         if hasattr(request, 'user') and not request.user.is_anonymous():
-            access_token = self.__get_access_token(request)
+            access_token = self._get_access_token(request)
             if access_token:
                 request.access_token = access_token.token
             else:
