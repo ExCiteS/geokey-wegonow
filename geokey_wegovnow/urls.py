@@ -12,6 +12,6 @@ urlpatterns = [
 
     url(r'^api/wegovnow/'
         r'navigation/$',
-        views.NavigationAPIView.as_view(),
-        name='api_navigation'),
+        views.UWUMNavigationAPIView.as_view(),
+        name='api_uwum_navigation'),
 ]

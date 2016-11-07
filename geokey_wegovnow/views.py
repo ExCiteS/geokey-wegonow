@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from allauth.socialaccount import app_settings
 
 
-class NavigationAPIView(APIView):
+class UWUMNavigationAPIView(APIView):
     """API endpoint for the WeGovNow navigation."""
 
     uwum_settings = app_settings.PROVIDERS.get('uwum', {})
