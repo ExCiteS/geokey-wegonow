@@ -46,6 +46,8 @@ class WeGovNowMiddleware(object):
         except OAuth2Error:
             return None
 
+        request.member_id = refreshed_token.get('member_id')
+
         refreshed_token = view.adapter.parse_token(refreshed_token)
         access_token.token = refreshed_token.token
         if refreshed_token.token_secret:

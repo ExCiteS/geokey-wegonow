@@ -7,6 +7,14 @@ from geokey_wegovnow import views
 
 urlpatterns = [
     # ###########################
+    # ADMIN VIEWS
+    # ###########################
+
+    url(r'^admin/profile/settings/$',
+        views.UWUMProfileSettingsView.as_view(),
+        name='uwum_profile_settings'),
+
+    # ###########################
     # PUBLIC API
     # ###########################
 
