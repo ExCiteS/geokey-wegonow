@@ -1,15 +1,20 @@
 """All middleware for the WeGovNow extension."""
 
+from importlib import import_module
+
+from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
 
 from allauth.account.adapter import get_adapter
-from allauth.socialaccount.models import SocialToken
+from allauth.socialaccount.models import SocialAccount, SocialToken
 from allauth.socialaccount.providers.oauth2.client import OAuth2Error
 from allauth_uwum.views import UWUMAdapter, UWUMView
 from rest_framework import status
+
+from geokey.users.views import AccountDisconnect
 
 
 class WeGovNowMiddleware(object):
@@ -83,3 +88,19 @@ class WeGovNowMiddleware(object):
                     return redirect(adapter.get_logout_redirect_url(request))
 
         return response
+
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        """Process the view."""
+        module = import_module(view_func.__module__)
+        if issubclass(getattr(module, view_func.__name__), AccountDisconnect):
+            try:
+                account = SocialAccount.objects.get(
+                    pk=view_kwargs.get('account_id'),
+                    user=request.user)
+                if account.provider == 'uwum':
+                    messages.error(
+                        request,
+                        'The UWUM account cannot be disconnected.')
+                    return HttpResponseRedirect(reverse('admin:userprofile'))
+            except:
+                pass
