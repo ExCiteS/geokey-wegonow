@@ -97,3 +97,19 @@ class UWUMNavigationAPIViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue('result' in content)
         self.assertTrue(isinstance(content.get('result'), list))
+
+    def test_get_when_retrieving_uwum_navigation_in_json_format(self):
+        """Test GET when retrieving UWUM navigation (JSON)."""
+        url = '%s?format=json' % self.url
+        request_get = self.factory.get(url)
+        response = self.view(request_get).render()
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('application/json' in response['Content-Type'])
+
+    def test_get_when_retrieving_uwum_navigation_in_raw_html_format(self):
+        """Test GET when retrieving UWUM navigation (Raw HTML)."""
+        url = '%s?format=raw_html' % self.url
+        request_get = self.factory.get(url)
+        response = self.view(request_get).render()
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('text/html' in response['Content-Type'])

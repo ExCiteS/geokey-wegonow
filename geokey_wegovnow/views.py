@@ -10,10 +10,13 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
 from rest_framework import status
+from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from braces.views import LoginRequiredMixin
 from allauth.socialaccount import app_settings
+
+from geokey_wegovnow.renderers import RawHTMLRenderer
 
 
 class UWUMProfileSettingsView(LoginRequiredMixin, TemplateView):
@@ -37,9 +40,10 @@ class UWUMProfileSettingsView(LoginRequiredMixin, TemplateView):
 class UWUMNavigationAPIView(APIView):
     """API endpoint for the WeGovNow navigation."""
 
+    renderer_classes = (JSONRenderer, RawHTMLRenderer)
     uwum_settings = app_settings.PROVIDERS.get('uwum', {})
 
-    def get(self, request):
+    def get(self, request, format=None):
         """GET method for the view."""
         navigation_url = self.uwum_settings.get('NAVIGATION_URL')
         if not navigation_url:
@@ -52,10 +56,17 @@ class UWUMNavigationAPIView(APIView):
         if hasattr(request, 'uwum_access_token'):
             access_token = request.uwum_access_token
             headers = {'Authorization': 'Bearer %s' % access_token}
-        response = get(navigation_url, headers=headers)
+
+        response = get(
+            '%s?format=%s' % (
+                navigation_url,
+                request.accepted_renderer.format),
+            headers=headers)
 
         if response.status_code == 200:
-            return Response(response.json(), status=status.HTTP_200_OK)
+            if request.accepted_renderer.format != 'raw_html':
+                response = response.json()
+            return Response(response, status=status.HTTP_200_OK)
         else:
             return Response(
                 {'error': 'UWUM navigation not found'},
