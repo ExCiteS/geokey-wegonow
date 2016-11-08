@@ -49,8 +49,9 @@ class UWUMNavigationAPIView(APIView):
 
         headers = None
 
-        if hasattr(request, 'access_token'):
-            headers = {'Authorization': 'Bearer %s' % request.access_token}
+        if hasattr(request, 'uwum_access_token'):
+            access_token = request.uwum_access_token
+            headers = {'Authorization': 'Bearer %s' % access_token}
         response = get(navigation_url, headers=headers)
 
         if response.status_code == 200:

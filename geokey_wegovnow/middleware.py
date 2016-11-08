@@ -1,17 +1,15 @@
 """All middleware for the WeGovNow extension."""
 
-from importlib import import_module
-
 from django.shortcuts import redirect
 from django.http import JsonResponse
-from django.core.urlresolvers import reverse
+from django.contrib.auth import logout as auth_logout
+from django.contrib import messages
 
-from rest_framework import status
-from rest_framework.views import APIView
-
+from allauth.account.adapter import get_adapter
 from allauth.socialaccount.models import SocialToken
 from allauth.socialaccount.providers.oauth2.client import OAuth2Error
 from allauth_uwum.views import UWUMAdapter, UWUMView
+from rest_framework import status
 
 
 class WeGovNowMiddleware(object):
@@ -24,8 +22,8 @@ class WeGovNowMiddleware(object):
         view.adapter = UWUMAdapter(view.request)
         return view
 
-    def _get_access_token(self, request):
-        """Get the access token."""
+    def _get_uwum_access_token(self, request):
+        """Get the UWUM access token."""
         try:
             access_token = SocialToken.objects.filter(
                 account__user=request.user,
@@ -33,9 +31,9 @@ class WeGovNowMiddleware(object):
         except SocialToken.DoesNotExist:
             return None
 
-        return self._refresh_access_token(request, access_token)
+        return self._refresh_uwum_access_token(request, access_token)
 
-    def _refresh_access_token(self, request, access_token):
+    def _refresh_uwum_access_token(self, request, access_token):
         """Refresh the access token."""
         view = self._get_uwum_view(request)
         client = view.get_client(view.request, access_token.app)
@@ -57,26 +55,31 @@ class WeGovNowMiddleware(object):
 
         return access_token
 
+    def _validate_uwum_user(self, request):
+        """Validate the UWUM user."""
+        if hasattr(request, 'user') and not request.user.is_anonymous():
+            if not hasattr(request, 'uwum_access_token'):
+                request.uwum_access_token = self._get_uwum_access_token(
+                    request)
+
     def process_request(self, request):
         """Process the request."""
-        request.unauthorized = False
+        self._validate_uwum_user(request)
 
-        if hasattr(request, 'user') and not request.user.is_anonymous():
-            access_token = self._get_access_token(request)
-            if access_token:
-                request.access_token = access_token.token
-            else:
-                request.unauthorized = True
-
-    def process_view(self, request, view_func, view_args, view_kwargs):
+    def process_response(self, request, response):
         """Process the response."""
-        if request.unauthorized:
-            module = import_module(view_func.__module__)
-            if issubclass(getattr(module, view_func.__name__), APIView):
-                return JsonResponse(
-                    {'error': 'Invalid UWUM access token used'},
-                    status=status.HTTP_401_UNAUTHORIZED)
-            else:
-                account_logout_path = reverse('account_logout')
-                if request.path != account_logout_path:
-                    return redirect(account_logout_path)
+        self._validate_uwum_user(request)
+
+        if hasattr(request, 'uwum_access_token'):
+            if not request.uwum_access_token:
+                if request.META['PATH_INFO'].startswith('/api/'):
+                    return JsonResponse(
+                        {'error': 'Invalid UWUM access token used'},
+                        status=status.HTTP_401_UNAUTHORIZED)
+                else:
+                    messages.error(request, 'You have been signed out.')
+                    auth_logout(request)
+                    adapter = get_adapter(request)
+                    return redirect(adapter.get_logout_redirect_url(request))
+
+        return response
