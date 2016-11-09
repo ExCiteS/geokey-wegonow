@@ -91,16 +91,22 @@ class WeGovNowMiddleware(object):
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         """Process the view."""
-        module = import_module(view_func.__module__)
-        if issubclass(getattr(module, view_func.__name__), AccountDisconnect):
-            try:
-                account = SocialAccount.objects.get(
-                    pk=view_kwargs.get('account_id'),
-                    user=request.user)
-                if account.provider == 'uwum':
-                    messages.error(
-                        request,
-                        'The UWUM account cannot be disconnected.')
-                    return HttpResponseRedirect(reverse('admin:userprofile'))
-            except:
-                pass
+        try:
+            module = import_module(view_func.__module__)
+            class_name = getattr(module, view_func.__name__)
+
+            if issubclass(class_name, AccountDisconnect):
+                try:
+                    account = SocialAccount.objects.get(
+                        pk=view_kwargs.get('account_id'),
+                        user=request.user)
+                    if account.provider == 'uwum':
+                        messages.error(
+                            request,
+                            'The UWUM account cannot be disconnected.')
+                        return HttpResponseRedirect(
+                            reverse('admin:userprofile'))
+                except:
+                    pass
+        except:
+            pass
