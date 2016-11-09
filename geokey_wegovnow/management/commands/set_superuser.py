@@ -11,9 +11,9 @@ from geokey.users.models import User
 
 
 class Command(BaseCommand):
-    """Set user as the superuser."""
+    """Set user as a superuser."""
 
-    help = 'Set user as the superuser.'
+    help = 'Set user as a superuser.'
 
     option_list = BaseCommand.option_list + (
         make_option(
@@ -21,14 +21,14 @@ class Command(BaseCommand):
             action='store',
             dest='username',
             default=None,
-            help='Make a user with this username the superuser.'
+            help='Make a user with this username a superuser.'
         ),
         make_option(
             '--email',
             action='store',
             dest='email',
             default=None,
-            help='Make a user with this email address the superuser.'
+            help='Make a user with this email address a superuser.'
         ),
     )
 
@@ -43,16 +43,15 @@ class Command(BaseCommand):
             try:
                 user = User.objects.get(
                     display_name=options['username'],
-                    email=options['email']
-                )
+                    email=options['email'])
             except User.DoesNotExist:
                 user = None
                 self.stderr.write('User was not found.')
 
             if user:
                 if user.is_superuser:
-                    self.stderr.write('User is already the superuser.')
+                    self.stderr.write('User is already a superuser.')
                 else:
                     user.is_superuser = True
                     user.save()
-                    self.stdout.write('User was set as the superuser.')
+                    self.stdout.write('User was set as a superuser.')
