@@ -19,6 +19,10 @@ from allauth.socialaccount import app_settings
 from geokey_wegovnow.renderers import RawHTMLRenderer
 
 
+# ###########################
+# ADMIN VIEWS
+# ###########################
+
 class UWUMProfileSettingsView(LoginRequiredMixin, TemplateView):
     """API endpoint for the UWUM profile settings (redirection)."""
 
@@ -36,6 +40,10 @@ class UWUMProfileSettingsView(LoginRequiredMixin, TemplateView):
 
         return redirect(url)
 
+
+# ###########################
+# PUBLIC API
+# ###########################
 
 class UWUMNavigationAPIView(APIView):
     """API endpoint for the WeGovNow navigation."""

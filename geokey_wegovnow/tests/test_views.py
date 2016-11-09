@@ -16,6 +16,10 @@ from geokey.users.tests.model_factories import UserFactory
 from geokey_wegovnow import views
 
 
+# ###########################
+# TESTS FOR ADMIN VIEWS
+# ###########################
+
 class UWUMProfileSettingsViewTest(TestCase):
     """Tests for UWUMProfileSettingsView."""
 
@@ -56,6 +60,10 @@ class UWUMProfileSettingsViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn(reverse('account_logout'), response['location'])
 
+
+# ###########################
+# TESTS FOR PUBLIC API
+# ###########################
 
 class UWUMNavigationAPIViewTest(TestCase):
     """Tests for UWUMNavigationAPIView."""
