@@ -42,23 +42,22 @@ class Command(BaseCommand):
 
         if provider:
             try:
-                socialapp = SocialApp.objects.get_current(provider.id)
+                social_app = SocialApp.objects.get_current(provider.id)
             except SocialApp.DoesNotExist:
-                socialapp = None
+                social_app = None
 
-            if socialapp:
-                socialapp.client_id = options['id']
-                socialapp.save()
+            if social_app:
+                social_app.client_id = options['id']
+                social_app.save()
                 self.stdout.write(
                     'UWUM app was updated to `%s`.' % options['id'])
             else:
-                socialapp = SocialApp.objects.create(
+                social_app = SocialApp.objects.create(
                     provider=provider.id,
                     name=provider.name,
                     client_id=options['id'],
                     secret='',
-                    key=''
-                )
-                socialapp.sites.add(get_current_site(settings.SITE_ID))
+                    key='')
+                social_app.sites.add(get_current_site(settings.SITE_ID))
                 self.stdout.write('UWUM app `%s` was added.' % options['id'])
                 self.stdout.write('Please configure UWUM in the settings.')
