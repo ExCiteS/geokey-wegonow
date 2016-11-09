@@ -59,16 +59,20 @@ class UWUMNavigationAPIView(APIView):
                 {'error': 'URL to UWUM navigation not set'},
                 status=status.HTTP_404_NOT_FOUND)
 
-        headers = None
+        client_id = None
+        if hasattr(request, 'client_id'):
+            client_id = request.client_id
 
+        headers = None
         if hasattr(request, 'uwum_access_token'):
             access_token = request.uwum_access_token
             headers = {'Authorization': 'Bearer %s' % access_token}
 
         response = get(
-            '%s?format=%s' % (
+            '%s?format=%s&client_id=%s' % (
                 navigation_url,
-                request.accepted_renderer.format),
+                request.accepted_renderer.format,
+                client_id),
             headers=headers)
 
         if response.status_code == 200:

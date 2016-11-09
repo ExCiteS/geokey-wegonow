@@ -9,7 +9,8 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
 
 from allauth.account.adapter import get_adapter
-from allauth.socialaccount.models import SocialAccount, SocialToken
+from allauth.socialaccount import providers
+from allauth.socialaccount.models import SocialApp, SocialAccount, SocialToken
 from allauth.socialaccount.providers.oauth2.client import OAuth2Error
 from allauth_uwum.views import UWUMAdapter, UWUMView
 from rest_framework import status
@@ -70,6 +71,16 @@ class WeGovNowMiddleware(object):
     def process_request(self, request):
         """Process the request."""
         self._validate_uwum_user(request)
+
+        provider = providers.registry.by_id('uwum')
+
+        try:
+            app = SocialApp.objects.get_current(provider.id, request)
+            client_id = app.client_id
+        except SocialApp.DoesNotExist:
+            client_id = None
+
+        request.client_id = client_id
 
     def process_response(self, request, response):
         """Process the response."""
