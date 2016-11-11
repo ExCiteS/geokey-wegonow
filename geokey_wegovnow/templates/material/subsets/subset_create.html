@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load material_form %}
+
+{% block bodydata %}
+data-project-id="{{ project.id }}"
+data-project-locked="{{ project.islocked }}"
+{% endblock %}
+
+{% block title %} | Project: {{ project.name }} - Create new subset{% endblock %}
+
+{% block main %}
+<div class="container expand-on-small-only">
+    <div class="row change-form">
+        <div class="col s12 m12 l10 offset-l1">
+            <div class="card">
+                <form method="POST" action="{% url 'admin:subset_create' project.id %}" novalidate>
+                    {% csrf_token %}
+
+                    <div class="card-content">
+                        <h3 class="form-title">
+                            Create new subset
+                            {% if project.islocked %}<i class="material-icons ">lock</i>{% endif %}
+                        </h3>
+
+                        <div class="row">
+                            <div class="col s12 input-field required">
+                                <input type="text" id="name" name="name" maxlength="100" required />
+                                <label for="name">Name (required)</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col s12 input-field">
+                                <textarea rows="5" id="description" name="description" class="materialize-textarea"></textarea>
+                                <label for="description">Description</label>
+                            </div>
+                        </div>
+
+                        <div class="card-action">
+                            <div class="right-align">
+                                <a role="button" href="{% url 'admin:subset_list' project.id %}" class="btn btn-large btn-flat">Cancel</a>
+                                <button type="submit" class="btn btn-large waves-effect waves-light">Create subset</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block libraries %}
+<script src="/static/js/admin.ui.forms.validate.js"></script>
+{% endblock %}
