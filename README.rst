@@ -55,13 +55,13 @@ Extend template loaders with a custom WeGovNow Material:
 
 .. code-block:: python
 
-    TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.loaders.templates.MaterialLoader']
+    TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.templates.MaterialLoader']
 
 Or a custom WeGovNow Bootstrap:
 
 .. code-block:: python
 
-    TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.loaders.templates.BootstrapLoader']
+    TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.templates.BootstrapLoader']
 
 Change UWUM provider settings (change URL accordingly):
 
