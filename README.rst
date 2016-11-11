@@ -31,11 +31,12 @@ Install geokey-wegovnow:
 
     pip install git+https://github.com/ExCiteS/geokey-wegovnow.git
 
-Add both packages to the installed apps:
+Add both packages to the installed apps (together with Material Design package):
 
 .. code-block:: python
 
     INSTALLED_APPS += (
+        'material',
         'allauth_uwum',
         'geokey_wegovnow',
     )
