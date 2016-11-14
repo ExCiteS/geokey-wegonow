@@ -18,6 +18,7 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Error
 from allauth_uwum.views import UWUMAdapter, UWUMView
 from rest_framework import status
 
+from geokey.users.models import User
 from geokey.users.views import AccountDisconnect
 
 
@@ -57,6 +58,25 @@ class WeGovNowMiddleware(object):
 
         response = post(url, headers=headers, params=params)
         if response.status_code == 200:
+            response = response.json()
+            extra_data = access_token.account.extra_data
+
+            current_name = extra_data.get('member', {}).get('name')
+            uwum_name = response.get('member', {}).get('name')
+            if current_name != uwum_name:
+                extra_data['member']['name'] = uwum_name
+                access_token.account.extra_data = extra_data
+                access_token.account.save()
+
+                display_name = uwum_name
+                suffix = 2
+                while User.objects.filter(display_name=display_name).exists():
+                    display_name = '%s %s' % (uwum_name, suffix)
+                    suffix += 1
+
+                request.user.display_name = display_name
+                request.user.save()
+
             return access_token
 
         return self._refresh_uwum_access_token(request, access_token)
