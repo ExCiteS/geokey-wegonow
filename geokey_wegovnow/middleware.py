@@ -33,7 +33,9 @@ class WeGovNowMiddleware(object):
         try:
             access_token = SocialToken.objects.filter(
                 account__user=request.user,
-                account__provider='uwum').latest('id')
+                account__provider='uwum'
+            ).latest('id').prefetch_related('account')
+            request.member_id = access_token.account.uid
         except SocialToken.DoesNotExist:
             return None
 
@@ -49,8 +51,6 @@ class WeGovNowMiddleware(object):
                 access_token.token_secret)
         except OAuth2Error:
             return None
-
-        request.member_id = refreshed_token.get('member_id')
 
         refreshed_token = view.adapter.parse_token(refreshed_token)
         access_token.token = refreshed_token.token
