@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 
 from requests import get
 
-from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
