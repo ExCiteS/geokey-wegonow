@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from braces.views import LoginRequiredMixin
 from allauth.socialaccount import app_settings
 
+from geokey_wegovnow.middleware import WeGovNowMiddleware
 from geokey_wegovnow.renderers import RawHTMLRenderer
 
 
@@ -56,6 +57,11 @@ class UWUMNavigationAPIView(APIView):
         client_id = None
         if hasattr(request, 'client_id'):
             client_id = request.client_id
+
+        if (not hasattr(request, 'uwum_access_token') and
+                not request.user.is_anonymous()):
+            middleware = WeGovNowMiddleware()
+            middleware._validate_uwum_user(request)
 
         headers = None
         if hasattr(request, 'uwum_access_token'):
