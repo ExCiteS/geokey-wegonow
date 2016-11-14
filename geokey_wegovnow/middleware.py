@@ -34,7 +34,7 @@ class WeGovNowMiddleware(object):
             access_token = SocialToken.objects.filter(
                 account__user=request.user,
                 account__provider='uwum'
-            ).latest('id').prefetch_related('account')
+            ).latest('id')
             request.member_id = access_token.account.uid
         except SocialToken.DoesNotExist:
             return None
