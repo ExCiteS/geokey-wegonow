@@ -1,6 +1,9 @@
 """All middleware for the WeGovNow extension."""
 
 from importlib import import_module
+from datetime import datetime
+from pytz import utc
+from requests import post
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
@@ -9,7 +12,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
 
 from allauth.account.adapter import get_adapter
-from allauth.socialaccount import providers
+from allauth.socialaccount import app_settings, providers
 from allauth.socialaccount.models import SocialApp, SocialAccount, SocialToken
 from allauth.socialaccount.providers.oauth2.client import OAuth2Error
 from allauth_uwum.views import UWUMAdapter, UWUMView
@@ -38,6 +41,23 @@ class WeGovNowMiddleware(object):
             request.member_id = access_token.account.uid
         except SocialToken.DoesNotExist:
             return None
+
+        if access_token.expires_at <= datetime.utcnow().replace(tzinfo=utc):
+            return self._refresh_uwum_access_token(request, access_token)
+        else:
+            return self._validate_uwum_access_token(request, access_token)
+
+    def _validate_uwum_access_token(self, request, access_token):
+        """Validate the UWUM access token."""
+        uwum_settings = app_settings.PROVIDERS.get('uwum', {})
+
+        headers = {'Authorization': 'Bearer %s' % access_token}
+        params = {'include_member': True}
+        url = '%s/api/1/validate' % uwum_settings.get('REGULAR_URL', '')
+
+        response = post(url, headers=headers, params=params)
+        if response.status_code == 200:
+            return access_token
 
         return self._refresh_uwum_access_token(request, access_token)
 
