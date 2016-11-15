@@ -10,6 +10,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.messages.storage.fallback import FallbackStorage
 
 from rest_framework.test import APIRequestFactory
+from allauth.socialaccount import app_settings
 
 from geokey.users.tests.model_factories import UserFactory
 
@@ -47,18 +48,21 @@ class UWUMProfileSettingsViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn('/admin/account/login/', response['location'])
 
-    def test_get_with_user_when_no_uwum_account(self):
+    def test_get_with_user(self):
         """
-        Accessing the view with normal user, when user has no UWUM account.
+        Accessing the view with a user.
 
-        It should log user out.
+        It should redirect to UWUM settings.
         """
         user = UserFactory.create()
         self.request.user = user
         response = self.view(self.request)
 
         self.assertEqual(response.status_code, 302)
-        self.assertIn(reverse('account_logout'), response['location'])
+        self.assertEqual(
+            response['location'],
+            '%s/member/settings.html' % (
+                app_settings.PROVIDERS.get('uwum', {}).get('REGULAR_URL', '')))
 
 
 # ###########################
