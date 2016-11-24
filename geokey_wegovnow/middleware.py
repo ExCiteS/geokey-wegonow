@@ -50,8 +50,9 @@ class WeGovNowMiddleware(object):
     def _validate_uwum_access_token(self, request, access_token):
         """Validate the UWUM access token."""
         uwum_settings = app_settings.PROVIDERS.get('uwum', {})
+        view = self._get_uwum_view(request)
 
-        headers = {'Authorization': 'Bearer %s' % access_token}
+        headers = view.adapter._make_request_headers(access_token)
         params = {'include_member': True}
         url = '%s/api/1/validate' % uwum_settings.get('REGULAR_URL', '')
 
