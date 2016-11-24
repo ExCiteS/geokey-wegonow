@@ -77,6 +77,8 @@ class WeGovNowMiddleware(object):
                 request.user.display_name = display_name
                 request.user.save()
 
+            self._update_uwum_notify_email(request, access_token)
+
             return access_token
 
         return self._refresh_uwum_access_token(request, access_token)
@@ -100,6 +102,15 @@ class WeGovNowMiddleware(object):
         access_token.save()
 
         return access_token
+
+    def _update_uwum_notify_email(self, request, access_token):
+        """Update the UWUM notify email."""
+        view = self._get_uwum_view(request)
+        notify_email = view.adapter.get_notify_email(access_token)
+
+        if notify_email and request.user.email != notify_email:
+            request.user.email = notify_email
+            request.user.save()
 
     def _validate_uwum_user(self, request):
         """Validate the UWUM user."""
