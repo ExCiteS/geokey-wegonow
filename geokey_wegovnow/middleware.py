@@ -73,6 +73,11 @@ class WeGovNowMiddleware(object):
                     suffix += 1
 
                 request.user.display_name = display_name
+
+                # current_email = extra_data.get('member', {}).get('email')
+                # if not current_email:
+                #     request.user.email = ...
+
                 request.user.save()
 
             self._update_uwum_notify_email(request, access_token)
@@ -109,6 +114,11 @@ class WeGovNowMiddleware(object):
         if notify_email and request.user.email != notify_email:
             request.user.email = notify_email
             request.user.save()
+
+            extra_data = access_token.account.extra_data
+            extra_data['member']['email'] = notify_email
+            access_token.account.extra_data = extra_data
+            access_token.account.save()
 
     def _validate_uwum_user(self, request):
         """Validate the UWUM user."""
