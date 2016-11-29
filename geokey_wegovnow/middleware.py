@@ -25,8 +25,8 @@ from .tools import create_random_email
 
 
 
-class WeGovNowMiddleware(object):
-    """WeGovNow middleware."""
+class UWUMMiddleware(object):
+    """UWUM middleware."""
 
     def _get_uwum_view(self, request):
         """Get the UWUM view."""
@@ -109,12 +109,9 @@ class WeGovNowMiddleware(object):
         """Update the UWUM notify email."""
         view = self._get_uwum_view(request)
         notify_email = view.adapter.get_notify_email(access_token)
+        extra_data = access_token.account.extra_data
 
-        if notify_email and request.user.email != notify_email:
-            request.user.email = notify_email
-            request.user.save()
-
-            extra_data = access_token.account.extra_data
+        if notify_email and extra_data['member']['email'] != notify_email:
             extra_data['member']['email'] = notify_email
             access_token.account.extra_data = extra_data
             access_token.account.save()

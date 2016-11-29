@@ -1,4 +1,4 @@
-"""All tools for the extension."""
+"""All tools for the WeGovNow extension."""
 
 from django.contrib.sites.models import Site
 from django.utils.text import slugify
@@ -41,6 +41,3 @@ def make_emailAddress(username,domain):
     )
 
     return email
-
-
-

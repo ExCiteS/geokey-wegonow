@@ -1,4 +1,4 @@
-"""All URLs for the extension."""
+"""All URLs for the WeGovNow extension."""
 
 from django.conf.urls import include, url
 
