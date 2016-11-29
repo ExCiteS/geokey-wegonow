@@ -60,7 +60,6 @@ class UWUMMiddleware(object):
         if response.status_code == 200:
             response = response.json()
             extra_data = access_token.account.extra_data
-            print extra_data
 
             current_name = extra_data.get('member', {}).get('name')
             uwum_name = response.get('member', {}).get('name')
