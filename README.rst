@@ -43,12 +43,12 @@ Add both packages to the installed apps (together with Material Design package):
 
 Configure django-allauth-uwum using the `official documentation <https://github.com/ExCiteS/django-allauth-uwum>`_.
 
-Add the custom WeGovNow middleware for requests and responses:
+Add the custom UWUM middleware for requests and responses:
 
 .. code-block:: python
 
     MIDDLEWARE_CLASSES += (
-        'geokey_wegovnow.middleware.WeGovNowMiddleware',
+        'geokey_wegovnow.middleware.UWUMMiddleware',
     )
 
 Extend template loaders with a custom WeGovNow Material:
@@ -62,6 +62,12 @@ Or a custom WeGovNow Bootstrap:
 .. code-block:: python
 
     TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.templates.BootstrapLoader']
+
+Change default social acccount adapter to UWUM:
+
+.. code-block:: python
+
+    SOCIALACCOUNT_ADAPTER = 'geokey_wegovnow.adapters.UWUMSocialAccountAdapter'
 
 Change UWUM provider settings (change URL accordingly):
 
@@ -77,6 +83,7 @@ Change UWUM provider settings (change URL accordingly):
     SOCIALACCOUNT_PROVIDERS['uwum']['AUTHORIZE_URL'] = '%s/api/1/authorization' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
     SOCIALACCOUNT_PROVIDERS['uwum']['ACCESS_TOKEN_URL'] = '%s/api/1/token' % SOCIALACCOUNT_PROVIDERS['uwum']['CERT_URL']
     SOCIALACCOUNT_PROVIDERS['uwum']['PROFILE_URL'] = '%s/api/1/info' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
+    SOCIALACCOUNT_PROVIDERS['uwum']['VALIDATE_URL'] = '%s/api/1/validate' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
     SOCIALACCOUNT_PROVIDERS['uwum']['NOTIFY_EMAIL_URL'] = '%s/api/1/notify_email' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
     SOCIALACCOUNT_PROVIDERS['uwum']['NAVIGATION_URL'] = '%s/api/1/navigation' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
 

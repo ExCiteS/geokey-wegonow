@@ -21,9 +21,11 @@ from rest_framework import status
 from geokey.users.models import User
 from geokey.users.views import AccountDisconnect
 
+from geokey_wegovnow.utils import generate_fake_email
 
-class WeGovNowMiddleware(object):
-    """WeGovNow middleware."""
+
+class UWUMMiddleware(object):
+    """UWUM middleware."""
 
     def _get_uwum_view(self, request):
         """Get the UWUM view."""
@@ -49,17 +51,16 @@ class WeGovNowMiddleware(object):
 
     def _validate_uwum_access_token(self, request, access_token):
         """Validate the UWUM access token."""
-        uwum_settings = app_settings.PROVIDERS.get('uwum', {})
         view = self._get_uwum_view(request)
-
         headers = view.adapter._make_request_headers(access_token)
         params = {'include_member': True}
-        url = '%s/api/1/validate' % uwum_settings.get('REGULAR_URL', '')
+        url = app_settings.PROVIDERS.get('uwum', {}).get('VALIDATE_URL', '')
 
         response = post(url, headers=headers, params=params)
         if response.status_code == 200:
             response = response.json()
             extra_data = access_token.account.extra_data
+            print extra_data
 
             current_name = extra_data.get('member', {}).get('name')
             uwum_name = response.get('member', {}).get('name')
@@ -75,6 +76,7 @@ class WeGovNowMiddleware(object):
                     suffix += 1
 
                 request.user.display_name = display_name
+                request.user.email = generate_fake_email(display_name)
                 request.user.save()
 
             self._update_uwum_notify_email(request, access_token)
@@ -107,10 +109,12 @@ class WeGovNowMiddleware(object):
         """Update the UWUM notify email."""
         view = self._get_uwum_view(request)
         notify_email = view.adapter.get_notify_email(access_token)
+        extra_data = access_token.account.extra_data
 
-        if notify_email and request.user.email != notify_email:
-            request.user.email = notify_email
-            request.user.save()
+        if notify_email and extra_data['member']['email'] != notify_email:
+            extra_data['member']['email'] = notify_email
+            access_token.account.extra_data = extra_data
+            access_token.account.save()
 
     def _validate_uwum_user(self, request):
         """Validate the UWUM user."""

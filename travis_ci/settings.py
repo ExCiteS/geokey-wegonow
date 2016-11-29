@@ -27,8 +27,10 @@ INSTALLED_APPS += (
 )
 
 MIDDLEWARE_CLASSES += (
-    'geokey_wegovnow.middleware.WeGovNowMiddleware',
+    'geokey_wegovnow.middleware.UWUMMiddleware',
 )
+
+SOCIALACCOUNT_ADAPTER = 'geokey_wegovnow.adapters.UWUMSocialAccountAdapter'
 
 SOCIALACCOUNT_PROVIDERS = {
     'uwum': {
