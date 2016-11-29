@@ -1,1 +1,1 @@
-"""All tools for the extension."""
+"""All tools for the WeGovNow extension."""

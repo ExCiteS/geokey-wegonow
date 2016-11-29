@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from braces.views import LoginRequiredMixin
 from allauth.socialaccount import app_settings
 
-from geokey_wegovnow.middleware import WeGovNowMiddleware
+from geokey_wegovnow.middleware import UWUMMiddleware
 from geokey_wegovnow.renderers import RawHTMLRenderer
 
 
@@ -41,7 +41,7 @@ class UWUMProfileSettingsView(LoginRequiredMixin, TemplateView):
 # ###########################
 
 class UWUMNavigationAPIView(APIView):
-    """API endpoint for the WeGovNow navigation."""
+    """API endpoint for the UWUM navigation."""
 
     renderer_classes = (JSONRenderer, RawHTMLRenderer)
     uwum_settings = app_settings.PROVIDERS.get('uwum', {})
@@ -60,7 +60,7 @@ class UWUMNavigationAPIView(APIView):
 
         if (not hasattr(request, 'uwum_access_token') and
                 not request.user.is_anonymous()):
-            middleware = WeGovNowMiddleware()
+            middleware = UWUMMiddleware()
             middleware._validate_uwum_user(request)
 
         headers = None

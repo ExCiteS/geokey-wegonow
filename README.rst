@@ -43,12 +43,12 @@ Add both packages to the installed apps (together with Material Design package):
 
 Configure django-allauth-uwum using the `official documentation <https://github.com/ExCiteS/django-allauth-uwum>`_.
 
-Add the custom WeGovNow middleware for requests and responses:
+Add the custom UWUM middleware for requests and responses:
 
 .. code-block:: python
 
     MIDDLEWARE_CLASSES += (
-        'geokey_wegovnow.middleware.WeGovNowMiddleware',
+        'geokey_wegovnow.middleware.UWUMMiddleware',
     )
 
 Extend template loaders with a custom WeGovNow Material:

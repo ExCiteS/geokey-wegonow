@@ -22,8 +22,8 @@ from geokey.users.models import User
 from geokey.users.views import AccountDisconnect
 
 
-class WeGovNowMiddleware(object):
-    """WeGovNow middleware."""
+class UWUMMiddleware(object):
+    """UWUM middleware."""
 
     def _get_uwum_view(self, request):
         """Get the UWUM view."""
