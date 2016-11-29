@@ -21,6 +21,9 @@ from rest_framework import status
 from geokey.users.models import User
 from geokey.users.views import AccountDisconnect
 
+from .tools import create_random_email
+
+
 
 class WeGovNowMiddleware(object):
     """WeGovNow middleware."""
@@ -73,11 +76,7 @@ class WeGovNowMiddleware(object):
                     suffix += 1
 
                 request.user.display_name = display_name
-
-                # current_email = extra_data.get('member', {}).get('email')
-                # if not current_email:
-                #     request.user.email = ...
-
+                request.user.email = create_random_email(display_name)
                 request.user.save()
 
             self._update_uwum_notify_email(request, access_token)
