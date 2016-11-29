@@ -1,11 +1,11 @@
-"""Test all tools."""
+"""Test all utils."""
 
 from django.test import TestCase
 from django.contrib.sites.models import Site
 
 from geokey.users.tests.model_factories import UserFactory
 
-from geokey_wegovnow.tools import make_email, generate_fake_email
+from geokey_wegovnow.utils import make_email, generate_fake_email
 
 
 class MakeEmailTest(TestCase):

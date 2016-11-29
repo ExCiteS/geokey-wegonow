@@ -4,7 +4,7 @@ from allauth.account.utils import user_email
 
 from geokey.core.adapters import SocialAccountAdapter
 
-from geokey_wegovnow.tools import generate_fake_email
+from geokey_wegovnow.utils import generate_fake_email
 
 
 class UWUMSocialAccountAdapter(SocialAccountAdapter):

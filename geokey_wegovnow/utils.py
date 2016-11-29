@@ -1,4 +1,4 @@
-"""All tools for the WeGovNow extension."""
+"""All utils for the WeGovNow extension."""
 
 from django.utils.text import slugify
 from django.contrib.sites.models import Site
