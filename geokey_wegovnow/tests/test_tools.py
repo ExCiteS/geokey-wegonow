@@ -1,45 +1,49 @@
-"""test for tools.py"""
+"""Test all tools."""
 
 from django.test import TestCase
+from django.contrib.sites.models import Site
 
 from geokey.users.tests.model_factories import UserFactory
-from ..tools import create_random_email
+
+from geokey_wegovnow.tools import make_email, generate_fake_email
 
 
+class MakeEmailTest(TestCase):
+    """Tests for method `make_email`."""
 
-class test_create_random_email(TestCase):
+    def setUp(self):
+        """Set up tests."""
+        self.domain = Site.objects.get_current().domain
 
-    def test_when_display_name_ideal(self):
-        display_name = 'user1'
+    def test_method(self):
+        """Test method."""
+        email = make_email('Tom Black')
+        self.assertEqual(email, 'tom-black@user.%s' % self.domain)
 
-        email = create_random_email(display_name)
+        email = make_email('skanhunt_42')
+        self.assertEqual(email, 'skanhunt_42@user.%s' % self.domain)
 
-        self.assertEqual(email, 'user1@user.example.com')
+        email = make_email('It\s Me!')
+        self.assertEqual(email, 'its-me@user.%s' % self.domain)
 
-    def test_when_display_name_has_white_space(self):
-        display_name = 'user user'
-        email = create_random_email(display_name)
 
-        self.assertEqual(email, 'user-user@user.example.com')
+class GenerateFakeEmailTest(TestCase):
+    """Tests for method `generate_fake_email`."""
 
-    def test_when_display_name_has_white_space_and_capital_letters(self):
+    def setUp(self):
+        """Set up tests."""
+        self.domain = Site.objects.get_current().domain
 
-        display_name = 'USer User'
-        email = create_random_email(display_name)
+    def test_when_email_does_not_exist_yet(self):
+        """Test method when email is not in use yet."""
+        email = generate_fake_email('Tom Black')
+        self.assertEqual(email, 'tom-black@user.%s' % self.domain)
 
-        self.assertEqual(email, 'user-user@user.example.com')
+    def test_when_email_already_exists(self):
+        """Test method when email is already in use."""
+        UserFactory.create(
+            display_name='Tom Black',
+            email='tom-black@user.%s' % self.domain)
 
-    def test_when_display_name_already_exists(self):
-        display_name = 'superuser'
-        user_new = UserFactory.create(
-            display_name=display_name,
-            email="superuser@user.example.com")
-
-        email = create_random_email(display_name)
-
-        self.assertNotEqual(email, user_new.email)
-
-    def test_when_display_name_has_special_characters(self):
-        display_name = "carabassa!!//**"
-        email = create_random_email(display_name)
-        self.assertEqual(email, 'carabassa@user.example.com')
+        email = generate_fake_email('Tom Black!')
+        self.assertEqual(email, 'tom-black-2@user.%s' % self.domain)

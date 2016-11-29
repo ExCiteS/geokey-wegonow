@@ -7,7 +7,7 @@ from allauth.socialaccount.models import SocialApp, SocialAccount
 from geokey.users.tests.model_factories import UserFactory
 from geokey.users.templatetags.social import get_social_apps
 
-from ..templatetags import wegovnow
+from geokey_wegovnow.templatetags import wegovnow
 
 
 class TemplateTagsTest(TestCase):

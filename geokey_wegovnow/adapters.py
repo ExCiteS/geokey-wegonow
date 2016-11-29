@@ -5,7 +5,7 @@ from allauth.socialaccount import app_settings
 
 from geokey.core.adapters import SocialAccountAdapter
 
-from geokey_wegovnow.tools import create_random_email
+from geokey_wegovnow.tools import generate_fake_email
 
 
 class UWUMSocialAccountAdapter(SocialAccountAdapter):
@@ -17,6 +17,6 @@ class UWUMSocialAccountAdapter(SocialAccountAdapter):
             request, sociallogin, data)
 
         username = getattr(user, app_settings.USER_MODEL_USERNAME_FIELD)
-        user_email(user, create_random_email(username))
+        user_email(user, generate_fake_email(username))
 
         return user

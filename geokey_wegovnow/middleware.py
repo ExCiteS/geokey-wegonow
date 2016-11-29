@@ -21,8 +21,7 @@ from rest_framework import status
 from geokey.users.models import User
 from geokey.users.views import AccountDisconnect
 
-from .tools import create_random_email
-
+from geokey_wegovnow.tools import generate_fake_email
 
 
 class UWUMMiddleware(object):
@@ -76,7 +75,7 @@ class UWUMMiddleware(object):
                     suffix += 1
 
                 request.user.display_name = display_name
-                request.user.email = create_random_email(display_name)
+                request.user.email = generate_fake_email(display_name)
                 request.user.save()
 
             self._update_uwum_notify_email(request, access_token)
