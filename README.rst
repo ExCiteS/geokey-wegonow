@@ -63,6 +63,12 @@ Or a custom WeGovNow Bootstrap:
 
     TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.templates.BootstrapLoader']
 
+Change default social acccount adapter to UWUM:
+
+.. code-block:: python
+
+    SOCIALACCOUNT_ADAPTER = 'geokey_wegovnow.adapters.UWUMSocialAccountAdapter'
+
 Change UWUM provider settings (change URL accordingly):
 
 .. code-block:: python
