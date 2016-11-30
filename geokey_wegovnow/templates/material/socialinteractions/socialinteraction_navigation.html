@@ -1,0 +1,16 @@
+<div class="card">
+    <div class="card heading grey lighten-3">
+        <h6 class="item-info">Social interactions</h6>
+        <h5>
+            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+            {{ socialinteraction.name }}
+        </h5>
+        <div class="collection">
+            <a href="{% url 'admin:socialinteraction_post' socialinteraction.project.id socialinteraction.id %}" class="collection-item {% if request.resolver_match.url_name == 'socialinteraction_post' %}active{% endif %}">Post to social media</a>
+            <a href="{% url 'admin:socialinteraction_settings' socialinteraction.project.id socialinteraction.id %}" class="collection-item {% if request.resolver_match.url_name == 'socialinteraction_settings' %}active{% endif %}">Settings</a>
+        </div>
+
+    </div>
+</div>
+
+

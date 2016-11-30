@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block bodydata %}
+data-project-id="{{ project.id }}"
+data-project-locked="{{ project.islocked }}"
+{% endblock %}
+
+{% block title %} | Project: {{ project.name }} - Geographic extent{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div class="container">
+        <h3 class="smaller">
+            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+            <a href="{% url 'admin:project_overview' project.id %}">{{ project.name }}</a>
+        </h3>
+
+        {% include 'projects/navigation.html' %}
+    </div>
+</div>
+
+<div class="container">
+    {% include 'snippets/messages.html' %}
+
+    {% if project.islocked %}
+        <div class="alert alert-info">
+            <p>The project is locked, therefore geographic extent cannot be edited. If you wish to edit it, you have to unlock the project in the <a href="{% url 'admin:project_settings' project.id %}"><strong>project settings</strong></a> first.</p>
+        </div>
+    {% endif %}
+    <div class="card" id="cardid">
+        <div class="card title">        <h5>
+                {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+                Geographic extent
+            </h5>
+            <div class="card content">
+            <div id="map"></div>
+            </div>
+
+                <form method="POST" action="{% url 'admin:project_geographicextent' project.id %}" novalidate>
+                    {% csrf_token %}
+
+                    <input type="hidden" id="geometry" name="geometry" value="{{ project.geographic_extent.json }}">
+
+                    {% if not project.islocked %}
+                        <div class="card-action">
+                            <div class="right-align">
+                                <button type="reset" class="btn btn-small btn-flat">Reset</button>
+                                <button type="submit"  class="btn btn-small waves-effect waves-light">Save</button>
+                                
+                            </div>
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block libraries %}
+<style>
+#map{
+    /*width:500px;*/
+    height:500px;
+}
+</style>
+<script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css">
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.css">
+
+<script src="/static/js/admin.ui.project.geographicextent.js"></script>
+<script>
+console.log("hehehehe", $('#cardid').height())
+$('#map').css("height", 
+        ($('#cardid').height()));
+</script>
+{% endblock %}

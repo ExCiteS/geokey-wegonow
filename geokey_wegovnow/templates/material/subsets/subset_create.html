@@ -9,18 +9,28 @@ data-project-locked="{{ project.islocked }}"
 {% block title %} | Project: {{ project.name }} - Create new subset{% endblock %}
 
 {% block main %}
+<div class="page-header">
+    <div class="container">
+        <h3 class="smaller">
+            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+            <a href="{% url 'admin:project_overview' project.id %}">{{ project.name }}</a>
+        </h3>
+
+        {% include 'projects/navigation.html' %}
+    </div>
+</div>
 <div class="container expand-on-small-only">
     <div class="row change-form">
-        <div class="col s12 m12 l10 offset-l1">
+        <div class="col m8 offset-m2">
             <div class="card">
                 <form method="POST" action="{% url 'admin:subset_create' project.id %}" novalidate>
                     {% csrf_token %}
 
                     <div class="card-content">
-                        <h3 class="form-title">
+                        <h4 class="form-title">
                             Create new subset
                             {% if project.islocked %}<i class="material-icons ">lock</i>{% endif %}
-                        </h3>
+                        </h4>
 
                         <div class="row">
                             <div class="col s12 input-field required">

@@ -1,0 +1,15 @@
+<div class="card">
+    <div class="card heading grey lighten-3">
+        <h4 class="item-info">Category</h4>
+
+        <h5>
+            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+            {{ category.name }}
+        </h5>
+        <div class="collection">
+            <a href="{% url 'admin:category_overview' category.project.id category.id %}" class="collection-item {% if request.resolver_match.url_name == 'category_overview' %}active{% endif %}">Fields</a>
+            <a href="{% url 'admin:category_display' category.project.id category.id %}" class="collection-item {% if request.resolver_match.url_name == 'category_display' %}active{% endif %}">Display</a>
+            <a href="{% url 'admin:category_settings' category.project.id category.id %}" class="collection-item {% if request.resolver_match.url_name == 'category_settings' %}active{% endif %}">Settings</a>
+        </div>
+    </div>
+</div>

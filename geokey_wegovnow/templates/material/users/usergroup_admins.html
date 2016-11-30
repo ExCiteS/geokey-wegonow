@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block bodydata %}
+data-project-id="{{ project.id }}"
+data-project-locked="{{ project.islocked }}"
+{% endblock %}
+
+{% block title %} | Project: {{ project.name }} - Administrators{{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div class="container">
+        <h3 class="smaller">
+            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+            <a href="{% url 'admin:project_overview' project.id %}">{{ project.name }}</a>
+        </h3>
+
+        {% include 'projects/navigation.html' %}
+    </div>
+</div>
+
+<div class="container">
+    {% include 'snippets/messages.html' %}
+
+    <div class="row">
+        <div class="col s4">
+            <div class="card">
+                <div class="card heading grey lighten-2">
+                    <h6 class="item-info">User group</h6>
+
+                    <h5>
+                        {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+                        Administrators
+                    </h5>
+                </div>
+
+                <div class="card content">
+                    <h6><strong>Special settings for administrators</strong></h6>
+                    <p>Project administrators can access all data.</p>
+                    <p>They can contribute new and moderate existing data, also they are allowed to change the settings of this project.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col s8" id="members">
+            {% include 'snippets/usergroup_editor.html' with users=project.admins.all admins=True %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block libraries %}
+<script src="/static/lib/handlebars/handlebars.js"></script>
+<script src="/static/js/templates.js"></script>
+
+<script src="/static/js/admin.ui.usergroup.users.js"></script>
+<script src="/static/js/admin.control.ajax.js"></script>
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block bodydata %}
+data-project-id="{{ project.id }}"
+data-project-locked="{{ project.islocked }}"
+data-socialinteraction-id="{{ socialinteraction.id }}"
+{% endblock %}
+
+{% block title %} | Project: {{ project.name }} - Social interaction: {{ socialinteraction.name }} - Settings{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div class="container">
+        <h3 class="smaller">
+            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+            <a href="{% url 'admin:project_overview' project.id %}">{{ project.name }}</a>
+        </h3>
+
+        {% include 'projects/navigation.html' %}
+    </div>
+</div>
+
+<div class="container">
+    {% include 'snippets/messages.html' %}
+
+    <div class="row">
+        <div class="col s4">
+            {% include 'socialinteractions/socialinteraction_navigation.html' %}
+        </div>
+
+        <div class="col s8">
+            <h3 class="header">Social interaction settings</h3>
+            <div class="card">
+                <div class="card-content">
+                    <form id="settings" method="POST" action="{% url 'admin:socialinteraction_settings' project.id socialinteraction.id %}" novalidate>
+                        {% csrf_token %}
+
+                        <div class="input-field">                            
+                            <input type="text" class="form-control input-lg" id="name" name="name" maxlength="100" value="{{ socialinteraction.name }}" required />
+                            <label for="name" class="control-label">Name (required)</label>
+                        </div>
+
+                        <div class="input-field">                           
+                            <textarea class="materialize-textarea" rows="5" id="description" name="description">{{ socialinteraction.description }} </textarea>
+                            <label for="description" class="control-label">Description</label>
+                        </div>
+                        <div class="row">
+                            <strong>Social account</strong>
+                            
+                            {% for socialaccount in socialaccounts_auth %}
+                                <ul id="check-list-box" class="list-group checked-list-box">
+                                {% if socialaccount == '' %}
+                                    <p>Unfortunately, you cannot create new social interactions because any social media is log in for this project.</p>
+                                {% else %} 
+                                    <p>                       
+                                    {% if socialaccount in socialinteraction.socialaccounts.all %}
+                                        <input type="checkbox" name="socialaccounts" class="filled-in" id="{{ socialaccount.id }}" value="{{ socialaccount.id }}" checked >
+                                        <label for="{{ socialaccount.id }}"> <img class="socialaccount_provider" src="{% static 'img/providers/' %}{{ socialaccount.provider }}.svg" alt="{{ socialaccount.get_provider.name }} social provider" /> {{ socialaccount.get_provider_account }} </label>
+                                        </p>
+                                    {% else %}
+                                        <input type="checkbox" id="{{ socialaccount.id }}" class="filled-in" name="socialaccounts" value="{{ socialaccount.id }}" >
+                                        <label for="{{ socialaccount.id }}"> <img class="socialaccount_provider" src="{% static 'img/providers/' %}{{ socialaccount.provider }}.svg" alt="{{ socialaccount.get_provider.name }} social provider" /> {{ socialaccount.get_provider_account }}  </label>
+                                        </p>
+                                    {%endif%}
+                               
+                                {% endif %}
+                             
+                            {% endfor %}
+                        </ul>
+                        </div>
+
+                        <div class="card-action">
+                            <div class="right-align">
+                                <button type="reset" class="btn btn-large btn-flat">Reset</button>
+                                <button type="submit"  class="btn btn-large waves-effect waves-light">Save</button>                                
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if not project.islocked %}
+        <div class="row">
+            <div class="col s8 offset-s4">
+                <div class="card">
+                    <h4 class="card title red lighten-3 red-text">Be careful!</h4>
+
+                    <div class="card-content">
+                        <div>
+                            <strong>Delete social interaction</strong>
+                            <p>Deleting this social interaction cannot be undone.</p>
+                            <a href="#delete-confirm" class="red-text" data-toggle="modal" data-target="#delete-confirm">Delete this social interaction</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block modals %}
+
+<div id="delete-confirm" class="modal">
+
+        <div class="modal-title">        
+            <h4 class="modal-title amber lighten-4">Are you sure?</h4>
+        </div>
+        <div class="modal-content">
+            <p><strong>Before you delete the social interaction, please read through the consequences of this action:</strong></p>
+
+            <ul>
+                    <li>Deleting a social interaction cannot be undone.</li>
+                    <li>Deleting a social interaction will not delete any of the data added to the project.</li>
+                </ul>
+
+        <div class="modal-footer">                
+            <a href="{% url 'admin:socialinteraction_delete' project.id socialinteraction.id %}" ><button  type="button" id="deactivate" class="btn red lighten-2">I'm absolutely sure, delete the social interaction!</button></a>
+            <a  class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block libraries %}
+<script src="/static/js/admin.ui.forms.validate.js"></script>
+<style>
+.socialaccount_provider
+{
+    height:15px;
+    width:15px;
+
+}
+</style>
+<script> 
+    $(document).ready(function(){
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+
+   
+      });
+  </script>
+{% endblock %}

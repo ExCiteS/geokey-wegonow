@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load social %}
+{% load wegovnow %}
+{% block title %} | Your profile{% endblock %}
+
+{% block main %}
+{% get_social_apps as all_social_apps %}
+{% with all_social_apps|exclude_uwum_app as social_apps %}
+    <div class="page-header">
+        <div class="container">
+            <h3>Your profile</h3>
+        </div>
+    </div>
+
+    <div class="container">
+        {% include 'snippets/messages.html' %}
+
+        <div class="row">
+            <div class="card">
+            {% if social_apps %}
+                <div class="col s6">
+                    <h4>Connect social accounts</h4>
+                    {% include 'snippets/social_apps.html' with process='connect' %}
+                    <div class="card content">
+                        {% with accounts|exclude_uwum_accounts as socialaccounts %}
+                    </div>
+                        {% if socialaccounts %}
+
+                            <h4 >Your connected accounts</h4>
+                             {% for socialaccount in socialaccounts %}
+                                {% with socialaccount.get_provider_account as provider_account %}
+                                    {% if forloop.first %}
+                                        <ul class="collection">
+                                    {% endif %}
+
+                                    <li class="collection-item">
+                                        <strong>{{ provider_account }}</strong>
+                                        <a role="button" href="{% url 'admin:account_disconnect' socialaccount.id %}" class="btn right blue-grey lighten-4">Disconnect</a>
+                                    </li>
+
+                                    {% if forloop.last %}
+                                        </ul>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+
+            {% endif %}
+
+            <div class="col s6 {% if not social_apps %}col-s8 offset-s2 offset-s3{% endif %}">
+                <h4 class="header">Profile settings</h4>
+
+                <div class="card-panel yellow lighten-4">
+                    <p>Please navigate to <a href="{% url 'geokey_wegovnow:uwum_profile_settings'%}" target="_blank">UWUM profile management</a> to change your user settings.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endwith %}
+{% endblock %}
+
+{% block libraries %}
+<script src="/static/js/admin.ui.forms.validate.js"></script>
+{% endblock %}
