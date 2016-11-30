@@ -69,6 +69,12 @@ Change default social acccount adapter to UWUM:
 
     SOCIALACCOUNT_ADAPTER = 'geokey_wegovnow.adapters.UWUMSocialAccountAdapter'
 
+Set option that UWUM users would be automatically signed up:
+
+.. code-block:: python
+
+    SOCIALACCOUNT_AUTO_SIGNUP = True
+
 Change UWUM provider settings (change URL accordingly):
 
 .. code-block:: python
