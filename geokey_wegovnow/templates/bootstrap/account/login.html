@@ -12,10 +12,8 @@
 <div class="container">
     {% include 'snippets/messages.html' %}
 
-    {% if request.GET.next %}
-        <div class="alert alert-warning">
-            <p>Please <a href="{% provider_login_url 'uwum' process='login' scope=scope auth_params=auth_params %}">sign in</a> to continue.</p>
-        </div>
-    {% endif %}
+    <div class="alert alert-warning">
+        <p>Please <a href="{% provider_login_url 'uwum' process='login' scope=scope auth_params=auth_params %}">sign in</a> to continue.</p>
+    </div>
 </div>
 {% endblock %}
