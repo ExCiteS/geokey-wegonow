@@ -3,7 +3,6 @@
 from importlib import import_module
 from datetime import datetime
 from pytz import utc
-from requests import post
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
@@ -12,7 +11,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
 
 from allauth.account.adapter import get_adapter
-from allauth.socialaccount import app_settings, providers
+from allauth.socialaccount import providers
 from allauth.socialaccount.models import SocialApp, SocialAccount, SocialToken
 from allauth.socialaccount.providers.oauth2.client import OAuth2Error
 from allauth_uwum.views import UWUMAdapter, UWUMView
@@ -52,11 +51,8 @@ class UWUMMiddleware(object):
     def _validate_uwum_access_token(self, request, access_token):
         """Validate the UWUM access token."""
         view = self._get_uwum_view(request)
-        headers = view.adapter._make_request_headers(access_token)
-        params = {'include_member': True}
-        url = app_settings.PROVIDERS.get('uwum', {}).get('VALIDATE_URL', '')
 
-        response = post(url, headers=headers, params=params)
+        response = view.adapter.validate_user(access_token)
         if response.status_code == 200:
             response = response.json()
             extra_data = access_token.account.extra_data
