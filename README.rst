@@ -17,7 +17,7 @@ Install
 geokey-wegovnow requires:
 
 - Python version 2.7
-- GeoKey version 1.2 or greater
+- GeoKey version 1.2.4 or greater
 
 Install django-allauth-uwum:
 
@@ -68,6 +68,12 @@ Change default social acccount adapter to UWUM:
 .. code-block:: python
 
     SOCIALACCOUNT_ADAPTER = 'geokey_wegovnow.adapters.UWUMSocialAccountAdapter'
+
+Set option that UWUM users would be automatically signed up:
+
+.. code-block:: python
+
+    SOCIALACCOUNT_AUTO_SIGNUP = True
 
 Change UWUM provider settings (change URL accordingly):
 

@@ -1,6 +1,6 @@
 """Main initialization for the WeGovNow extension."""
 
-VERSION = (1, 1, 0)
+VERSION = (1, 2, 0)
 __version__ = '.'.join(map(str, VERSION))
 
 

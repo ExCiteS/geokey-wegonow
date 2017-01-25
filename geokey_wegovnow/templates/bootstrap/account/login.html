@@ -1,21 +1,2 @@
-{% extends 'base.html' %}
 {% load socialaccount %}
-{% block title %} | Sign in{% endblock %}
-
-{% block main %}
-<div class="page-header">
-    <div class="container">
-        <h1>Sign in</h1>
-    </div>
-</div>
-
-<div class="container">
-    {% include 'snippets/messages.html' %}
-
-    {% if request.GET.next %}
-        <div class="alert alert-warning">
-            <p>Please <a href="{% provider_login_url 'uwum' process='login' scope=scope auth_params=auth_params %}">sign in</a> to continue.</p>
-        </div>
-    {% endif %}
-</div>
-{% endblock %}
+<meta http-equiv="refresh" content="0;url={% provider_login_url 'uwum' process='login' scope=scope auth_params=auth_params %}">
