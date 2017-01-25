@@ -45,19 +45,22 @@ data-project-locked="{{ project.islocked }}"
                         
                     </div>
 
-                    <div class="row">
-                        <strong >Social account</strong>
-                         {% for socialaccount in socialaccounts %}
-                        <p>
-                            {%if socialaccount == '' %}
-                                <p>Unfortunately, you cannot create new social interactions because any social media has been logged on for this project.</p>
-                            {% else %}
-                                <input type="checkbox" id="{{ socialaccount.id }}" class="filled-in" name="socialaccounts" value="{{ socialaccount.id }}"> </input>
-                                <label for="{{ socialaccount.id }}"><img class="socialaccount_provider" src="{% static 'img/providers/' %}{{ socialaccount.provider }}.svg" alt="{{ socialaccount.get_provider.name }} social provider" /> <strong>{{ socialaccount.get_provider_account }}</strong></label>
-                            {% endif %}
-                        {% endfor %}
-                        </p>
-                    </div>
+                    <b >Social account</b>
+                     {% for socialaccount in socialaccounts %}
+                    <p>
+                        {%if socialaccount == '' %}
+                            <p>Unfortunately, you cannot create new social interactions because any social media has been logged on for this project.</p>
+                        {% else %}
+                            <input type="checkbox" id="{{ socialaccount.id }}" class="filled-in" name="socialaccounts" value="{{ socialaccount.id }}"> </input>
+                            <label for="{{ socialaccount.id }}"><img class="socialaccount_provider" src="{% static 'img/providers/' %}{{ socialaccount.provider }}.svg" alt="{{ socialaccount.get_provider.name }} social provider" /> <strong>{{ socialaccount.get_provider_account }}</strong></label>
+                        {% endif %}
+                    {% endfor %}
+                    </p>
+      <!--               <div class="input-field">                        
+                        <textarea class="materialize-textarea" rows="5" id="text_post" name="text_post"></textarea>
+                        <label for="text_post" class="materialize-textarea">Text to post</label>
+                    </div> -->
+
 
                     <div class="card-action">
                         <div class="right-align">
@@ -74,7 +77,7 @@ data-project-locked="{{ project.islocked }}"
 {% endblock %}
 
 {% block libraries %}
-<script src="/static/js/admin.ui.forms.validate.js"></script>
+<script src="/static/material/js/admin.ui.forms.validate.js"></script>
 <style>
 .socialaccount_provider
 {

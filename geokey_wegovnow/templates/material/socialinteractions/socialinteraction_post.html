@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
 {% block bodydata %}
 data-project-id="{{ project.id }}"
 data-project-locked="{{ project.islocked }}"
@@ -25,41 +26,30 @@ data-socialinteraction-id="{{ socialinteraction.id }}"
     {% include 'snippets/messages.html' %}
 
     <div class="row">
-        <div class="col s4">
+        <div class="col s12 l4">
             {% include 'socialinteractions/socialinteraction_navigation.html' %}
         </div>
 
-        <div class="col s8">
-            <h5 class="header">Social interaction post to social media</h5>
-            <p class="header">Social accounts associated: {% for sa in socialinteraction.socialaccounts.all %} {% load static %}<img id="#socialaccount_provider" src="{% static 'img/providers/' %}{{ sa.provider }}.svg" alt="{{ sa.get_provider.name }} social provider" /> {%if sa.provider == 'twitter' %}@{% endif%}{{sa.get_provider_account}}{% endfor %}  </p>
-            <form id="settings" method="POST" action="{% url 'admin:socialinteraction_settings' project.id socialinteraction.id %}" novalidate>
-                {% csrf_token %}
-                <div class="card">
-                    <div class="card-content">
-                        <div class="input-field">                        
-                            <textarea class="materialize-textarea" rows="5" id="description" name="description"></textarea>
-                            <label for="description" class="materialize-textarea">Text to post</label>
-                        </div>
-                       <div class="input-field">
-                            <strong>Categories</strong>
+        <div class="col s12 l8">
+            <div class="card">
+                <div class="card-content">
+                    <h5 class="header">Social interaction post to social media</h5>
+                    <p class="header">Social accounts associated: 
+                        {% for sa in socialinteraction.socialaccounts.all %}
+                            <img class="socialaccount_provider" src="{% static 'img/providers/' %}{{ sa.provider }}.svg" alt="{{ sa.get_provider.name }} social provider" /> {%if sa.provider == 'twitter' %}@{% endif%}{{sa.get_provider_account}}
+                        {% endfor %}
+                    <form id="settings" method="POST" action="{% url 'admin:socialinteraction_post' project.id socialinteraction.id %}" novalidate>
+                        {% csrf_token %}
 
-                            {% if not project.categories.all %}
-                                <div class="alert alert-info">
-                                    <p>The project has no categories, therefore social interaction post to social media cannot be edited. If you wish to edit it, you have to <a href="{% url 'admin:category_create' project.id %}"><strong>create a new category</strong></a> first.</p>
-                                </div>
-                            {% endif %}
-                            {% if project.categories.all %}
-                               <select name="display_category" class="form-control input-lg" >
-                                {% for category in project.categories.all %}
-                                  <option value="category.id">{{category.name}}</option>
-                                {% endfor %}
-                            </select>
-                            {% endif %}
+                        <div class="input-field">                        
+                            <textarea class="materialize-textarea" rows="5" id="text_post" name="text_post" {%if is_twitter == True %} maxlength="140"  {% endif%} > {{socialinteraction.text_to_post}}</textarea>
+                            <label for="text_post" class="materialize-textarea">Text to post{%if is_twitter == True %} (140 max., Twitter account linked to this social interaction) {% endif%}</label>
                         </div>
                         <div class="card-action">
-                            <div clas="right-align">
+                            <div class="right-align">
                                 <button type="reset" class="btn btn-large btn-flat">Reset</button>
-                                <button type="submit" class="btn btn-large waves-effect waves-light">Save</button>
+                                <button type="submit" href="{% url 'admin:socialinteraction_post' project.id socialinteraction.id %}" class="btn btn-large waves-effect waves-light">Save</button>
+                                <!-- <button type="submit" href="{% url 'admin:socialinteraction_post' project.id socialinteraction.id %}" class="btn btn-large waves-effect waves-light">new contribution</button> -->
                             </div>
                         </div>
                     </div>
@@ -74,9 +64,9 @@ data-socialinteraction-id="{{ socialinteraction.id }}"
 
 
 {% block libraries %}
-<script src="/static/js/admin.ui.forms.validate.js"></script>
+<script src="/static/material/js/admin.ui.forms.validate.js"></script>
 <style>
-#socialaccount_provider
+.socialaccount_provider
 {
     height:15px;
     width:15px;

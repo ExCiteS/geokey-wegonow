@@ -23,7 +23,7 @@ data-project-locked="{{ project.islocked }}"
     {% include 'snippets/messages.html' %}
 
     <div class="row">
-        <div class="col s8 offset-s2">
+        <div class="col m8 offset-m2">
             <div class="card">               
                 <div class="card-content"> 
                     <form method="POST" action="{% url 'admin:project_settings' project.id %}" novalidate>
@@ -31,26 +31,23 @@ data-project-locked="{{ project.islocked }}"
                         <h4 class="form-title">Settings</h4>
                         <div class="input-field">
                             <label for="name" >Name (required)</label>
-                            <input type="text" class="validate" id="name" name="name" maxlength="100" value="{{ project.name }}" required />
-                            
-                            
+                            <input type="text" class="validate" id="name" name="name" maxlength="100" value="{{ project.name }}" required /> 
                         </div>
+                        <a href="{% url 'admin:socialinteraction_pull' project.id %}"> PULL DATA </a>
 
                         <div class="input-field">
                             <label for="description">Description</label>
-                            <textarea class="materialize-textarea" rows="5" id="description" name="description">{{ project.description }}</textarea>
-                            
-                            
+                            <textarea class="materialize-textarea validate" rows="5" id="description" name="description">{{ project.description }}</textarea>
                         </div>
 
                         <div class="row">
-                           <strong>Project permissions</strong>
+                           <b>Project permissions</b>
                            
                                 <div class="public {% if project.isprivate %}hidden{% endif %}">
                                     <p>
                                         <input class="with-gap" name="everyone_contributes" type="radio" id="true" value="true" {% if project.everyone_contributes == 'true' %}checked{% endif %}/>
                                         <label for="true">
-                                            <strong>All users</strong><br>All users can contribute. This includes anonymous contributions from users, who are not logged in
+                                            <b>All users</b><br>All users can contribute. This includes anonymous contributions from users, who are not logged in
                                         </label>
                                     </p>
                                 </div>
@@ -60,10 +57,10 @@ data-project-locked="{{ project.islocked }}"
                                     <input class="with-gap" name="everyone_contributes" type="radio" value="auth" id="auth" {% if project.everyone_contributes == 'auth' %}checked{% endif %}/>
                                         <label for="auth"> 
                                             <span class="private">
-                                                <strong>All users</strong><br>All users that have access to the project can contribute.
+                                                <b>All users</b><br>All users that have access to the project can contribute.
                                             </span>
                                             <span class="public hide">
-                                                <strong>All authenticated users</strong><br>Users have to be logged in to contribute.
+                                                <b>All authenticated users</b><br>Users have to be logged in to contribute.
                                             </span>
                                         </label>  
                                     </p>
@@ -71,7 +68,7 @@ data-project-locked="{{ project.islocked }}"
                                 <div class="radio">
                                     <p> 
                                         <input class="with-gap" name="everyone_contributes" id="false" type="radio" value="false" {% if project.everyone_contributes == 'false' %}checked{% endif %} />
-                                        <label for="false"><strong>Only members of contributor groups can contribute</strong><br>Only users, who are members of a user groups that have been granted contribute permissions, can contribute.
+                                        <label for="false"><b>Only members of contributor groups can contribute</b><br>Only users, who are members of a user groups that have been granted contribute permissions, can contribute.
                                         </label>  
                                     </p>
                                 </div>
@@ -91,7 +88,62 @@ data-project-locked="{{ project.islocked }}"
         </div>
     </div>
 
-    <div class="row">
+    <!-- NEW MODALS -->
+
+  <div class="row">
+    <div class="col m8 offset-m2">
+        <div class="card">
+            <h4 class="card-title red lighten-3 red-text">Be careful!</h4> 
+            <div class="card-content">                  
+                <div class="toggle-active {% if project.status == status_types.active %} hide{% endif %}">
+                    <b>Activate the project</b>
+                    <p>The project will accessible again.</p>
+                    <a href="#make-active-confirm" class="text-danger" data-toggle="modal" data-target="#make-active-confirm">Activate</a>
+                    <div class="divider red lighten-3"></div>
+                </div>
+                <div class="toggle-active {% if project.status == status_types.inactive %} hide{% endif %}">
+                    <b>Archive the project</b>
+                    <p>The project will be no longer accessible.</p>
+                    <a href="#make-inactive-confirm" class="text-danger" data-toggle="modal" data-target="#make-inactive-confirm">Archive</a>
+                    <div class="divider red lighten-3"></div>
+                </div>
+                <div class="toggle-private {% if not project.isprivate %} hide{% endif %}">
+                    <b>Make the project public</b>
+                    <p>Make this project visible to the general public.</p>
+                    <a href="#make-public-confirm" class="text-danger" data-toggle="modal" data-target="#make-public-confirm">Make public</a>
+                    <div class="divider red lighten-3"></div>                        
+                </div>
+                <div class="toggle-private {% if project.isprivate %} hide{% endif %}">
+                    <b>Make the project private</b>
+                    <p>Hide this project from the public.</p>
+                    <a href="#make-private-confirm" class="text-danger" data-toggle="modal" data-target="#make-private-confirm">Make private</a>
+                    <div class="divider red lighten-3"></div>
+                </div>
+                <div class="toggle-locked {% if project.islocked %} hide{% endif %}">
+                    <b>Lock this project</b>
+                    <p>Make sure the structure of this project will not change.</p>
+                    <a href="#lock-confirm" class="text-danger" data-toggle="modal" data-target="#lock-confirm">Lock this project</a>
+                    <div class="divider red lighten-3"></div>
+                </div>
+                <div class="toggle-locked {% if not project.islocked %} hide{% endif %}">
+                    <b>Unlock this project</b>
+                    <p>Allow to edit the structure of this project.</p>
+                    <a href="#unlock-confirm" class="text-danger" data-toggle="modal" data-target="#unlock-confirm">Unlock this project</a>
+                    <div class="divider red lighten-3"></div>
+                </div>
+                <div class="toggle-locked {% if project.islocked %} hide{% endif %}">
+                    <b>Delete project</b>
+                    <p>Deleting a project cannot be undone. All data contributed to the project will be deleted too.</p>
+                    <a href="#delete-confirm" class="text-danger" data-toggle="modal" data-target="#delete-confirm">Delete this project</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- MODALS ORIGINAL FROM GEOKEY -->
+<!--     <div class="row">
         <div class="col s8 offset-s2">
             <div class="card">
                 <div class="card title red lighten-3 red-text">
@@ -100,57 +152,189 @@ data-project-locked="{{ project.islocked }}"
                 <div class="card content">
                 {% if project.status == status_types.active %}                
                     <div class="toggle-active {% if project.status == status_types.active %} hide{% endif %}">
-                        <strong>Activate the project</strong>
+                        <b>Activate the project</b>
                         <p>The project will accessible again.</p>
                         <a href="#" class="red-text" data-toggle="modal" data-target="#make-active-confirm">Activate</a>
                     </div>
 
                 {% else %}
                     <div class="toggle-active {% if project.status == status_types.inactive %} hide{% endif %}">
-                        <strong>Archive the project</strong>
+                        <b>Archive the project</b>
                         <p>The project will be no longer accessible.</p>
                         <a href="#" class="red-text" data-toggle="modal" data-target="#make-inactive-confirm">Archive</a>
                     </div>
                 <div class="divider red lighten-3"></div>
                 {% endif %}                
                     <div class="toggle-private {% if not project.isprivate %} hide{% endif %}">
-                        <strong>Make the project public</strong>
+                        <b>Make the project public</b>
                         <p>Make this project visible to the general public.</p>
                         <a href="#" class="red-text" data-toggle="modal" data-target="#make-public-confirm">Make public</a>
                     </div>
                     <div class="divider red lighten-3"></div>
                     <div class="toggle-private {% if project.isprivate %} hide{% endif %}">
-                        <strong>Make the project private</strong>
+                        <b>Make the project private</b>
                         <p>Hide this project from the public.</p>
                         <a href="#" class="red-text" data-toggle="modal" data-target="#make-private-confirm">Make private</a>
                     </div>
                     <div class="divider red lighten-3"></div>
                     <div class="toggle-locked {% if project.islocked %} hide{% endif %}">
-                        <strong>Lock this project</strong>
+                        <b>Lock this project</b>
                         <p>Make sure the structure of this project will not change.</p>
                         <a href="#" class="red-text" data-toggle="modal" data-target="#lock-confirm">Lock this project</a>
                     </div>
                     <div class="divider red lighten-3"></div>
                     <div class="toggle-locked {% if not project.islocked %} hide{% endif %}">
-                        <strong>Unlock this project</strong>
+                        <b>Unlock this project</b>
                         <p>Allow to edit the structure of this project.</p>
                         <a href="#" class="red-text" data-toggle="modal" data-target="#unlock-confirm">Unlock this project</a>
                     </div>
                     <div class="divider red lighten-3"></div>
                     <div class="toggle-locked {% if project.islocked %} hide{% endif %}">
-                        <strong>Delete project</strong>
+                        <b>Delete project</b>
                         <p>Deleting a project cannot be undone. All data contributed to the project will be deleted too.</p>
                         <a href="#" class="red-text" data-toggle="modal" data-target="#delete-confirm">Delete this project</a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 {% endblock %}
 
-{% block modals %}
-<div role="dialog" class="modal fade" id="make-active-confirm" tabindex="-1" aria-hidden="true">
+{% block modals %}http://127.0.0.1:8000/admin/projects/9/settings/#make-private-confirm
+<!-- NEW MODALS -->
+
+<div id="make-active-confirm" class="modal"  tabindex="-1" aria-hidden="true">
+    <div class="modal-title">        
+        <h4 class="modal-title amber lighten-4">Are you sure?</h4>
+    </div>
+    <div class="modal-content">
+        <b>Before you activate the project, please read through the consequences of this action:</b>
+        <ul>
+            <li>The project will be accessible to users according to project permissions.</li>
+            <li>It will be possible to access existing data and contribute new data to the project.</li>
+        </ul>
+        <div class="modal-footer">
+            <a href="{% url 'admin:project_settings' project.id %}" ><button type="button" class="btn btn-warning orange lighten-2" name="confirm" value="{{ status_types.active }}" data-loading-text="Loading...">Yes, activate the project</button></a>
+            <a  class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+        </div>
+    </div>
+</div>
+
+
+<div id="make-inactive-confirm" class="modal"  tabindex="-1" aria-hidden="true">
+    <div class="modal-title">        
+        <h4 class="modal-title amber lighten-4">Are you sure?</h4>
+    </div>
+    <div class="modal-content">
+        <b>Before you archive the project, please read through the consequences of this action:</b>
+        <ul>
+            <li>The project will be accessible to project administrators only.</li>
+            <li>All data, user groups and subsets will be kept in the database.</li>
+            <li>It will not be possible to access existing data or contribute new data to the project.</li>
+        </ul>
+        <div class="modal-footer">
+            <a href="{% url 'admin:project_settings' project.id %}" ><button type="button" class="btn btn-warning orange lighten-2" name="confirm" value="{{ status_types.inactive }}" data-loading-text="Loading...">Yes, archive the project</button></a>
+            <a  class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+        </div>
+    </div>
+</div>
+
+<div id="make-private-confirm" class="modal"  tabindex="-1" aria-hidden="true">
+    <div class="modal-title">        
+        <h4 class="modal-title amber lighten-4">Are you sure?</h4>
+    </div>
+    <div class="modal-content">
+        <b>Before you make the project private, please read through the consequences of this action:</b>
+        <ul>
+            <li>The project will be accessible administrators and moderators, contributors and members of any user group that is assigned to at least one subsets.</li>
+        </ul>
+        <div class="modal-footer">
+            <a href="{% url 'admin:project_settings' project.id %}" ><button type="button" class="btn btn-warning orange lighten-2" name="confirm" value="true" data-loading-text="Loading...">Yes, make the project private</button></a>
+            <a  class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="make-public-confirm" class="modal">
+    <div class="modal-title">        
+        <h4 class="modal-title amber lighten-4">Are you sure?</h4>
+    </div>
+    <div class="modal-content">
+        <b>Before you make the project public, please read through the consequences of this action:</b>
+        <ul>
+            <li>The project will be accessible to any user.</li>
+        </ul>
+
+        <div class="modal-footer">
+            <a href="{% url 'admin:project_settings' project.id %}" ><button type="button" class="btn btn-warning orange lighten-2" name="confirm" value="false" data-loading-text="Loading...">Yes, make the project public</button></a>
+            <a  class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+        </div>
+    </div>
+</div>
+
+
+<div id="unlock-confirm" class="modal">
+    <div class="modal-title">        
+        <h4 class="amber lighten-4">Are you sure?</h4>
+    </div>
+    <div class="modal-content">
+        <b>Before you unlock the project, please read through the consequences of this action:</b>
+        <ul>
+            <li>It will be possible to change the structure of the project.</li>
+            <li>Making such changes may affect some GeoKey extensions or linked applications.</li>
+        </ul>
+        <div class="modal-footer">
+            <a href="{% url 'admin:project_settings' project.id %}" ><button type="button" class="btn btn-warning orange lighten-2" name="confirm" value="false" data-loading-text="Loading...">Yes, unlock the project</button></a>
+            <a  class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+        </div>
+    </div>
+</div>
+
+<div id="lock-confirm" class="modal">
+    <div class="modal-title">        
+        <h4 class="modal-title amber lighten-4">Are you sure?</h4>
+    </div>
+    <div class="modal-content">
+        <b>Before you lock the project, please read through the consequences of this action:</b>
+        <ul>
+            <li>It will no longer be possible to change the structure of the project.</li>
+        </ul>
+
+        <div class="modal-footer">
+            <a href="{% url 'admin:project_settings' project.id %}" ><button type="button" class="btn btn-warning orange lighten-2" name="confirm" value="true" data-loading-text="Loading...">Yes, lock the project</button></a>
+            <a  class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+        </div>
+    </div>  
+</div>
+
+
+
+<div id="delete-confirm" class="modal">
+    <div class="modal-title">        
+        <h4 class="modal-title amber lighten-4">Are you sure?</h4>
+    </div>
+    <div class="modal-content">
+        <b>Before you delete the project, please read through the consequences of this action:</b>
+        <ul>
+            <li>- Deleting a project cannot be undone.</li>
+            <li>- Deleting a project will delete all data contributed to the project.</li>
+        </ul>
+
+        <div class="modal-footer">                
+            <a href="{% url 'admin:project_delete' project.id %}" ><button  type="button" class="btn red lighten-2">I'm absolutely sure, delete the project!</button></a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+ <!-- ORIGINAL MODALS FROM GEOKEY -->
+<!--<div role="dialog" clas s="modal fade" id="make-active-confirm" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content panel-warning">
             <div class="modal-header panel-heading">
@@ -159,7 +343,7 @@ data-project-locked="{{ project.islocked }}"
             </div>
 
             <div class="modal-body panel-body">
-                <p><strong>Before you activate the project, please read through the consequences of this action:</strong></p>
+                <p><b>Before you activate the project, please read through the consequences of this action:</b></p>
                 <ul>
                     <li>The project will be accessible to users according to project permissions.</li>
                     <li>It will be possible to access existing data and contribute new data to the project.</li>
@@ -182,7 +366,7 @@ data-project-locked="{{ project.islocked }}"
             </div>
 
             <div class="modal-body panel-body">
-                <p><strong>Before you archive the project, please read through the consequences of this action:</strong></p>
+                <p><b>Before you archive the project, please read through the consequences of this action:</b></p>
                 <ul>
                     <li>The project will be accessible to project administrators only.</li>
                     <li>All data, user groups and subsets will be kept in the database.</li>
@@ -206,7 +390,7 @@ data-project-locked="{{ project.islocked }}"
             </div>
 
             <div class="modal-body panel-body">
-                <p><strong>Before you make the project public, please read through the consequences of this action:</strong></p>
+                <p><b>Before you make the project public, please read through the consequences of this action:</b></p>
                 <ul>
                     <li>The project will be accessible to any user.</li>
                 </ul>
@@ -228,7 +412,7 @@ data-project-locked="{{ project.islocked }}"
             </div>
 
             <div class="modal-body panel-body">
-                <p><strong>Before you make the project private, please read through the consequences of this action:</strong></p>
+                <p><b>Before you make the project private, please read through the consequences of this action:</b></p>
                 <ul>
                     <li>The project will be accessible administrators and moderators, contributors and members of any user group that is assigned to at least one subsets.</li>
                 </ul>
@@ -250,7 +434,7 @@ data-project-locked="{{ project.islocked }}"
             </div>
 
             <div class="modal-body panel-body">
-                <p><strong>Before you lock the project, please read through the consequences of this action:</strong></p>
+                <p><b>Before you lock the project, please read through the consequences of this action:</b></p>
                 <ul>
                     <li>It will no longer be possible to change the structure of the project.</li>
                 </ul>
@@ -272,7 +456,7 @@ data-project-locked="{{ project.islocked }}"
             </div>
 
             <div class="modal-body panel-body">
-                <p><strong>Before you unlock the project, please read through the consequences of this action:</strong></p>
+                <p><b>Before you unlock the project, please read through the consequences of this action:</b></p>
                 <ul>
                     <li>It will be possible to change the structure of the project.</li>
                     <li>Making such changes may affect some GeoKey extensions or linked applications.</li>
@@ -295,7 +479,7 @@ data-project-locked="{{ project.islocked }}"
             </div>
 
             <div class="modal-body panel-body">
-                <p><strong>Before you delete the project, please read through the consequences of this action:</strong></p>
+                <p><b>Before you delete the project, please read through the consequences of this action:</b></p>
                 <ul>
                     <li>Deleting a project cannot be undone.</li>
                     <li>Deleting a project will delete all data contributed to the project.</li>
@@ -307,11 +491,18 @@ data-project-locked="{{ project.islocked }}"
             </div>
         </div>
     </div>
-</div>
+</div> -->
 {% endblock %}
 
 {% block libraries %}
 <script src="/static/js/admin.ui.forms.validate.js"></script>
 <script src="/static/js/admin.ui.updater.js"></script>
 <script src="/static/js/admin.control.ajax.js"></script>
+<script>
+$(document).ready(function(){
+    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+    $('.modal').modal();
+
+  });
+  </script>
 {% endblock %}

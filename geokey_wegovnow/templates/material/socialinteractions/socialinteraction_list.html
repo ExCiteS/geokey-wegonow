@@ -23,7 +23,7 @@ data-project-locked="{{ project.islocked }}"
     {% include 'snippets/messages.html' %}
 
     <div class="row">
-        <div class="col m4 push-m8">
+        <div class="col l4 push-l8 col s12">
             <div class="card-panel  blue lighten-4">
                 {% if project.islocked %}
                     <p>The project is locked, therefore social interactions cannot be edited. If you wish to edit them, you have to unlock the project in the <a href="{% url 'admin:project_settings' project.id %}"><strong>project settings</strong></a> first.</p>
@@ -31,48 +31,47 @@ data-project-locked="{{ project.islocked }}"
                     <p>Create social interactions to automatically post/tweet on your social accounts when you add a new contribution.</p>
                 {% endif %}
             </div>
+            <a href="{% url 'admin:socialinteraction_pull' project.id %}"> PULL DATA </a>
         </div>
 
-        <div class="col m8 pull-m4">
+        <div class="col l8 pull-l4 col s12">
             <div class="card">
-                <h4 class="header">
-                    {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+                <h4>
+                    {% if project.islocked %}<i class="material-icons">lock</i></span>{% endif %}
                     <span>Social interactions</span>
 
                     {% if project.categories.all and project.socialinteractions.all and not project.islocked %}
                         <a href="{% url 'admin:socialinteraction_create' project.id %}" class="btn-floating btn-large waves-effect waves-light tooltipped green" data-position="right" data-delay="50" data-tooltip="Create social interaction"><i class="material-icons">add</i></a>
-                            <span class="glyphicon glyphicon-plus"></span>
                     {% endif %}
                 </h4>
-
-            {% for socialinteraction in project.socialinteractions.all %}
-                {% if forloop.first %}
-                    <ul class="collection">
-                {% endif %}
-
-                <li class="collection-item">
-                    <h5>
-                        {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
-                        <a href="{% url 'admin:socialinteraction_settings' project.id socialinteraction.id %}">{{ socialinteraction.name }}</a>
-                    </h5>
-
-                    {% if socialinteraction.description %}<p>{{ socialinteraction.description }}</p>{% endif %}
-                </li>
-
-                {% if forloop.last %}
-                    </ul>
-                {% endif %}
-            {% empty %}
-                <div class="well empty-list">
-                    <p class="lead">We couldn't find any social interactions for this project.</p>
-
-                    {% if project.islocked %}
-                        <p>Unfortunately, you cannot create new social interactions when the project is locked.</p>
-                    {% else %}
-                        <a href="{% url 'admin:socialinteraction_create' project.id %}" class="btn btn-success btn-lg">Create new social interaction</a>
+                {% for socialinteraction in project.socialinteractions.all %}
+                    {% if forloop.first %}
+                        <ul class="collection">
                     {% endif %}
-                </div>
-            {% endfor %}
+
+                    <li class="collection-item">
+                        <h5>
+                            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+                            <a href="{% url 'admin:socialinteraction_post' project.id socialinteraction.id %}">{{ socialinteraction.name }}</a>
+                        </h5>
+
+                        {% if socialinteraction.description %}<p>{{ socialinteraction.description }}</p>{% endif %}
+                    </li>
+
+                    {% if forloop.last %}
+                        </ul>
+                    {% endif %}
+                {% empty %}
+                    <div class="well empty-list">
+                        <p class="lead">We couldn't find any social interactions for this project.</p>
+
+                        {% if project.islocked %}
+                            <p>Unfortunately, you cannot create new social interactions when the project is locked.</p>
+                        {% else %}
+                            <a href="{% url 'admin:socialinteraction_create' project.id %}" class="btn btn-success btn-lg">Create new social interaction</a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

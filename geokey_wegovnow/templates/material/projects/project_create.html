@@ -30,29 +30,26 @@
                         </div>
 
                         <div class="row">
-                            
-                               <strong>Project visibilty</strong>
-                               <p>
-                                    <input class="with-gap" name="isprivate" type="radio" id="private" value="true" checked />
-                                    <label for="private"><strong>Private</strong><br>The project will only be visible to project administrators and members of any user group assigned to this project.
-                                    </label>
-                                </p>
-                                <p>
-                                    <input class="with-gap" name="isprivate" type="radio" id="public" value="false" />
-                                    <label for="public"><strong>Public</strong><br>The project will be visible to the general public                        
-                                    </label>
-                                </p>
-   
+                            <b>Project visibilty</b>
+                            <p>
+                                <input class="with-gap" name="isprivate" type="radio" id="private" value="true" checked />
+                                <label for="private"><b>Private</b><br>The project will only be visible to project administrators and members of any user group assigned to this project.
+                                </label>
+                            </p>
+                            <p>
+                                <input class="with-gap" name="isprivate" type="radio" id="public" value="false" />
+                                <label for="public"><b>Public</b><br>The project will be visible to the general public                        
+                                </label>
+                            </p>   
                         </div>
 
                         <div class="row">
-                               <strong>Project permissions</strong>
-                               
-                                    <div class="public hide">
+                               <b>Project permissions</b>                               
+                                    <div class="public hide">                                       
                                         <p>
                                             <input class="with-gap" name="everyone_contributes" type="radio" id="true" value="true" />
                                             <label for="true">
-                                                <strong>All users</strong><br>All users can contribute. This includes anonymous contributions from users, who are not logged in
+                                                <b>All users</b><br>All users can contribute. This includes anonymous contributions from users, who are not logged in.
                                             </label>
                                         </p>
                                     </div>
@@ -62,10 +59,10 @@
                                         <input class="with-gap" name="everyone_contributes" type="radio" value="auth" id="auth"/>
                                             <label for="auth"> 
                                                 <span class="private">
-                                                    <strong>All users</strong><br>All users that have access to the project can contribute.
+                                                    <b>All users</b><br>All users that have access to the project can contribute.
                                                 </span>
                                                 <span class="public hide">
-                                                    <strong>All authenticated users</strong><br>Users have to be logged in to contribute.
+                                                    <b>All authenticated users</b><br>Users have to be logged in to contribute.
                                                 </span>
                                             </label>  
                                         </p>
@@ -73,7 +70,7 @@
                                     <div class="radio">
                                         <p> 
                                             <input class="with-gap" name="everyone_contributes" id="false" type="radio" value="false" />
-                                            <label for="false"><strong>Only members of contributor groups can contribute</strong><br>Only users, who are members of a user groups that have been granted contribute permissions, can contribute.
+                                            <label for="false"><b>Only members of contributor groups can contribute</b><br>Only users, who are members of a user groups that have been granted contribute permissions, can contribute.
                                             </label>  
                                         </p>
                                     </div>
@@ -93,7 +90,7 @@
 {% endblock %}
 
 {% block libraries %}
-<script src="/static/js/admin.ui.project.materialize.js"></script>
+<script src="/static/material/js/admin.ui.project.materialize.js"></script>
 <script src="/static/js/admin.ui.forms.validate.js"></script>
 {% endblock %}
 

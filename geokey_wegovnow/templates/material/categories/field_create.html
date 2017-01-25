@@ -49,14 +49,14 @@ data-category-id="{{ category.id }}"
 
                         <div class="checkbox">
                             <input type="checkbox" name="required" id="mandatory_value" {% if data.required %}checked{% endif %} />
-                            <label for="mandatory_value">   <strong>A value for this field is mandatory</strong>
+                            <label for="mandatory_value">   <b>A value for this field is mandatory</b>
                                 <br>Tick this box, if you want to ensure contributors provide a value for this field.
                             </label>
                         </div>
 
                         <div class="input-field"> 
-                            <strong >Type</label>              
-                            <select name="type" id="type" class="form-control" required>
+                            <b >Type</b>              
+                            <select name="type" id="type" required>
                                 <option value="" disable selected>Please select the data type of the field.</option>
                                 {% for field in fieldtypes %}
                                     <option value="{{ field.fieldtype }}" {% if data.type == field.fieldtype %}selected{% endif %}>{{ field.type_name }}</option>
@@ -75,21 +75,21 @@ data-category-id="{{ category.id }}"
                                 </div>
                             </div>
 
-                            <div class="input-field col s12">                    
-                                <input type="number" class="form-control" id="maxlength" name="maxlength" min="0" step="1" />
-                                <label for="maxlength" class="control-label">Maximum length</label>
+                        <div class="input-field col s12">                    
+                                <input type="number" id="maxlength" name="maxlength" min="0" step="1" />
+                                <label for="maxlength">Maximum length</label>
                             </div>
                         </div>
 
                         <div class="row hide field-special" id="minmax">
                             <div class="input-field col s6">                    
-                                <input type="number" step="0.001" class="form-control" id="minval" name="minval" placeholder="e.g.; 1.642" />
-                                <label for="minval" class="control-label">Minimum value</label>
+                                <input type="number" step="0.001" id="minval" name="minval" placeholder="e.g.; 1.642" />
+                                <label for="minval">Minimum value</label>
                             </div>
 
                             <div class="input-field col s6">                    
-                                <input type="number" step="0.001" class="form-control" id="maxval" name="maxval" placeholder="e.g.; 4541.6" />
-                                <label for="maxval" class="control-label">Maximum value</label>
+                                <input type="number" step="0.001" id="maxval" name="maxval" placeholder="e.g.; 4541.6" />
+                                <label for="maxval">Maximum value</label>
                             </div>
                         </div>
 
@@ -101,9 +101,9 @@ data-category-id="{{ category.id }}"
                             </div>
                         </div>
                         <div class="card-action">
-                            <div class="right-align">
-                                <button type="submit" class="btn btn-primary">Save</button>
-                                <a role="button" href="{% url 'admin:category_overview' project.id category.id %}" class="btn btn-link">Cancel</a>
+                            <div class="right-align">                                
+                                <a role="button" href="{% url 'admin:category_overview' project.id category.id %}" class="btn btn-large btn-flat">Cancel</a>
+                                <button type="submit" class="btn-large waves-effect waves-light">Save</button>
                             </div>
                         </div>
 
@@ -117,5 +117,5 @@ data-category-id="{{ category.id }}"
 
 {% block libraries %}
 <script src="/static/js/admin.ui.forms.validate.js"></script>
-<script src="/static/js/admin.ui.field.create.materialize.js"></script>
+<script src="/static/material/js/admin.ui.field.create.materialize.js"></script>
 {% endblock %}

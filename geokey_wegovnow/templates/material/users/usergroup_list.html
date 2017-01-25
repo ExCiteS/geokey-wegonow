@@ -22,7 +22,7 @@ data-project-locked="{{ project.islocked }}"
 <div class="container">
     {% include 'snippets/messages.html' %}
     <div class="row">
-        <div class="col m4 push-m8">
+        <div class="col l4 push-l8 sol s12">
             <div class="card-panel green lighten-4">
                 {% if project.islocked %}
                     <p>The project is locked, therefore user groups cannot be edited. If you wish to edit them, you have to unlock the project in the <a href="{% url 'admin:project_settings' project.id %}"><strong>project settings</strong></a> first.</p>
@@ -31,7 +31,7 @@ data-project-locked="{{ project.islocked }}"
                 {% endif %}
             </div>
         </div>
-        <div class="col m8 pull-m4">
+        <div class="col l8 pull-l4 col s12">
             <div class="card">
                 <h4>
                     {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}

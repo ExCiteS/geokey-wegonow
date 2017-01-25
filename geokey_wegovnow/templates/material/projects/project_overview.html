@@ -30,13 +30,13 @@ data-project-locked="{{ project.islocked }}"
         </h4>
 
         <div class="row">
-            <div class="col s4">
+            <div class="col s12 l4">
                 {% with categories=project.categories.all %}
                     <div class="card-panel grey lighten-3">
                         <div class="card-heading">
                             <h6 class="card-title">
                                 {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
-                                <span><strong>Categories</strong></span>
+                                <span><b>Categories</b></span>
                             </h6>
                         </div>
 
@@ -44,12 +44,12 @@ data-project-locked="{{ project.islocked }}"
                             {% for category in categories %}
                                 {% if forloop.counter == 6 %}
                                     <div class="collection-item">
-                                        <strong><a href="#" class="text-primary expand">{% more_link_text categories|length 'category' 'categories' %}</a></strong>
+                                        <b><a href="#" class="text-primary expand">{% more_link_text categories|length 'category' 'categories' %}</a></b>
                                     </div>
                                 {% endif %}
 
                                 <a href="{% url 'admin:category_overview' project.id category.id %}" class="collection-item {% if forloop.counter > 5 %}hidden{% endif %}">
-                                    <strong>{{ category.name }}</strong><br>
+                                    <b>{{ category.name }}</b><br>
                                     {% with fields_count=category.fields.count %}
                                         {{ fields_count }} field{{ fields_count|pluralize }}
                                     {% endwith %}
@@ -69,13 +69,13 @@ data-project-locked="{{ project.islocked }}"
                 {% endwith %}
             </div>
 
-            <div class="col s4">
+            <div class="col s12 l4">
                 {% with subsets=project.subsets.all %}
                     <div class="card-panel grey lighten-3">
                         <div class="card-heading">
                             <h6 class="card-title">
                                 {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
-                                <span><strong>Subsets</strong></span>
+                                <span><b>Subsets</b></span>
                                 
                             </h6>
                         </div>
@@ -84,7 +84,7 @@ data-project-locked="{{ project.islocked }}"
                             {% for subset in subsets %}
                                 {% if forloop.counter == 6 %}
                                     <div class="collection-item">
-                                        <strong><a href="#" class="text-primary expand">{% more_link_text subsets|length 'subset' 'subsets' %}</a></strong>
+                                        <b><a href="#" class="text-primary expand">{% more_link_text subsets|length 'subset' 'subsets' %}</a></b>
                                     </div>
                                 {% endif %}
 
@@ -103,19 +103,19 @@ data-project-locked="{{ project.islocked }}"
                 {% endwith %}
             </div>
 
-            <div class="col s4">
+            <div class="col s12 l4">
                 {% with usergroups=project.usergroups.all %}
                     <div class="card-panel grey lighten-3">
                         <div class="card-heading">
                             <h6 class="card-title">
                                 {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
-                                <span><strong>User groups</strong></span>
+                                <span><b>User groups</b></span>
                             </h6>
                         </div>
 
                         <div class="collection">
                             <a href="{% url 'admin:admins_overview' project.id %}" class="collection-item">
-                                <strong>Administators</strong><br>
+                                <b>Administators</b><br>
                                 {% with admins_count=project.admins.count %}
                                     {{ admins_count }} member{{ admins_count|pluralize }}
                                 {% endwith %}
@@ -124,12 +124,12 @@ data-project-locked="{{ project.islocked }}"
                             {% for group in usergroups %}
                                 {% if forloop.counter == 5 %}
                                     <div class="collection-item">
-                                        <strong><a href="#" class="text-primary expand">{% more_link_text usergroups|length 'user group' 'user groups' 4 %}</a></strong>
+                                        <b><a href="#" class="text-primary expand">{% more_link_text usergroups|length 'user group' 'user groups' 4 %}</a></b>
                                     </div>
                                 {% endif %}
 
                                 <a href="{% url 'admin:usergroup_overview' project.id group.id %}" class="collection-item {% if forloop.counter > 4 %}hidden{% endif %}">
-                                    <strong>{{ group.name }}</strong><br>
+                                    <b>{{ group.name }}</b><br>
                                     {% with members_count=group.users.count %}
                                         {{ members_count }} member{{ members_count|pluralize }}
                                     {% endwith %}
@@ -151,20 +151,20 @@ data-project-locked="{{ project.islocked }}"
     {% include 'snippets/project_help.html' %}
 
     <div id="statistics-bock">
-        <h3 class="header">Statistics</h3>
+        <h4 class="header">Statistics</h4>
 
         <div id="statistics" class="row">
-            <div class="col s4">
+            <div class="col s12 l4">
                 <span class="number">{{ project.contributions_count }}</span>
                 <p>contribution{{ project.contributions_count|pluralize }}</p>
             </div>
 
-            <div class="col s4">
+            <div class="col s12 l4">
                 <span class="number">{{ project.comments_count }}</span>
                 <p>comment{{ project.comments_count|pluralize }}</p>
             </div>
 
-            <div class="col s4">
+            <div class="col s12 l4">
                 <span class="number">{{ project.media_count }}</span>
                 <p>media file{{ project.media_count|pluralize }}</p>
             </div>
@@ -179,12 +179,6 @@ $('#help-link').click(function(event) {
     event.preventDefault();
     $('#help-block').removeClass('hide');
     $('#overview-block').addClass('hide');
-});
-
-$('a.expand').click(function(event) {
-    event.preventDefault();
-    $(this).parents('.list-group').find('a.hide').removeClass('hide');
-    $(this).parents('.list-group-item').remove();
 });
 </script>
 {% endblock %}

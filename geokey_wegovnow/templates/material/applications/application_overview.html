@@ -5,25 +5,24 @@
 {% block main %}
         <div class="page-header">
             <div class="container">
-                <h3>Applications</h1>
-
-                <nav>
-                    <div class="nav-wrapper orange ">
-                        <ul class="left">
-                            <li class="active"><a href="{% url 'admin:app_overview' %}">Registered applications</a></li>
-                            <li ><a href="{% url 'admin:app_connected' %}">Connected applications</a></li>
-                        </ul>
-                    </div>
-                <nav>
-            </div>
+                <h3>Applications</h3>
+            <nav>
+                <div class="nav-wrapper orange">
+                    <ul class="left">
+                        <li class="active"><a href="{% url 'admin:app_overview' %}">Registered applications</a></li>
+                        <li ><a href="{% url 'admin:app_connected' %}">Connected applications</a></li>
+                    </ul>
+                </div>
+            </nav>
         </div>
+
         <div class="container">
             {% include 'snippets/messages.html' %}
 
             <div class="row">
-                <div class="col m4">
+                <div class="col s12 l4">
                     <div class="card-panel blue lighten-4">
-                        <h5><strong>Learn more about:</strong></h5>
+                        <h6><b>Learn more about:</b></h6>
                         <ul>
                             <li><a href="http://geokey.org.uk/help/getting-started-with-oauth.html">How to use OAuth to authenticate users with your application.</a></li>
                             <li><a href="http://geokey.org.uk/docs/">The GeoKey API.</a></li>
@@ -31,7 +30,7 @@
                     </div>
                 </div>
 
-                <div class="col m8">
+                <div class="col s12 l8">
                     <h5 class="header">
                         Your registered applications
                         {% if apps %}<a href="{% url 'admin:app_register' %}" class="btn-floating btn-large waves-effect waves-light tooltipped right green" data-position="right" data-delay="50" data-tooltip="Create new application"><i class="material-icons">add</i></a>{% endif %}

@@ -22,17 +22,16 @@ data-category-id="{{ category.id }}"
 
 <div class="container">
     <div class="row">
-        <div class="col s4">{% include 'categories/category_navigation.html' %}</div>
+        <div class="col s12 l4">{% include 'categories/category_navigation.html' %}</div>
         
-        <div class="col s8">
+        <div class="col s12 l8">
             {% with fields=category.fields.all %}
                 <h4 class="header">
-                    {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+                    {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true">6666</span>{% endif %}
                     <span>Category fields</span>
 
                     {% if fields and not project.islocked %}
-                        <a href="{% url 'admin:category_field_create' category.project.id category.id %}" class="btn-floating btn-large waves-effect waves-light tooltipped right green" data-position="right" data-delay="50" data-tooltip="Create new field"><i class="material-icons">add</i></a>
-                            <span class="glyphicon glyphicon-plus"></span>
+                        <a href="{% url 'admin:category_field_create' category.project.id category.id %}" class="btn-floating btn-large waves-effect waves-light tooltipped green" data-position="right" data-delay="50" data-tooltip="Create new field"><i class="material-icons">add</i></a>
                     {% endif %}
                 </h4>
 

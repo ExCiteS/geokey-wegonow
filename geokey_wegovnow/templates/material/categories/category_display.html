@@ -29,41 +29,45 @@ data-category-id="{{ category.id }}"
         </div>
 
         <div class="col s8">
-            <h4 class="header">Category display</h4>
+            <div class="card">
+                <div class="card-content">
+                    <h4 class="header">Category display</h4>
+                    <form method="POST" action="{% url 'admin:category_display' category.project.id category.id %}" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
 
-            <form method="POST" action="{% url 'admin:category_display' category.project.id category.id %}" enctype="multipart/form-data" novalidate>
-                {% csrf_token %}
+                        <input type="hidden" name="clear-symbol" id="symbol-clear" value="false">
+                        <b>Colour</b>
+                        <div class="input-field">                            
+                            <div class="input-group" id="colour">
+                                <input type="text" name="colour" value="{{ category.colour }}" class="form-control" />
+                                <span class="input-group-addon"><i></i></span>
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <b stule="">Symbol</b>
+                            <input type="file" id="symbol" name="symbol" data-target="symbol" {% if category.symbol %}data-preview="{{ category.symbol.url }}"{% endif %} />    
+                        </div>
 
-                <input type="hidden" name="clear-symbol" id="symbol-clear" value="false">
+<!--                         <div class="file-field input-field">
+                            <div class="btn">
+                               <span>File666</span>
+                               <input type="file2">
+                            </div>
+                              <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                              </div>
+                        </div> -->
 
-                <div class="form-group">
-                    <label for="colour" class="control-label">Colour</label>
-                    <div class="input-group" id="colour">
-                        <input type="text" name="colour" value="{{ category.colour }}" class="form-control" />
-                        <span class="input-group-addon"><i></i></span>
-                    </div>
+
+                        <div class="card-action">
+                            <div class="right-align">                                
+                                <button type="reset" class="btn btn-small btn-flat">Reset</a>
+                                <button type="submit" class="btn btn-small waves-effect waves-light">Save</button> 
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="file-field input-field">
-                      <div class="btn right">
-                        <span>Browse dasdas</span>
-                        <input type="file">
-                      </div>
-                      <div class="file-path-wrapper">
-                        <input class="file-path validate" id="symbol" type="text">
-
-                        <label for="symbol">Symbol</label>
-                      </div>
-                </div>
-                <!--<div class="form-group">
-                    <label for="symbol" class="control-label">Symbol</label>
-                    <input type="file" id="symbol" name="symbol" data-target="symbol" {% if category.symbol %}data-preview="{{ category.symbol.url }}"{% endif %} />
-                </div>-->
-
-                <div class="form-group">
-                    <button type="submit" class="btn btn-large btn-flat">Save</button>
-                    <button type="reset" class="btn btn-primary btn-link">Reset</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
@@ -76,7 +80,7 @@ data-category-id="{{ category.id }}"
 <link rel="stylesheet" href="/static/lib/bootstrap-fileinput/css/bootstrap-fileinput.min.css">
 <script src="/static/lib/bootstrap-fileinput/js/bootstrap-fileinput.min.js"></script>
 
-<script src="/static/js/admin.ui.fileinput.js"></script>
-<script src="/static/js/admin.ui.forms.validate.js"></script>
-<script src="/static/js/admin.ui.category.display.js"></script>
+<script src="/static/material/js/admin.ui.fileinput.js"></script>
+<script src="/static/material/js/admin.ui.forms.validate.js"></script>
+<script src="/static/material/js/admin.ui.category.display.js"></script>
 {% endblock %}

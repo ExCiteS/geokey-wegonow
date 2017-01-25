@@ -25,17 +25,16 @@ data-socialinteraction-id="{{ socialinteraction.id }}"
     {% include 'snippets/messages.html' %}
 
     <div class="row">
-        <div class="col s4">
+        <div class="col s12 l4">
             {% include 'socialinteractions/socialinteraction_navigation.html' %}
         </div>
 
-        <div class="col s8">
-            <h3 class="header">Social interaction settings</h3>
+        <div class="col s12 l8">            
             <div class="card">
                 <div class="card-content">
                     <form id="settings" method="POST" action="{% url 'admin:socialinteraction_settings' project.id socialinteraction.id %}" novalidate>
                         {% csrf_token %}
-
+                        <h4 class="header">Social interaction settings</h4>
                         <div class="input-field">                            
                             <input type="text" class="form-control input-lg" id="name" name="name" maxlength="100" value="{{ socialinteraction.name }}" required />
                             <label for="name" class="control-label">Name (required)</label>
@@ -45,31 +44,29 @@ data-socialinteraction-id="{{ socialinteraction.id }}"
                             <textarea class="materialize-textarea" rows="5" id="description" name="description">{{ socialinteraction.description }} </textarea>
                             <label for="description" class="control-label">Description</label>
                         </div>
-                        <div class="row">
-                            <strong>Social account</strong>
-                            
-                            {% for socialaccount in socialaccounts_auth %}
-                                <ul id="check-list-box" class="list-group checked-list-box">
-                                {% if socialaccount == '' %}
-                                    <p>Unfortunately, you cannot create new social interactions because any social media is log in for this project.</p>
-                                {% else %} 
-                                    <p>                       
-                                    {% if socialaccount in socialinteraction.socialaccounts.all %}
-                                        <input type="checkbox" name="socialaccounts" class="filled-in" id="{{ socialaccount.id }}" value="{{ socialaccount.id }}" checked >
-                                        <label for="{{ socialaccount.id }}"> <img class="socialaccount_provider" src="{% static 'img/providers/' %}{{ socialaccount.provider }}.svg" alt="{{ socialaccount.get_provider.name }} social provider" /> {{ socialaccount.get_provider_account }} </label>
-                                        </p>
-                                    {% else %}
-                                        <input type="checkbox" id="{{ socialaccount.id }}" class="filled-in" name="socialaccounts" value="{{ socialaccount.id }}" >
-                                        <label for="{{ socialaccount.id }}"> <img class="socialaccount_provider" src="{% static 'img/providers/' %}{{ socialaccount.provider }}.svg" alt="{{ socialaccount.get_provider.name }} social provider" /> {{ socialaccount.get_provider_account }}  </label>
-                                        </p>
-                                    {%endif%}
-                               
-                                {% endif %}
-                             
-                            {% endfor %}
-                        </ul>
-                        </div>
 
+                        <b>Social account</b>
+                        
+                        {% for socialaccount in socialaccounts_auth %}
+                            <ul id="check-list-box" class="list-group checked-list-box">
+                            {% if socialaccount == '' %}
+                                <p>Unfortunately, you cannot create new social interactions because any social media is log in for this project.</p>
+                            {% else %} 
+                                <p>                       
+                                {% if socialaccount in socialinteraction.socialaccounts.all %}
+                                    <input type="checkbox" name="socialaccounts" class="filled-in" id="{{ socialaccount.id }}" value="{{ socialaccount.id }}" checked >
+                                    <label for="{{ socialaccount.id }}"> <img class="socialaccount_provider" src="{% static 'img/providers/' %}{{ socialaccount.provider }}.svg" alt="{{ socialaccount.get_provider.name }} social provider" /> {{ socialaccount.get_provider_account }} </label>
+                                    </p>
+                                {% else %}
+                                    <input type="checkbox" id="{{ socialaccount.id }}" class="filled-in" name="socialaccounts" value="{{ socialaccount.id }}" >
+                                    <label for="{{ socialaccount.id }}"> <img class="socialaccount_provider" src="{% static 'img/providers/' %}{{ socialaccount.provider }}.svg" alt="{{ socialaccount.get_provider.name }} social provider" /> {{ socialaccount.get_provider_account }}  </label>
+                                    </p>
+                                {%endif%}
+                           
+                            {% endif %}
+                         
+                        {% endfor %}
+                        </ul>
                         <div class="card-action">
                             <div class="right-align">
                                 <button type="reset" class="btn btn-large btn-flat">Reset</button>
@@ -84,7 +81,7 @@ data-socialinteraction-id="{{ socialinteraction.id }}"
 
     {% if not project.islocked %}
         <div class="row">
-            <div class="col s8 offset-s4">
+            <div class="col l8 offset-l4 s12 ">
                 <div class="card">
                     <h4 class="card title red lighten-3 red-text">Be careful!</h4>
 
@@ -126,7 +123,7 @@ data-socialinteraction-id="{{ socialinteraction.id }}"
 {% endblock %}
 
 {% block libraries %}
-<script src="/static/js/admin.ui.forms.validate.js"></script>
+<script src="/static/material/js/admin.ui.forms.validate.js"></script>
 <style>
 .socialaccount_provider
 {

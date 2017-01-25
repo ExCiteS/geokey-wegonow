@@ -26,17 +26,17 @@ data-usergroup-id="{{ usergroup.id }}"
     {% include 'snippets/messages.html' %}
 
     <div class="row">
-        <div class="col s4">
+        <div class="col s12 l4">
             {% include 'users/usergroup_navigation.html' %}
         </div>
 
-        <div class="col s8">
-            <div class="card">
-                <h4 class="header">
-                    {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
-                    User group permissions
-                </h4>
+        <div class="col s12 l8">
+            <div class="card">                
                 <div class="card-content">
+                    <h4 class="header">
+                        {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+                        User group permissions
+                    </h4>
                     {% if project.islocked %}
                         <div class="card-panel yellow lighten-4">
                             <p>The project is locked, therefore user group permissions cannot be edited. If you wish to edit it, you have to unlock the project in the <a href="{% url 'admin:project_settings' project.id %}"><strong>project settings</strong></a> first.</p>
@@ -55,14 +55,14 @@ data-usergroup-id="{{ usergroup.id }}"
                         <div class="radio">
                             
                             <input type="radio" class="with-gap" name="permission" id="read_only" value="read_only" {% if not usergroup.can_contribute and not usergroup.can_moderate %}checked="true"{% endif %} {% if project.islocked %}disabled{% endif %} />
-                            <label for="read_only">    <strong>Read only</strong>
+                            <label for="read_only">    <b>Read only</b>
                                 <p>Members of this user group will only be able to read data from its subsets.</p>
                             </label>
                         </div>
                         <div class="radio">
                             
                             <input type="radio" class="with-gap" name="permission" id="can_contribute" value="can_contribute" {% if usergroup.can_contribute and not usergroup.can_moderate %}checked="true"{% endif %} {% if project.islocked %}disabled{% endif %} />
-                            <label  for="can_contribute">    <strong>Contributors</strong>
+                            <label  for="can_contribute">    <b>Contributors</b>
                                 <p>Members of this user group will be able to contribute new data to the project and read data from its subsets.</p>
                             </label>
                         </div>
@@ -70,14 +70,16 @@ data-usergroup-id="{{ usergroup.id }}"
                         <div class="radio">
                             
                                 <input type="radio" class="with-gap" name="permission" id="can_moderate" value="can_moderate" {% if usergroup.can_moderate %}checked="true"{% endif %} {% if project.islocked %}disabled{% endif %} />
-                            <label for="can_moderate" >    <strong>Moderators</strong>
+                            <label for="can_moderate" >    <b>Moderators</b>
                                 <p>Members of this user group will be able to contribute new data as well as to read and moderate data from its subsets.</p>
                             </label>
                         </div>
 
                         {% if not project.islocked %}
                             <div class="card-action">
-                                <button type="submit" class="btn btn-large waves-effect waves-light">Save</button>
+                                <div class="right-align">
+                                    <button type="submit" class="btn btn-large waves-effect waves-light">Save</button>
+                                </div>
                             </div>
                         {% endif %}
                     </form>
@@ -89,5 +91,5 @@ data-usergroup-id="{{ usergroup.id }}"
 {% endblock %}
 
 {% block libraries %}
-<script src="/static/js/admin.ui.usergroup.permissions.js"></script>
+<script src="/static/material/js/admin.ui.usergroup.permissions.js"></script>
 {% endblock %}

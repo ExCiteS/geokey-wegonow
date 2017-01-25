@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %} | Superuser tools - Platform settings{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div class="container">
+        <h3>Superuser tools</h3>
+        {% include 'superusertools/navigation.html' %}
+    </div>
+</div>
+
+<div class="container">
+    {% include 'snippets/messages.html' %}
+
+    <div class="row">
+        <div class="col s10 offset-s1 col m8 offset-m2">
+            <form method="POST" action="{% url 'admin:superusertools_platform_settings' %}" novalidate>
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-content">
+
+                        <h4 class="header">General settings</h4>
+
+                        <div class="input-field">                            
+                            <input type="text" id="name" class="form-control input-lg" name="name" maxlength="50" value="{{ site.name }}" required />
+                            <label for="name">Name</label>
+                        </div>
+
+                        <div class="input-field">                            
+                            <input type="url" id="domain" class="form-control input-lg" name="domain" maxlength="100" value="{{ site.domain }}" required />
+                            <label for="domain">Domain</label>
+                        </div>
+
+                        <div class="card-action">
+                            <div class="right-align">
+                                <a type="reset" href="{% url 'admin:superusertools_platform_settings' %}" class="btn btn-large btn-flat">Reset</a>
+                                <button type="submit" class="btn btn-large waves-effect waves-light">Save</button>   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block libraries %}
+<script src="/static/js/admin.ui.forms.validate.js"></script>
+{% endblock %}

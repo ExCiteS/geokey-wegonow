@@ -54,6 +54,7 @@ data-subset-id="{{ subset.id }}"
                             <input type="hidden" name="filters" value="-1">
 
                             <fieldset id="filter">
+
                                 {% if not project.islocked %}<p>Select categories that will be accessible through the subset:</p>{% endif %}
 
                                 {% for category in project.categories.all %}
@@ -70,6 +71,24 @@ data-subset-id="{{ subset.id }}"
                                     </div>
                                 {% endfor %}
                             </fieldset>
+<!-- 
+                                <fieldset id="filter">
+                                    {% if not project.islocked %}<p>Select categories that will be accessible through the subset:</p>{% endif %}
+
+                                    {% for category in project.categories.all %}
+                                        <div class="category checkbox">
+                                            <label>
+                                                <input type="checkbox" class="category" name="category" value="{{ category.id }}" {% if subset.filters|is_in:category.id %}checked="checked"{% endif %} {% if project.islocked %}disabled{% endif %} />
+                                                {{ category.name }}
+                                                {% if not project.islocked %}{% show_restrict subset.filters category %}{% endif %}
+                                            </label>
+
+                                            {% if subset.filters|is_in:category.id %}
+                                                {% show_fields subset.filters category %}
+                                            {% endif%}
+                                        </div>
+                                    {% endfor %}
+                                </fieldset> -->
 
                             {% if not project.islocked %}
                                 <div class="card-action">
@@ -91,12 +110,16 @@ data-subset-id="{{ subset.id }}"
 <script src="/static/lib/moment/moment.min.js"></script>
 
 <script src="/static/lib/handlebars/handlebars.js"></script>
-<script src="/static/js/templates.js"></script>
+<script src="/static/material/js/templates.js"></script>
 
 <link rel="stylesheet" href="/static/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
 <script src="/static/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 
-<script src="/static/js/admin.ui.filters.data.js"></script>
-<script src="/static/js/admin.ui.forms.validate.js"></script>
-<script src="/static/js/admin.control.ajax.js"></script>
+<script src="/static/material/js/admin.ui.filters.data.js"></script>
+<script src="/static/material/js/admin.ui.forms.validate.js"></script>
+<script src="/static/material/js/admin.control.ajax.js"></script>
+<script>
+
+</script>
+
 {% endblock %}

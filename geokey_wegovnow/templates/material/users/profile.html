@@ -30,12 +30,14 @@
                              {% for socialaccount in socialaccounts %}
                                 {% with socialaccount.get_provider_account as provider_account %}
                                     {% if forloop.first %}
-                                        <ul class="collection">
+                                    <ul class="collection">
                                     {% endif %}
 
                                     <li class="collection-item">
-                                        <strong>{{ provider_account }}</strong>
-                                        <a role="button" href="{% url 'admin:account_disconnect' socialaccount.id %}" class="btn right blue-grey lighten-4">Disconnect</a>
+                                        <div>
+                                            <b>{{ provider_account }}</b><a href="#delete-socialaccount" class="secondary-content"><i class="material-icons">delete</i></a>
+                                            <!-- <i type="button" class="btn red lighten-2" >Disconnect</i></a> -->
+                                        </div>     <!-- <a href="{% url 'admin:account_disconnect' socialaccount.id %}" class="btn right blue-grey lighten-4">Disconnect</a> -->
                                     </li>
 
                                     {% if forloop.last %}
@@ -62,6 +64,37 @@
 {% endwith %}
 {% endblock %}
 
+{% block modals %}
+
+<div id="delete-socialaccount" class="modal">
+               
+        <h4 class="modal-title amber lighten-4">Are you sure?</h4>
+        <div class="modal-content">
+            <b>Before you delete the social account, please read through the consequences of this action:</b>
+            <ul>
+                <li>If you remove this social account will affect the existing social interactions you have created</li>
+                <li></li>
+            </ul>
+            <div class="modal-footer">                
+                <a href="#"" ><button type="button" id="deactivate" class="btn red lighten-2" data-loading-text="Loading...">I'm absolutely sure, delete the social account!</button></a>
+                <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+            </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
 {% block libraries %}
 <script src="/static/js/admin.ui.forms.validate.js"></script>
+<script>
+$(document).ready(function(){
+    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+    $('.modal').modal();
+
+  });
+
+  </script>
+
 {% endblock %}
+
