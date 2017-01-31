@@ -30,6 +30,8 @@ MIDDLEWARE_CLASSES += (
     'geokey_wegovnow.middleware.UWUMMiddleware',
 )
 
+OAUTH2_PROVIDER['OAUTH2_VALIDATOR_CLASS'] = 'geokey_wegovnow.validators.UWUMOAuth2Validator'
+
 SOCIALACCOUNT_ADAPTER = 'geokey_wegovnow.adapters.UWUMSocialAccountAdapter'
 
 SOCIALACCOUNT_PROVIDERS = {

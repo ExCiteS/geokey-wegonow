@@ -51,6 +51,12 @@ Add the custom UWUM middleware for requests and responses:
         'geokey_wegovnow.middleware.UWUMMiddleware',
     )
 
+Extend OAuth2 provider settings by setting a custom UWUM validator class:
+
+.. code-block:: python
+
+    OAUTH2_PROVIDER['OAUTH2_VALIDATOR_CLASS'] = 'geokey_wegovnow.validators.UWUMOAuth2Validator'
+
 Extend template loaders with a custom WeGovNow Material:
 
 .. code-block:: python
