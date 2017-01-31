@@ -84,13 +84,9 @@ Change UWUM provider settings (change URL accordingly):
             'CERT': join(dirname(abspath(__file__)), 'uwum.pem'),
             'REGULAR_URL': 'https://wegovnow.liquidfeedback.com',
             'CERT_URL': 'https://wegovnow-cert.liquidfeedback.com',
+            'API_VERSION': 1,
         },
     }
-    SOCIALACCOUNT_PROVIDERS['uwum']['AUTHORIZE_URL'] = '%s/api/1/authorization' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
-    SOCIALACCOUNT_PROVIDERS['uwum']['ACCESS_TOKEN_URL'] = '%s/api/1/token' % SOCIALACCOUNT_PROVIDERS['uwum']['CERT_URL']
-    SOCIALACCOUNT_PROVIDERS['uwum']['PROFILE_URL'] = '%s/api/1/info' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
-    SOCIALACCOUNT_PROVIDERS['uwum']['VALIDATE_URL'] = '%s/api/1/validate' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
-    SOCIALACCOUNT_PROVIDERS['uwum']['NOTIFY_EMAIL_URL'] = '%s/api/1/notify_email' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
     SOCIALACCOUNT_PROVIDERS['uwum']['NAVIGATION_URL'] = '%s/api/1/navigation' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
 
 After all GeoKey migrations are initiated, add the UWUM app (client ID must be the one registered by the UWUM Certificate Authority):
