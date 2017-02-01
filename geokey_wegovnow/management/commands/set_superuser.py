@@ -6,8 +6,7 @@ from __future__ import unicode_literals
 from optparse import make_option
 
 from django.core.management.base import BaseCommand
-
-from geokey.users.models import User
+from allauth.socialaccount.models import SocialAccount
 
 
 class Command(BaseCommand):
@@ -40,13 +39,13 @@ class Command(BaseCommand):
             self.stderr.write('Email address not provided.')
 
         if options['username'] and options['email']:
-            try:
-                user = User.objects.get(
-                    display_name=options['username'],
-                    email=options['email'])
-            except User.DoesNotExist:
-                user = None
-                self.stderr.write('User was not found.')
+            user = None
+            for account in SocialAccount.objects.all():
+                member = account.extra_data.get('member', {})
+                if (member.get('name') == options['username'] and
+                    member.get('email') == options['email']):
+                    user = account.user
+                    break;
 
             if user:
                 if user.is_superuser:
@@ -55,3 +54,5 @@ class Command(BaseCommand):
                     user.is_superuser = True
                     user.save()
                     self.stdout.write('User was set as a superuser.')
+            else:
+                self.stderr.write('User was not found.')
