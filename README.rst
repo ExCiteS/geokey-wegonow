@@ -81,7 +81,7 @@ Set option that UWUM users would be automatically signed up:
 
     SOCIALACCOUNT_AUTO_SIGNUP = True
 
-Change UWUM provider settings (change URL accordingly):
+Add UWUM provider settings (change URL accordingly):
 
 .. code-block:: python
 
@@ -93,7 +93,10 @@ Change UWUM provider settings (change URL accordingly):
             'API_VERSION': 1,
         },
     }
-    SOCIALACCOUNT_PROVIDERS['uwum']['NAVIGATION_URL'] = '%s/api/1/navigation' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
+    SOCIALACCOUNT_PROVIDERS['uwum']['NAVIGATION_URL'] = '%s/api/%s/navigation' % (
+        SOCIALACCOUNT_PROVIDERS.get('uwum', {}).get('REGULAR_URL').rstrip('/'),
+        SOCIALACCOUNT_PROVIDERS.get('uwum', {}).get('API_VERSION'),
+    )
 
 After all GeoKey migrations are initiated, add the UWUM app (client ID must be the one registered by the UWUM Certificate Authority):
 
