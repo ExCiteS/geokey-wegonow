@@ -28,7 +28,7 @@ class UWUMOAuth2ValidatorTests(TestCase):
 
     def test_validate_bearer_token_when_no_token(self):
         """Test checking bearer token when token is not provided."""
-        self.assertFalse(validator.validate_bearer_token(
+        self.assertFalse(self.validator.validate_bearer_token(
             None,
             self.scopes,
             self.request))
