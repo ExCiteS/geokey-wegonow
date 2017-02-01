@@ -17,7 +17,7 @@ class UWUMOAuth2ValidatorTests(TestCase):
         self.token = 'f34mfSADsf45sada31mF'
         self.scopes = []
         self.headers = {
-            'Authorization': 'Bearer %s' % access_token,
+            'Authorization': 'Bearer %s' % self.token,
             'UWUM': True,
         }
         self.request = Request(
