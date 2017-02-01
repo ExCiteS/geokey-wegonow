@@ -23,8 +23,8 @@ class GetUWUMViewTest(TestCase):
         request = HttpRequest()
         view = get_uwum_view(request)
         self.assertEqual(view.request, request)
-        self.assetTrue(isinstance(view, UWUMView))
-        self.assetTrue(isinstance(view.adapter, UWUMAdapter))
+        self.assertTrue(isinstance(view, UWUMView))
+        self.assertTrue(isinstance(view.adapter, UWUMAdapter))
 
 
 class MakeEmailTest(TestCase):
