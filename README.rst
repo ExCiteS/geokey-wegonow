@@ -104,6 +104,7 @@ After all GeoKey migrations are initiated, add the UWUM app (client ID must be t
 
     python manage.py add_uwum_app --id='<client_id>'
 
+Sign up with UWUM account and note your screen name (not login name!) and email address, then use those details to set yourself as a superuser:
 
 .. code-block:: console
 
