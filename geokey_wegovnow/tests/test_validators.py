@@ -10,7 +10,7 @@ from geokey_wegovnow import validators
 class UWUMOAuth2ValidatorTests(TestCase):
     """Tests for UWUM OAuth2 validator."""
 
-    validator = UWUMOAuth2Validator()
+    validator = validators.UWUMOAuth2Validator()
 
     def setUp(self):
         """Set up tests."""
