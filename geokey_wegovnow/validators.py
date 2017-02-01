@@ -28,6 +28,7 @@ class UWUMOAuth2Validator(OAuth2Validator):
                         provider='uwum')
                     request.user = account.user
                     request.scopes = scopes
+                    request.uwum_access_token = token
                     return True
                 except SocialAccount.DoesNotExist:
                     pass
