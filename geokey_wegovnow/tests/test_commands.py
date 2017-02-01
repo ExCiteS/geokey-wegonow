@@ -116,7 +116,6 @@ class SetSuperuserCommandTest(TestCase):
             extra_data={
                 'member': {'name': 'Another User', 'email': 'test@email.com'}
             })
-        )
         self.socialaccount_3 = SocialAccount.objects.create(
             user=self.user_1,
             provider='uwum',
@@ -124,7 +123,6 @@ class SetSuperuserCommandTest(TestCase):
             extra_data={
                 'member': {'name': 'Test User', 'email': 'test@email.com'}
             })
-        )
 
     def test_when_username_is_not_provided(self):
         """Test command when username is not provided."""
