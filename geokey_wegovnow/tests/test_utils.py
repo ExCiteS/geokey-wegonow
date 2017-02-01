@@ -1,11 +1,30 @@
 """Test all utils."""
 
 from django.test import TestCase
+from django.http import HttpRequest
 from django.contrib.sites.models import Site
+
+from allauth_uwum.views import UWUMAdapter, UWUMView
 
 from geokey.users.tests.model_factories import UserFactory
 
-from geokey_wegovnow.utils import make_email, generate_fake_email
+from geokey_wegovnow.utils import (
+    get_uwum_view,
+    make_email,
+    generate_fake_email,
+)
+
+
+class GetUWUMViewTest(TestCase):
+    """Tests for method `get_uwum_view`."""
+
+    def test_method(self):
+        """Test method."""
+        request = HttpRequest()
+        view = get_uwum_view(request)
+        self.assertEqual(view.request, request)
+        self.assetTrue(isinstance(view, UWUMView))
+        self.assetTrue(isinstance(view.adapter, UWUMAdapter))
 
 
 class MakeEmailTest(TestCase):

@@ -20,18 +20,11 @@ from rest_framework import status
 from geokey.users.models import User
 from geokey.users.views import AccountDisconnect
 
-from geokey_wegovnow.utils import generate_fake_email
+from geokey_wegovnow.utils import get_uwum_view, generate_fake_email
 
 
 class UWUMMiddleware(object):
     """UWUM middleware."""
-
-    def _get_uwum_view(self, request):
-        """Get the UWUM view."""
-        view = UWUMView()
-        view.request = request
-        view.adapter = UWUMAdapter(view.request)
-        return view
 
     def _get_uwum_access_token(self, request):
         """Get the UWUM access token."""
@@ -52,7 +45,7 @@ class UWUMMiddleware(object):
 
     def _validate_uwum_access_token(self, request, access_token):
         """Validate the UWUM access token."""
-        view = self._get_uwum_view(request)
+        view = get_uwum_view(request)
 
         response = view.adapter.validate_user(access_token)
         if response.status_code == 200:
@@ -100,7 +93,7 @@ class UWUMMiddleware(object):
 
     def _refresh_uwum_access_token(self, request, access_token):
         """Refresh the access token."""
-        view = self._get_uwum_view(request)
+        view = get_uwum_view(request)
         client = view.get_client(view.request, access_token.app)
 
         try:
@@ -128,7 +121,7 @@ class UWUMMiddleware(object):
         GeoKey does not allow to have duplicate email addresses on the system,
         but UWUM does.
         """
-        view = self._get_uwum_view(request)
+        view = get_uwum_view(request)
         notify_email = view.adapter.get_notify_email(access_token)
         extra_data = access_token.account.extra_data
 

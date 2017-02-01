@@ -3,7 +3,17 @@
 from django.utils.text import slugify
 from django.contrib.sites.models import Site
 
+from allauth_uwum.views import UWUMAdapter, UWUMView
+
 from geokey.users.models import User
+
+
+def get_uwum_view(request):
+    """Get the UWUM view (with adapter) passing the request."""
+    view = UWUMView()
+    view.request = request
+    view.adapter = UWUMAdapter(view.request)
+    return view
 
 
 def make_email(username):
