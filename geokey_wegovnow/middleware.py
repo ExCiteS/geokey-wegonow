@@ -129,8 +129,10 @@ class UWUMMiddleware(object):
     def _validate_uwum_user(self, request):
         """Validate the UWUM user."""
         if hasattr(request, 'user') and not request.user.is_anonymous():
+            # Do not validate UWUM users validated on the OAuth2 REST API
             # Do not validate twice - UWUM access token is attached to request
-            if not hasattr(request, 'uwum_access_token'):
+            if (not hasattr(request.user, 'uwum') and
+                    not hasattr(request, 'uwum_access_token')):
                 request.uwum_access_token = self._get_uwum_access_token(
                     request)
 

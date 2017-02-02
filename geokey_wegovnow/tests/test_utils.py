@@ -1,14 +1,20 @@
 """Test all utils."""
 
+from importlib import import_module
+
 from django.test import TestCase
+from django.conf import settings
 from django.http import HttpRequest
 from django.contrib.sites.models import Site
 
+from allauth.socialaccount.models import SocialAccount
 from allauth_uwum.views import UWUMAdapter, UWUMView
 
+from geokey.users.models import User
 from geokey.users.tests.model_factories import UserFactory
 from geokey_wegovnow.utils import (
     get_uwum_view,
+    sign_up_uwum_user,
     make_email_address,
     generate_display_name,
     generate_fake_email,
@@ -25,6 +31,47 @@ class GetUWUMViewTest(TestCase):
         self.assertEqual(view.request, request)
         self.assertTrue(isinstance(view, UWUMView))
         self.assertTrue(isinstance(view.adapter, UWUMAdapter))
+
+
+class SignUpUWUMUserTest(TestCase):
+    """Tests for method `sign_up_uwum_user`."""
+
+    def test_method(self):
+        """Test method."""
+        request = HttpRequest()
+        engine = import_module(settings.SESSION_ENGINE)
+        session_key = None
+        request.session = engine.SessionStore(session_key)
+
+        response = {
+            'member': {
+                'id': '129',
+                'name': 'New User'
+            }
+        }
+        user = sign_up_uwum_user(request, response)
+        socialaccount = SocialAccount.objects.latest('pk')
+        self.assertEqual(socialaccount.provider, 'uwum')
+        self.assertEqual(socialaccount.uid, '129')
+        self.assertTrue(isinstance(socialaccount.user, User))
+        self.assertEqual(socialaccount.user.display_name, 'New User')
+        self.assertTrue(isinstance(user, User))
+        self.assertEqual(user.display_name, 'New User')
+
+        response = {
+            'member': {
+                'id': '130',
+                'name': 'New User'  # Just in case UWUM gives same member name
+            }
+        }
+        user = sign_up_uwum_user(request, response)
+        socialaccount = SocialAccount.objects.latest('pk')
+        self.assertEqual(socialaccount.provider, 'uwum')
+        self.assertEqual(socialaccount.uid, '130')
+        self.assertTrue(isinstance(socialaccount.user, User))
+        self.assertEqual(socialaccount.user.display_name, 'New User 2')
+        self.assertTrue(isinstance(user, User))
+        self.assertEqual(user.display_name, 'New User 2')
 
 
 class MakeEmailAddressTest(TestCase):

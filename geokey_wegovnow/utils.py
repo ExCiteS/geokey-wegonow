@@ -3,6 +3,7 @@
 from django.utils.text import slugify
 from django.contrib.sites.models import Site
 
+from allauth.socialaccount.adapter import get_adapter
 from allauth_uwum.views import UWUMAdapter, UWUMView
 
 from geokey.users.models import User
@@ -14,6 +15,14 @@ def get_uwum_view(request):
     view.request = request
     view.adapter = UWUMAdapter(view.request)
     return view
+
+
+def sign_up_uwum_user(request, response):
+    """Sign up the UWUM user automatically on GeoKey."""
+    view = get_uwum_view(request)
+    provider = view.adapter.get_provider()
+    sociallogin = provider.sociallogin_from_response(request, response)
+    return get_adapter(request).save_user(request, sociallogin, form=None)
 
 
 def make_email_address(username):
