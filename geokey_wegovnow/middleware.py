@@ -14,13 +14,15 @@ from allauth.account.adapter import get_adapter
 from allauth.socialaccount import providers
 from allauth.socialaccount.models import SocialApp, SocialAccount, SocialToken
 from allauth.socialaccount.providers.oauth2.client import OAuth2Error
-from allauth_uwum.views import UWUMAdapter, UWUMView
 from rest_framework import status
 
-from geokey.users.models import User
 from geokey.users.views import AccountDisconnect
 
-from geokey_wegovnow.utils import get_uwum_view, generate_fake_email
+from geokey_wegovnow.utils import (
+    get_uwum_view,
+    generate_display_name,
+    generate_fake_email,
+)
 
 
 class UWUMMiddleware(object):
@@ -74,14 +76,8 @@ class UWUMMiddleware(object):
                 access_token.account.extra_data = extra_data
                 access_token.account.save()
 
-                display_name = uwum_name
-                suffix = 2
-                while User.objects.filter(display_name=display_name).exists():
-                    display_name = '%s %s' % (uwum_name, suffix)
-                    suffix += 1
-
-                request.user.display_name = display_name
-                request.user.email = generate_fake_email(display_name)
+                request.user.display_name = generate_display_name(uwum_name)
+                request.user.email = generate_fake_email(uwum_name)
                 request.user.save()
 
             self._update_uwum_notify_email(request, access_token)
