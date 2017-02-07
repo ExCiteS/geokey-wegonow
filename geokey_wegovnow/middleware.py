@@ -14,24 +14,19 @@ from allauth.account.adapter import get_adapter
 from allauth.socialaccount import providers
 from allauth.socialaccount.models import SocialApp, SocialAccount, SocialToken
 from allauth.socialaccount.providers.oauth2.client import OAuth2Error
-from allauth_uwum.views import UWUMAdapter, UWUMView
 from rest_framework import status
 
-from geokey.users.models import User
 from geokey.users.views import AccountDisconnect
 
-from geokey_wegovnow.utils import generate_fake_email
+from geokey_wegovnow.utils import (
+    get_uwum_view,
+    generate_display_name,
+    generate_fake_email,
+)
 
 
 class UWUMMiddleware(object):
     """UWUM middleware."""
-
-    def _get_uwum_view(self, request):
-        """Get the UWUM view."""
-        view = UWUMView()
-        view.request = request
-        view.adapter = UWUMAdapter(view.request)
-        return view
 
     def _get_uwum_access_token(self, request):
         """Get the UWUM access token."""
@@ -52,7 +47,7 @@ class UWUMMiddleware(object):
 
     def _validate_uwum_access_token(self, request, access_token):
         """Validate the UWUM access token."""
-        view = self._get_uwum_view(request)
+        view = get_uwum_view(request)
 
         response = view.adapter.validate_user(access_token)
         if response.status_code == 200:
@@ -81,14 +76,8 @@ class UWUMMiddleware(object):
                 access_token.account.extra_data = extra_data
                 access_token.account.save()
 
-                display_name = uwum_name
-                suffix = 2
-                while User.objects.filter(display_name=display_name).exists():
-                    display_name = '%s %s' % (uwum_name, suffix)
-                    suffix += 1
-
-                request.user.display_name = display_name
-                request.user.email = generate_fake_email(display_name)
+                request.user.display_name = generate_display_name(uwum_name)
+                request.user.email = generate_fake_email(uwum_name)
                 request.user.save()
 
             self._update_uwum_notify_email(request, access_token)
@@ -100,7 +89,7 @@ class UWUMMiddleware(object):
 
     def _refresh_uwum_access_token(self, request, access_token):
         """Refresh the access token."""
-        view = self._get_uwum_view(request)
+        view = get_uwum_view(request)
         client = view.get_client(view.request, access_token.app)
 
         try:
@@ -128,7 +117,7 @@ class UWUMMiddleware(object):
         GeoKey does not allow to have duplicate email addresses on the system,
         but UWUM does.
         """
-        view = self._get_uwum_view(request)
+        view = get_uwum_view(request)
         notify_email = view.adapter.get_notify_email(access_token)
         extra_data = access_token.account.extra_data
 
@@ -140,8 +129,10 @@ class UWUMMiddleware(object):
     def _validate_uwum_user(self, request):
         """Validate the UWUM user."""
         if hasattr(request, 'user') and not request.user.is_anonymous():
+            # Do not validate UWUM users validated on the OAuth2 REST API
             # Do not validate twice - UWUM access token is attached to request
-            if not hasattr(request, 'uwum_access_token'):
+            if (not hasattr(request.user, 'uwum') and
+                    not hasattr(request, 'uwum_access_token')):
                 request.uwum_access_token = self._get_uwum_access_token(
                     request)
 

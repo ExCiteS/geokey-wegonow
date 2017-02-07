@@ -10,7 +10,7 @@ from django.core import management
 from django.contrib.sites.shortcuts import get_current_site
 
 from allauth.socialaccount import providers
-from allauth.socialaccount.models import SocialApp
+from allauth.socialaccount.models import SocialApp, SocialAccount
 
 from geokey.users.models import User
 from geokey.users.tests.model_factories import UserFactory
@@ -96,14 +96,37 @@ class SetSuperuserCommandTest(TestCase):
         sys.stout = self.out
         sys.sterr = self.err
 
-        self.user = UserFactory.create(
-            display_name='Test User',
-            email='test@email.com',
+        self.user_1 = UserFactory.create(
+            display_name='Test User 1',
+            email='random-user-1@email.com',
             is_superuser=False)
+        self.user_2 = UserFactory.create(
+            display_name='Test User 2',
+            email='random-user-2@email.com',
+            is_superuser=False)
+        self.socialaccount_1 = SocialAccount.objects.create(
+            user=self.user_1,
+            provider='twitter',
+            uid='5478',
+            extra_data={})
+        self.socialaccount_2 = SocialAccount.objects.create(
+            user=self.user_2,
+            provider='uwum',
+            uid='437',
+            extra_data={
+                'member': {'name': 'Another User', 'email': 'test@email.com'}
+            })
+        self.socialaccount_3 = SocialAccount.objects.create(
+            user=self.user_1,
+            provider='uwum',
+            uid='1547',
+            extra_data={
+                'member': {'name': 'Test User', 'email': 'test@email.com'}
+            })
 
     def test_when_username_is_not_provided(self):
         """Test command when username is not provided."""
-        options = {'email': self.user.email}
+        options = {'email': 'test@email.com'}
         management.call_command(
             'set_superuser',
             stdout=self.out,
@@ -114,7 +137,7 @@ class SetSuperuserCommandTest(TestCase):
 
     def test_when_email_is_not_provided(self):
         """Test command when email is not provided."""
-        options = {'username': self.user.display_name}
+        options = {'username': 'Test User'}
         management.call_command(
             'set_superuser',
             stdout=self.out,
@@ -126,7 +149,7 @@ class SetSuperuserCommandTest(TestCase):
     def test_when_user_is_not_found(self):
         """Test command when user is not found."""
         options = {
-            'username': self.user.display_name,
+            'username': 'Test User',
             'email': 'non-existing@email.com'}
         management.call_command(
             'set_superuser',
@@ -138,7 +161,7 @@ class SetSuperuserCommandTest(TestCase):
 
         options = {
             'username': 'Non-existing User',
-            'email': self.user.email}
+            'email': 'test@email.com'}
         management.call_command(
             'set_superuser',
             stdout=self.out,
@@ -149,11 +172,11 @@ class SetSuperuserCommandTest(TestCase):
 
     def test_when_user_is_already_superuser(self):
         """Test command when user is already a superuser."""
-        self.user.is_superuser = True
-        self.user.save()
+        self.user_1.is_superuser = True
+        self.user_1.save()
         options = {
-            'username': self.user.display_name,
-            'email': self.user.email}
+            'username': 'Test User',
+            'email': 'test@email.com'}
         management.call_command(
             'set_superuser',
             stdout=self.out,
@@ -165,8 +188,8 @@ class SetSuperuserCommandTest(TestCase):
     def test_when_user_is_set_as_the_superuser(self):
         """Test command when user is set as a superuser."""
         options = {
-            'username': self.user.display_name,
-            'email': self.user.email}
+            'username': 'Test User',
+            'email': 'test@email.com'}
         management.call_command(
             'set_superuser',
             stdout=self.out,
@@ -174,5 +197,5 @@ class SetSuperuserCommandTest(TestCase):
             **options)
         self.assertTrue('User was set as a superuser.' in self.out.getvalue())
         self.assertEquals(self.err.getvalue(), '')
-        user = User.objects.get(pk=self.user.id)
+        user = User.objects.get(pk=self.user_1.id)
         self.assertEquals(user.is_superuser, True)

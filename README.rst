@@ -51,6 +51,12 @@ Add the custom UWUM middleware for requests and responses:
         'geokey_wegovnow.middleware.UWUMMiddleware',
     )
 
+Extend OAuth2 provider settings by setting a custom UWUM validator class:
+
+.. code-block:: python
+
+    OAUTH2_PROVIDER['OAUTH2_VALIDATOR_CLASS'] = 'geokey_wegovnow.validators.UWUMOAuth2Validator'
+
 Extend template loaders with a custom WeGovNow Material:
 
 .. code-block:: python
@@ -75,7 +81,7 @@ Set option that UWUM users would be automatically signed up:
 
     SOCIALACCOUNT_AUTO_SIGNUP = True
 
-Change UWUM provider settings (change URL accordingly):
+Add UWUM provider settings (change URL accordingly):
 
 .. code-block:: python
 
@@ -84,14 +90,13 @@ Change UWUM provider settings (change URL accordingly):
             'CERT': join(dirname(abspath(__file__)), 'uwum.pem'),
             'REGULAR_URL': 'https://wegovnow.liquidfeedback.com',
             'CERT_URL': 'https://wegovnow-cert.liquidfeedback.com',
+            'API_VERSION': 1,
         },
     }
-    SOCIALACCOUNT_PROVIDERS['uwum']['AUTHORIZE_URL'] = '%s/api/1/authorization' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
-    SOCIALACCOUNT_PROVIDERS['uwum']['ACCESS_TOKEN_URL'] = '%s/api/1/token' % SOCIALACCOUNT_PROVIDERS['uwum']['CERT_URL']
-    SOCIALACCOUNT_PROVIDERS['uwum']['PROFILE_URL'] = '%s/api/1/info' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
-    SOCIALACCOUNT_PROVIDERS['uwum']['VALIDATE_URL'] = '%s/api/1/validate' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
-    SOCIALACCOUNT_PROVIDERS['uwum']['NOTIFY_EMAIL_URL'] = '%s/api/1/notify_email' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
-    SOCIALACCOUNT_PROVIDERS['uwum']['NAVIGATION_URL'] = '%s/api/1/navigation' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
+    SOCIALACCOUNT_PROVIDERS['uwum']['NAVIGATION_URL'] = '%s/api/%s/navigation' % (
+        SOCIALACCOUNT_PROVIDERS.get('uwum', {}).get('REGULAR_URL').rstrip('/'),
+        SOCIALACCOUNT_PROVIDERS.get('uwum', {}).get('API_VERSION'),
+    )
 
 After all GeoKey migrations are initiated, add the UWUM app (client ID must be the one registered by the UWUM Certificate Authority):
 
@@ -99,7 +104,7 @@ After all GeoKey migrations are initiated, add the UWUM app (client ID must be t
 
     python manage.py add_uwum_app --id='<client_id>'
 
-Sign up with UWUM account and note your username and email address, then you those details to set yourself as a superuser:
+Sign up with UWUM account and note your screen name (not login name!) and email address, then use those details to set yourself as a superuser:
 
 .. code-block:: console
 
