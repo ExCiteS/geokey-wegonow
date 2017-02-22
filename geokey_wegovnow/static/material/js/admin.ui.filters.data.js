@@ -240,7 +240,6 @@
      */
     function handleActivateDetailed(event) {
         event.preventDefault();
-        console.log("print", $(this) )
         var container = $(this).parent();
         console.log(container)
         $(this).remove();
