@@ -17,7 +17,7 @@ Install
 geokey-wegovnow requires:
 
 - Python version 2.7
-- GeoKey version 1.2.4 or greater
+- GeoKey version 1.3 or greater
 
 Install django-allauth-uwum:
 
