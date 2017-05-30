@@ -67,7 +67,7 @@ class UWUMMiddleware(object):
             difficult, but comparing previously set actual UWUM name (saved in
             the extra data) with the new one is a peace of cake!
 
-            P.S. Ignore user emails - they're all fake. Get from extra data!
+            P.S. Ignore user emails - they're all fake. Get from extra data!!!
             """
             current_name = extra_data.get('member', {}).get('name')
             uwum_name = response.get('member', {}).get('name')
