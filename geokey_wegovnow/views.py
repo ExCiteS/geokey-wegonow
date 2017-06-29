@@ -7,6 +7,8 @@ from requests import get
 
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
@@ -17,11 +19,19 @@ from allauth.socialaccount import app_settings
 
 from geokey_wegovnow.middleware import UWUMMiddleware
 from geokey_wegovnow.renderers import RawHTMLRenderer
+from geokey.core.models import LoggerHistory
+
+from .logger import create_event, send_events
+from .base import ONTOMAP_MODELS
+
+import json
+
 
 
 # ###########################
 # ADMIN VIEWS
 # ###########################
+
 
 class UWUMProfileSettingsView(LoginRequiredMixin, TemplateView):
     """API endpoint for the UWUM profile settings (redirection)."""
@@ -83,3 +93,16 @@ class UWUMNavigationAPIView(APIView):
             return Response(
                 {'error': 'UWUM navigation not found'},
                 status=status.HTTP_404_NOT_FOUND)
+
+
+@receiver(post_save, sender=LoggerHistory)
+def post_historical_logger(sender, instance, created, **kwargs):
+    """Check when a new logger is created for the ONTOMAP_MODELS."""
+    if instance.action['class'] in ONTOMAP_MODELS:
+
+        event = create_event(
+            instance,
+            instance.action['class'],
+            instance.action['id'])
+
+        send_events(json.loads(event))
