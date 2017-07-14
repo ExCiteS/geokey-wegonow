@@ -25,6 +25,7 @@ from .logger import create_event, send_events
 from .base import ONTOMAP_MODELS
 
 import json
+import ast
 
 
 
@@ -98,11 +99,23 @@ class UWUMNavigationAPIView(APIView):
 @receiver(post_save, sender=LoggerHistory)
 def post_historical_logger(sender, instance, created, **kwargs):
     """Check when a new logger is created for the ONTOMAP_MODELS."""
+    print ("*************************************** post historical logger ", instance.action['id'])
+    print ("*************************************** post historical logger ", instance.action['class'])
     if instance.action['class'] in ONTOMAP_MODELS:
-
+        print ("*************************************** before send event ")
         event = create_event(
             instance,
             instance.action['class'],
             instance.action['id'])
 
-        send_events(json.loads(event))
+        print(":::::::::::::::::::: event is ", event)
+        # at this point, the event is still a string with single quotes, based on the text in base.py
+        # so now need to convert the string to json by replacing the single quotes with double quotes
+
+        print("zzzzzzzzzzzzzzzzzzzzzzz33", event.replace("'","\""))
+        event = event.replace("'","\"")
+        # the JSON doesn't need encoding - it should be sent as a string as part of the POST statement
+        #send_events(json.loads(event))
+        send_events(event)
+        print ("*************************************** after send event ");
+
