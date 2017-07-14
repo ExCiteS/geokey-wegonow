@@ -98,13 +98,16 @@ def replace_url(instance, class_name):
 
 def create_event(instance, class_name, action):
     """Create the json to replace the event."""
+    print ("7777777777777777 tune is ",int(round(time.time() * 1000)))
     replacements = {
         '$uwum_user_id$': SocialAccount.objects.get(
             provider='uwum',
             user=User.objects.get(id=instance.user['id'])
         ).id,
         '$activity_type$': 'object_' + action,
-        '$timestamp$': int(time.time()),
+        # time needs to be in milliseconds
+        #'$timestamp$': int(time.time()),
+        '$timestamp$' : int(round(time.time() * 1000)),
         '$external_url$': replace_url(instance, class_name),
         '$hidden$': "false"
 
