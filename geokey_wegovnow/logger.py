@@ -14,7 +14,7 @@ import time
 import string
 import json
 
-
+    
 def send_events(event_json):
     """Send events to OntoMap API."""
     event_url = ONTOMAP_URLS['event']
@@ -22,8 +22,17 @@ def send_events(event_json):
     # cert_path = uwum_settings['CERT']
     cert_path = get_cert_path()
     try:
-        headers = {'content-type': 'application/json;charset=utf-8'}
-        # headers = {'content-type': 'application/json'}
+        # headers = {'content-type': 'application/json;charset=utf-8'}
+        headers = {'content-type': 'application/json'}
+        print ("WWWWWWWWwww")
+        print ("WWWWWWWWwww")
+        print event_url
+        print cert_path
+        print headers
+        print event_json
+
+        print ("WWWWWWWWwww")
+        print ("WWWWWWWWwww")
         events_rqst = requests.post(
             event_url,
             headers=headers,
@@ -87,6 +96,10 @@ def replace_url(instance, class_name):
     if class_name == "Category":
         replacements['$category_id$'] = instance.category['id']
 
+    if class_name == "Field":
+        replacements['$category_id$'] = instance.category['id']
+        replacements['$field_id$'] = instance.field['id']
+    print("888888888888888",class_name)
     url = api_call[class_name]
     for src, target in replacements.iteritems():
         url = string.replace(url, src, str(target))
@@ -107,14 +120,14 @@ def create_event(instance, class_name, action):
 
     }
 
-    if action == 'updated' or 'created':
-        print "we get inside updated"
-        replacements['$additional_prop$'] = get_additional_properties(
-            instance,
-            class_name
-        )
-    else:
-        replacements['$additional_prop$'] = {}
+    #if action == 'updated' or 'created':
+    #    print "we get inside updated"
+    #    replacements['$additional_prop$'] = get_additional_properties(
+    #        instance,
+    #        class_name
+    #    )
+    #else:
+    replacements['$additional_prop$'] = {}
 
     if class_name != 'Observation':
         # Only geometry exists when it Observation -- Location
@@ -156,7 +169,9 @@ def get_additional_properties(instance, class_name):
     for the additionalProperties key on the json event for th OntoMap API call.
     """
     cert = get_cert_path()
+    print ("cert is ", cert)
     try:
+        print ("sssssssssssssss ", class_name)
         print "URL", replace_url(instance, class_name)
         response = requests.get(replace_url(instance, class_name), cert=cert)
         print "response.status_code", response.status_code
