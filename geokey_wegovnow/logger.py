@@ -98,7 +98,6 @@ def replace_url(instance, class_name):
 
 def create_event(instance, class_name, action):
     """Create the json to replace the event."""
-    print ("7777777777777777 tune is ",int(round(time.time() * 1000)))
     replacements = {
         '$uwum_user_id$': SocialAccount.objects.get(
             provider='uwum',
@@ -113,6 +112,7 @@ def create_event(instance, class_name, action):
 
     }
 
+    # 12th July 2017 removed the additional properties for now as it is not clear how these should work
     #if action == 'updated' or 'created':
     #    print "we get inside updated"
     #    replacements['$additional_prop$'] = get_additional_properties(
