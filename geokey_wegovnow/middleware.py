@@ -185,7 +185,6 @@ class UWUMMiddleware(object):
                         status=status.HTTP_401_UNAUTHORIZED)
                 else:
                     # But for frontend views we need to log user out of GeoKey
-                    messages.error(request, 'You have been signed out.')
                     auth_logout(request)
                     adapter = get_adapter(request)
                     return redirect(adapter.get_logout_redirect_url(request))
