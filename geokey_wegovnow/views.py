@@ -31,9 +31,7 @@ class UWUMProfileSettingsView(LoginRequiredMixin, TemplateView):
 
     def get(self, request):
         """GET method for the view."""
-        url = '%s/member/settings.html' % (
-            self.uwum_settings.get('REGULAR_URL', ''))
-        return redirect(url)
+        return redirect(self.uwum_settings.get('SETTINGS_URL', ''))
 
 
 # ###########################

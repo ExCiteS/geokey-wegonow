@@ -97,6 +97,9 @@ Add UWUM provider settings (change URL accordingly):
         SOCIALACCOUNT_PROVIDERS.get('uwum', {}).get('REGULAR_URL').rstrip('/'),
         SOCIALACCOUNT_PROVIDERS.get('uwum', {}).get('API_VERSION'),
     )
+    SOCIALACCOUNT_PROVIDERS['uwum']['SETTINGS_URL'] = '%s/member/settings.html' % (
+        SOCIALACCOUNT_PROVIDERS.get('uwum', {}).get('REGULAR_URL').rstrip('/')
+    )
 
 After all GeoKey migrations are initiated, add the UWUM app (client ID must be the one registered by the UWUM Certificate Authority):
 

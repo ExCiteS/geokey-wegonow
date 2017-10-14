@@ -61,8 +61,7 @@ class UWUMProfileSettingsViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(
             response['location'],
-            '%s/member/settings.html' % (
-                app_settings.PROVIDERS.get('uwum', {}).get('REGULAR_URL', '')))
+            app_settings.PROVIDERS.get('uwum', {}).get('SETTINGS_URL', ''))
 
 
 # ###########################
