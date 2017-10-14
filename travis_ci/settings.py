@@ -36,8 +36,8 @@ SOCIALACCOUNT_ADAPTER = 'geokey_wegovnow.adapters.UWUMSocialAccountAdapter'
 
 SOCIALACCOUNT_PROVIDERS = {
     'uwum': {
-        'REGULAR_URL': 'https://wegovnow-pt1.liquidfeedback.com',
-        'CERT_URL': 'https://wegovnow-pt1-cert.liquidfeedback.com',
+        'REGULAR_URL': 'https://wegovnow.liquidfeedback.com',
+        'CERT_URL': 'https://wegovnow-cert.liquidfeedback.com',
         'API_VERSION': 1,
     },
 }
