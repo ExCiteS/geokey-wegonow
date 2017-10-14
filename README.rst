@@ -101,6 +101,13 @@ Add UWUM provider settings (change URL accordingly):
         SOCIALACCOUNT_PROVIDERS.get('uwum', {}).get('REGULAR_URL').rstrip('/')
     )
 
+Change default GeoKey redirects:
+
+.. code-block:: python
+
+    LOGIN_REDIRECT_URL = SOCIALACCOUNT_PROVIDERS['uwum']['SETTINGS_URL']
+    ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = SOCIALACCOUNT_PROVIDERS['uwum']['SETTINGS_URL']
+
 After all GeoKey migrations are initiated, add the UWUM app (client ID must be the one registered by the UWUM Certificate Authority):
 
 .. code-block:: console

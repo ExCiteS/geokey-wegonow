@@ -49,6 +49,8 @@ SOCIALACCOUNT_PROVIDERS['uwum']['SETTINGS_URL'] = '%s/member/settings.html' % (
     SOCIALACCOUNT_PROVIDERS.get('uwum', {}).get('REGULAR_URL').rstrip('/')
 )
 
+LOGIN_REDIRECT_URL = SOCIALACCOUNT_PROVIDERS['uwum']['SETTINGS_URL']
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = SOCIALACCOUNT_PROVIDERS['uwum']['SETTINGS_URL']
 
 TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.templates.BootstrapLoader']
 
