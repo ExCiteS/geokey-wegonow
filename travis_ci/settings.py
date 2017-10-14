@@ -41,7 +41,10 @@ SOCIALACCOUNT_PROVIDERS = {
         'API_VERSION': 1,
     },
 }
-SOCIALACCOUNT_PROVIDERS['uwum']['NAVIGATION_URL'] = '%s/api/1/navigation' % SOCIALACCOUNT_PROVIDERS['uwum']['REGULAR_URL']
+SOCIALACCOUNT_PROVIDERS['uwum']['NAVIGATION_URL'] = '%s/api/%s/navigation' % (
+    SOCIALACCOUNT_PROVIDERS.get('uwum', {}).get('REGULAR_URL').rstrip('/'),
+    SOCIALACCOUNT_PROVIDERS.get('uwum', {}).get('API_VERSION'),
+)
 
 TEMPLATES[0]['OPTIONS']['loaders'][:0] = ['geokey_wegovnow.templates.BootstrapLoader']
 
