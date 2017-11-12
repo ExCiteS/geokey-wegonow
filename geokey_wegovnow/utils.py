@@ -50,3 +50,24 @@ def generate_fake_email(username):
         email = make_email_address('%s %s' % (username, suffix))
         suffix += 1
     return email
+
+
+def set_coordinates_precision(coords, precision):
+    """Set precision for coordinates."""
+    result = []
+
+    try:
+        return round(coords, int(precision))
+    except TypeError:
+        for coord in coords:
+            result.append(set_coordinates_precision(coord, precision))
+
+    return result
+
+
+def set_geometry_precision(geometry, precision):
+    """Set precision for geometry."""
+    coordinates = set_coordinates_precision(geometry['coordinates'], precision)
+    geometry['coordinates'] = coordinates
+
+    return geometry
