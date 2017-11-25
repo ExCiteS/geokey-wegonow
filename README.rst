@@ -101,6 +101,23 @@ Add UWUM provider settings (change URL accordingly):
         SOCIALACCOUNT_PROVIDERS.get('uwum', {}).get('REGULAR_URL').rstrip('/')
     )
 
+Add OnToMap logger settings (change URL accordingly):
+
+.. code-block:: python
+
+    ONTOMAP_URLS = {
+        'BASE_URL': 'https://api.ontomap.eu',
+        'API_VERSION': 1,
+    }
+    ONTOMAP_URLS['EVENTS_URL'] = '%s/api/v%s/logger/events' % (
+        ONTOMAP_URLS.get('BASE_URL').rstrip('/'),
+        ONTOMAP_URLS.get('API_VERSION'),
+    )
+    ONTOMAP_URLS['MAPPINGS_URL'] = '%s/api/v%s/logger/mappings' % (
+        ONTOMAP_URLS.get('BASE_URL').rstrip('/'),
+        ONTOMAP_URLS.get('API_VERSION'),
+    )
+
 Change default GeoKey redirects:
 
 .. code-block:: python
