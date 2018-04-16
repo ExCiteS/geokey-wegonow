@@ -53,13 +53,23 @@ CATEGORY_MAPPING = {
 CONTRIBUTION_MAPPING = {
     'app_concept': 'Contribution',
     'ontomap_concept': 'AtomicThing',
-    'properties': []
+    'properties': [
+        {
+            'app_property': 'name',
+            'ontomap_property': 'hasName'
+        }
+    ]
 }
 
 COMMENT_MAPPING = {
     'app_concept': 'Comment',
     'ontomap_concept': 'Comment',
-    'properties': []
+    'properties': [
+        {
+            'app_property': 'name',
+            'ontomap_property': 'hasName'
+        }
+    ]
 }
 
 MEDIAFILE_MAPPING = {
