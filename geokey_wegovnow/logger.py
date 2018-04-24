@@ -244,6 +244,8 @@ def make_event(class_name, instance, action):
             url = domain + instance.image.url
         elif hasattr(instance, 'video'):
             url = instance.youtube_link
+        else:
+            url = domain
 
         activity_objects.append({
             'type': 'Feature',
