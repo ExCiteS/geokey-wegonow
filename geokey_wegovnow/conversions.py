@@ -5,13 +5,13 @@ def make_cm_url(url):
     """Turns a Geokey url into a Community Maps url."""
     protocol, address = url.split('//')
     address_parts = address.split('/')
-    new_address_parts = [address_parts[0]]
+    new_address_parts = []
     for i, part in enumerate(address_parts):
         if part == 'api':
             continue
         if i == 0 and '-gk-' in part:
             new_address_parts.append(part.replace('-gk-', '-cm-'))
-        if part.endswith('s'):
+        elif part.endswith('s'):
             new_address_parts.append(part[:-1])
         else:
             new_address_parts.append(part)
