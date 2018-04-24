@@ -103,7 +103,7 @@ def make_event(class_name, instance, action):
     # ###########################
 
     if class_name == 'Project':
-        external_url = '%s/projects/%s/' % (
+        external_url = '%s/api/projects/%s/' % (
             domain, instance.id)
 
         if action == 'deleted' or instance.isprivate:
@@ -136,7 +136,7 @@ def make_event(class_name, instance, action):
     # ###########################
 
     if class_name == 'Category':
-        external_url = '%s/projects/%s/categories/%s/' % (
+        external_url = '%s/api/projects/%s/categories/%s/' % (
             domain, instance.project.id, instance.id)
         hidden = True if action == 'deleted' else instance.status == 'active'
 
@@ -166,7 +166,7 @@ def make_event(class_name, instance, action):
     # ###########################
 
     if class_name == 'Observation':
-        external_url = '%s/projects/%s/contributions/%s/' % (
+        external_url = '%s/api/projects/%s/contributions/%s/' % (
             domain, instance.project.id, instance.id)
         hidden = True if action == 'deleted' else instance.status == 'active'
 
@@ -199,7 +199,7 @@ def make_event(class_name, instance, action):
         contribution = instance.commentto
         parent_comment = instance.respondsto or None
 
-        external_url = '%s/projects/%s/contributions/%s/comment' % (
+        external_url = '%s/api/projects/%s/contributions/%s/comments' % (
             domain, contribution.project.id, contribution.id)
         hidden = True if action == 'deleted' else instance.status == 'active'
 
@@ -234,7 +234,7 @@ def make_event(class_name, instance, action):
     if class_name == 'MediaFile':
         contribution = instance.contribution
 
-        external_url = '%s/projects/%s/contributions/%s/media/%s' % (
+        external_url = '%s/api/projects/%s/contributions/%s/media/%s' % (
             domain, contribution.project.id, contribution.id, instance.id)
         hidden = True if action == 'deleted' else instance.status == 'active'
 
