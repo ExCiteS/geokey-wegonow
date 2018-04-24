@@ -21,5 +21,5 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['*.tests', '*.tests.*', 'tests.*']),
     include_package_data=True,
-    install_requires=['django-material==0.10.0'],
+    install_requires=['django-material==0.10.0', 'geokey', 'django-allauth', 'django', 'requests'],
 )
