@@ -14,13 +14,7 @@ from allauth.socialaccount.models import SocialAccount
 from allauth_uwum.provider import UWUMProvider
 
 from geokey.core.signals import get_request
-from geokey.users.models import User
-from geokey.projects.models import Project
-from geokey.categories.models import Category
-from geokey.contributions.models import Observation, Comment, MediaFile
-
 from geokey_wegovnow.base import MAPPINGS
-from geokey_wegovnow.utils import set_geometry_precision
 
 
 # Default headers for OnToMap
