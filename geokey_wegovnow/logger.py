@@ -18,6 +18,8 @@ from geokey_wegovnow.base import MAPPINGS
 
 
 # Default headers for OnToMap
+from geokey_wegovnow.conversions import make_cm_url
+
 headers = {'content-type': 'application/json;charset=utf-8'}
 
 
@@ -117,7 +119,7 @@ def make_event(class_name, instance, action):
             'properties': {
                 'hasType': 'Project',
                 'name': instance.name,
-                'external_url': external_url,
+                'external_url': make_cm_url(external_url),
                 'additionalProperties': {
                     'description': instance.description
                 }
@@ -125,7 +127,7 @@ def make_event(class_name, instance, action):
         })
 
         visibility_details.append({
-            'external_url': external_url,
+            'external_url': make_cm_url(external_url),
             'hidden': hidden
         })
 
@@ -146,7 +148,7 @@ def make_event(class_name, instance, action):
             'properties': {
                 'hasType': 'Category',
                 'name': instance.name,
-                'external_url': external_url,
+                'external_url': make_cm_url(external_url),
                 'additionalProperties': {
                     'description': instance.description
                 }
@@ -154,7 +156,7 @@ def make_event(class_name, instance, action):
         })
 
         visibility_details.append({
-            'external_url': external_url,
+            'external_url': make_cm_url(external_url),
             'hidden': hidden
         })
 
@@ -178,13 +180,13 @@ def make_event(class_name, instance, action):
             'geometry': geometry,
             'properties': {
                 'hasType': 'Contribution',
-                'external_url': external_url,
+                'external_url': make_cm_url(external_url),
                 'additionalProperties': properties
             }
         })
 
         visibility_details.append({
-            'external_url': external_url,
+            'external_url': make_cm_url(external_url),
             'hidden': hidden
         })
 
@@ -208,7 +210,7 @@ def make_event(class_name, instance, action):
             'geometry': None,
             'properties': {
                 'hasType': 'Comment',
-                'external_url': external_url,
+                'external_url': make_cm_url(external_url),
                 'additionalProperties': {
                     'text': instance.text,
                     'responds_to': (
@@ -219,7 +221,7 @@ def make_event(class_name, instance, action):
         })
 
         visibility_details.append({
-            'external_url': external_url,
+            'external_url': make_cm_url(external_url),
             'hidden': hidden
         })
 
@@ -253,7 +255,7 @@ def make_event(class_name, instance, action):
             'properties': {
                 'hasType': 'MediaFile',
                 'name': instance.name,
-                'external_url': external_url,
+                'external_url': make_cm_url(external_url),
                 'additionalProperties': {
                     'description': instance.description,
                     'url': url
@@ -262,7 +264,7 @@ def make_event(class_name, instance, action):
         })
 
         visibility_details.append({
-            'external_url': external_url,
+            'external_url': make_cm_url(external_url),
             'hidden': hidden
         })
 
