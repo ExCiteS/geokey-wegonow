@@ -180,6 +180,7 @@ def make_event(class_name, instance, action):
             'geometry': geometry,
             'properties': {
                 'hasType': 'Contribution',
+                'hasName': instance.name,
                 'external_url': make_cm_url(external_url),
                 'additionalProperties': properties
             }
