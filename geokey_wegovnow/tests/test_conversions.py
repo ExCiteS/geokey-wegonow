@@ -1,7 +1,7 @@
 """Non-Django tests for self-contained conversion methods."""
 from unittest import TestCase
 
-from geokey_wegovnow.conversions import make_cm_url
+from geokey_wegovnow.conversions import make_cm_url, get_link_title
 
 
 class ExternalUrlsConversionTests(TestCase):
@@ -47,5 +47,32 @@ class ExternalUrlsConversionTests(TestCase):
         expected_cm_url_contains = "wegovnow-cm-sandona"
         output = make_cm_url(url=geokey_url)
         self.assertIn(expected_cm_url_contains, output)
+
+
+class GetTitleTests(TestCase):
+
+    def test_blank_dict_unknown(self):
+        props = {}
+        expected_title = "Unknown title"
+        output = get_link_title(properties=props)
+        self.assertEquals(output, expected_title)
+
+    def test_find_lc_name_field(self):
+        props = {'name': 'It could be sweet'}
+        expected_title = "It could be sweet"
+        output = get_link_title(properties=props)
+        self.assertEquals(output, expected_title)
+
+    def test_find_1cap_name_field(self):
+        props = {'Name': 'It could be sweet'}
+        expected_title = "It could be sweet"
+        output = get_link_title(properties=props)
+        self.assertEquals(output, expected_title)
+
+    def test_default_to_first_item(self):
+        props = {'Strawberries': 'Wandering'}
+        expected_title = "Strawberries Wandering"
+        output = get_link_title(properties=props)
+        self.assertEquals(output, expected_title)
 
 
