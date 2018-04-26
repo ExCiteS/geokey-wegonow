@@ -18,7 +18,7 @@ from geokey_wegovnow.base import MAPPINGS
 
 
 # Default headers for OnToMap
-from geokey_wegovnow.conversions import make_cm_url
+from geokey_wegovnow.conversions import make_cm_url, get_link_title
 
 headers = {'content-type': 'application/json;charset=utf-8'}
 
@@ -180,7 +180,7 @@ def make_event(class_name, instance, action):
             'additionalProperties': additional_properties
         }
         if not hidden:
-            properties['name'] = literal_eval(json.dumps(instance.name)),
+            properties['name'] = get_link_title(properties=json.dumps(instance.properties))
 
         activity_objects.append({
             'type': 'Feature',

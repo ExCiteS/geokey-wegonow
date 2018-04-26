@@ -16,3 +16,18 @@ def make_cm_url(url):
         else:
             new_address_parts.append(part)
     return protocol + '//' + '/'.join(new_address_parts)
+
+
+def get_link_title(properties):
+    """Gets a link title from a properties dictionary."""
+    if not properties:
+        return "Unknown title"
+
+    # Try plausible fields for link titles.
+    possible_title_field_names = ['name', 'Name', 'title', 'Title']
+    for title in possible_title_field_names:
+        if title in properties:
+            return properties[title]
+
+    # Fall back to the first items in the dict.
+    return ' '.join(properties.items()[0])
