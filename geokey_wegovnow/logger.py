@@ -173,17 +173,19 @@ def make_event(class_name, instance, action):
         hidden = True if action == 'deleted' else instance.status == 'active'
 
         geometry = literal_eval(instance.location.geometry.geojson)
-        properties = literal_eval(json.dumps(instance.properties))
+        additional_properties = literal_eval(json.dumps(instance.properties))
+        properties = {
+            'hasType': 'Contribution',
+            'external_url': make_cm_url(external_url),
+            'additionalProperties': additional_properties
+        }
+        if not hidden:
+            properties['name'] = literal_eval(json.dumps(instance.name)),
 
         activity_objects.append({
             'type': 'Feature',
             'geometry': geometry,
-            'properties': {
-                'hasType': 'Contribution',
-                'name': 'test_name',
-                'external_url': make_cm_url(external_url),
-                'additionalProperties': properties
-            }
+            'properties': properties
         })
 
         visibility_details.append({
