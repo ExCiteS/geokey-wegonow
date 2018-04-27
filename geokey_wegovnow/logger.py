@@ -179,7 +179,7 @@ def make_event(class_name, instance, action):
             'external_url': make_cm_url(external_url),
             'additionalProperties': additional_properties
         }
-        if not hidden:
+        if action != 'deleted':
             properties['name'] = get_link_title(properties=instance.properties)
 
         activity_objects.append({
