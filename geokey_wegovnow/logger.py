@@ -180,7 +180,7 @@ def make_event(class_name, instance, action):
             'additionalProperties': additional_properties
         }
         if not hidden:
-            properties['name'] = get_link_title(properties=json.dumps(instance.properties))
+            properties['name'] = get_link_title(properties=instance.properties)
 
         activity_objects.append({
             'type': 'Feature',
