@@ -14,16 +14,12 @@ from allauth.socialaccount.models import SocialAccount
 from allauth_uwum.provider import UWUMProvider
 
 from geokey.core.signals import get_request
-from geokey.users.models import User
-from geokey.projects.models import Project
-from geokey.categories.models import Category
-from geokey.contributions.models import Observation, Comment, MediaFile
-
 from geokey_wegovnow.base import MAPPINGS
-from geokey_wegovnow.utils import set_geometry_precision
 
 
 # Default headers for OnToMap
+from geokey_wegovnow.conversions import make_cm_url, get_link_title
+
 headers = {'content-type': 'application/json;charset=utf-8'}
 
 
@@ -123,7 +119,7 @@ def make_event(class_name, instance, action):
             'properties': {
                 'hasType': 'Project',
                 'name': instance.name,
-                'external_url': external_url,
+                'external_url': make_cm_url(external_url),
                 'additionalProperties': {
                     'description': instance.description
                 }
@@ -131,7 +127,7 @@ def make_event(class_name, instance, action):
         })
 
         visibility_details.append({
-            'external_url': external_url,
+            'external_url': make_cm_url(external_url),
             'hidden': hidden
         })
 
@@ -152,7 +148,7 @@ def make_event(class_name, instance, action):
             'properties': {
                 'hasType': 'Category',
                 'name': instance.name,
-                'external_url': external_url,
+                'external_url': make_cm_url(external_url),
                 'additionalProperties': {
                     'description': instance.description
                 }
@@ -160,7 +156,7 @@ def make_event(class_name, instance, action):
         })
 
         visibility_details.append({
-            'external_url': external_url,
+            'external_url': make_cm_url(external_url),
             'hidden': hidden
         })
 
@@ -177,20 +173,23 @@ def make_event(class_name, instance, action):
         hidden = True if action == 'deleted' else instance.status == 'active'
 
         geometry = literal_eval(instance.location.geometry.geojson)
-        properties = literal_eval(json.dumps(instance.properties))
+        additional_properties = literal_eval(json.dumps(instance.properties))
+        properties = {
+            'hasType': 'Contribution',
+            'external_url': make_cm_url(external_url),
+            'additionalProperties': additional_properties
+        }
+        if action != 'deleted':
+            properties['name'] = get_link_title(properties=instance.properties)
 
         activity_objects.append({
             'type': 'Feature',
             'geometry': geometry,
-            'properties': {
-                'hasType': 'Contribution',
-                'external_url': external_url,
-                'additionalProperties': properties
-            }
+            'properties': properties
         })
 
         visibility_details.append({
-            'external_url': external_url,
+            'external_url': make_cm_url(external_url),
             'hidden': hidden
         })
 
@@ -214,7 +213,7 @@ def make_event(class_name, instance, action):
             'geometry': None,
             'properties': {
                 'hasType': 'Comment',
-                'external_url': external_url,
+                'external_url': make_cm_url(external_url),
                 'additionalProperties': {
                     'text': instance.text,
                     'responds_to': (
@@ -225,7 +224,7 @@ def make_event(class_name, instance, action):
         })
 
         visibility_details.append({
-            'external_url': external_url,
+            'external_url': make_cm_url(external_url),
             'hidden': hidden
         })
 
@@ -250,6 +249,8 @@ def make_event(class_name, instance, action):
             url = domain + instance.image.url
         elif hasattr(instance, 'video'):
             url = instance.youtube_link
+        else:
+            url = domain
 
         activity_objects.append({
             'type': 'Feature',
@@ -257,7 +258,7 @@ def make_event(class_name, instance, action):
             'properties': {
                 'hasType': 'MediaFile',
                 'name': instance.name,
-                'external_url': external_url,
+                'external_url': make_cm_url(external_url),
                 'additionalProperties': {
                     'description': instance.description,
                     'url': url
@@ -266,7 +267,7 @@ def make_event(class_name, instance, action):
         })
 
         visibility_details.append({
-            'external_url': external_url,
+            'external_url': make_cm_url(external_url),
             'hidden': hidden
         })
 
