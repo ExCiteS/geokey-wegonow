@@ -75,4 +75,16 @@ class GetTitleTests(TestCase):
         output = get_link_title(properties=props)
         self.assertEquals(output, expected_title)
 
+    def test_numeric_keys(self):
+        props = {0: 'Two divided by', 1: 'With each other'}
+        expected_title = '0 Two divided by'
+        output = get_link_title(properties=props)
+        self.assertEqual(output, expected_title)
+
+    def test_numeric_values(self):
+        props = {'Two divided by': 0, 'With each other': 1}
+        expected_title = 'Two divided by 0'
+        output = get_link_title(properties=props)
+        self.assertEqual(output, expected_title)
+
 
