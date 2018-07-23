@@ -24,10 +24,11 @@ def get_link_title(properties):
         return "Unknown title"
 
     # Try plausible fields for link titles.
-    possible_title_field_names = ['name', 'Name', 'title', 'Title']
+    possible_title_field_names = ['name', 'title', 'heading', 'main']
     for title in possible_title_field_names:
-        if title in properties:
-            return properties[title]
+        for k in properties.keys():
+            if str.upper(title) in str.upper(str(k)):
+                return properties[k]
 
     # Fall back to the first items in the dict.
-    return ' '.join(properties.items()[0])
+    return ' '.join([str(a) for a in properties.items()[0]])
