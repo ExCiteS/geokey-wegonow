@@ -140,7 +140,7 @@ def make_event(class_name, instance, action):
     if class_name == 'Category':
         external_url = '%s/api/projects/%s/categories/%s/' % (
             domain, instance.project.id, instance.id)
-        hidden = True if action == 'deleted' else instance.status == 'active'
+        hidden = True if action == 'deleted' or instance.project.isprivate else instance.status == 'active'
 
         activity_objects.append({
             'type': 'Feature',
@@ -170,7 +170,7 @@ def make_event(class_name, instance, action):
     if class_name == 'Observation':
         external_url = '%s/api/projects/%s/contributions/%s/' % (
             domain, instance.project.id, instance.id)
-        hidden = True if action == 'deleted' else instance.status == 'active'
+        hidden = True if action == 'deleted' or instance.project.isprivate else instance.status == 'active'
 
         geometry = literal_eval(instance.location.geometry.geojson)
         additional_properties = literal_eval(json.dumps(instance.properties))
@@ -206,7 +206,7 @@ def make_event(class_name, instance, action):
 
         external_url = '%s/api/projects/%s/contributions/%s/comments' % (
             domain, contribution.project.id, contribution.id)
-        hidden = True if action == 'deleted' else instance.status == 'active'
+        hidden = True if action == 'deleted' or instance.project.isprivate else instance.status == 'active'
 
         activity_objects.append({
             'type': 'Feature',
@@ -241,7 +241,7 @@ def make_event(class_name, instance, action):
 
         external_url = '%s/api/projects/%s/contributions/%s/media/%s' % (
             domain, contribution.project.id, contribution.id, instance.id)
-        hidden = True if action == 'deleted' else instance.status == 'active'
+        hidden = True if action == 'deleted' or instance.project.isprivate else instance.status == 'active'
 
         if hasattr(instance, 'audio'):
             url = domain + instance.audio.url
