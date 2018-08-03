@@ -1,3 +1,4 @@
+# coding=utf-8
 """Non-Django tests for self-contained conversion methods."""
 from unittest import TestCase
 
@@ -87,4 +88,18 @@ class GetTitleTests(TestCase):
         output = get_link_title(properties=props)
         self.assertEqual(output, expected_title)
 
+
+class GetLinkTitleNonAsciiCharsTest(TestCase):
+
+    def test_ascii_chars(self):
+        props = {'Some normal chars': 'THIS-THING'}
+        expected_title = 'Some normal chars THIS-THING'
+        output = get_link_title(properties=props)
+        self.assertEqual(output, expected_title)
+
+    def test_non_ascii_charts(self):
+        props = {'Title': 'Ç-THàNG¡'}
+        expected_title = u'Ç-THàNG¡'
+        output = get_link_title(properties=props)
+        self.assertEqual(expected_title, output)
 
