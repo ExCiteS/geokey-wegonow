@@ -97,9 +97,20 @@ class GetLinkTitleNonAsciiCharsTest(TestCase):
         output = get_link_title(properties=props)
         self.assertEqual(output, expected_title)
 
-    def test_non_ascii_charts(self):
+    def test_non_ascii_charts_in_value(self):
         props = {'Title': 'Ç-THàNG¡'}
         expected_title = u'Ç-THàNG¡'
         output = get_link_title(properties=props)
         self.assertEqual(expected_title, output)
 
+    def test_non_ascii_charts_in_key(self):
+        props = {'Title Çà¡': 'Thing!'}
+        expected_title = u'Thing!'
+        output = get_link_title(properties=props)
+        self.assertEqual(expected_title, output)
+
+    def test_non_ascii_charts_in_value_no_title(self):
+        props = {'Start': 'Ç-THàNG¡'}
+        expected_title = u'Start Ç-THàNG¡'
+        output = get_link_title(properties=props)
+        self.assertEqual(expected_title, output)

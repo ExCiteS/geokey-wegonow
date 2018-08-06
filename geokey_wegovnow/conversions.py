@@ -28,7 +28,7 @@ def get_link_title(properties):
     for title in possible_title_field_names:
         for k in properties.keys():
             if str.upper(title) in str.upper(str(k)):
-                return properties[k]
+                return unicode(properties[k], encoding='utf-8')
 
     # Fall back to the first items in the dict.
-    return ' '.join([str(a) for a in properties.items()[0]])
+    return ' '.join([unicode(a, encoding='utf-8') for a in properties.items()[0]])
