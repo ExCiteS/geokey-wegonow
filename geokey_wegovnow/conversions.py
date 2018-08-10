@@ -1,5 +1,12 @@
 """Methods for converting data between systems or formats."""
 
+import sys
+
+if sys.version_info.major < 3:
+    # This is supposed to be bad practice, but is the only thing found to work.
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+
 
 def make_cm_url(url):
     """Turns a Geokey url into a Community Maps url."""

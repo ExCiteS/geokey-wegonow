@@ -1,3 +1,4 @@
+# coding=utf-8
 """Non-Django tests for self-contained conversion methods."""
 from unittest import TestCase
 
@@ -86,5 +87,40 @@ class GetTitleTests(TestCase):
         expected_title = 'Two divided by 0'
         output = get_link_title(properties=props)
         self.assertEqual(output, expected_title)
+
+
+class GetLinkTitleNonAsciiCharsTest(TestCase):
+
+    def test_ascii_chars(self):
+        props = {'Some normal chars': 'THIS-THING'}
+        expected_title = 'Some normal chars THIS-THING'
+        output = get_link_title(properties=props)
+        self.assertEqual(output, expected_title)
+
+    def test_non_ascii_charts_in_value(self):
+        props = {'Title': 'Ç-THàNG¡'}
+        expected_title = u'Ç-THàNG¡'
+        output = get_link_title(properties=props)
+        self.assertEqual(expected_title, output)
+
+    def test_non_ascii_charts_in_key(self):
+        props = {'Title Çà¡': 'Thing!'}
+        expected_title = u'Thing!'
+        output = get_link_title(properties=props)
+        self.assertEqual(expected_title, output)
+
+    def test_non_ascii_charts_in_value_no_title(self):
+        props = {'Start': 'Ç-THàNG¡'}
+        expected_title = u'Start Ç-THàNG¡'
+        output = get_link_title(properties=props)
+        self.assertEqual(expected_title, output)
+
+    def test_non_ascii_charts_in_value_descrizione(self):
+        props = {'Descrizione': u"Area dedicata ad attività atletiche a corpo libero con il supporto di sbarre, "
+                                u"parallele e anelli. Quest'area NON è oggetto di co-progettazione"}
+        expected_title = u"Descrizione Area dedicata ad attività atletiche a corpo libero con il supporto di " \
+                         u"sbarre, parallele e anelli. Quest'area NON è oggetto di co-progettazione"
+        output = get_link_title(properties=props)
+        self.assertEqual(expected_title, output)
 
 
