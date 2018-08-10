@@ -114,3 +114,13 @@ class GetLinkTitleNonAsciiCharsTest(TestCase):
         expected_title = u'Start Ç-THàNG¡'
         output = get_link_title(properties=props)
         self.assertEqual(expected_title, output)
+
+    def test_non_ascii_charts_in_value_descrizione(self):
+        props = {'Descrizione': u"Area dedicata ad attività atletiche a corpo libero con il supporto di sbarre, "
+                                u"parallele e anelli. Quest'area NON è oggetto di co-progettazione"}
+        expected_title = u"Descrizione Area dedicata ad attività atletiche a corpo libero con il supporto di " \
+                         u"sbarre, parallele e anelli. Quest'area NON è oggetto di co-progettazione"
+        output = get_link_title(properties=props)
+        self.assertEqual(expected_title, output)
+
+

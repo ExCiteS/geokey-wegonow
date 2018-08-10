@@ -1,5 +1,12 @@
 """Methods for converting data between systems or formats."""
 
+import sys
+
+if sys.version_info.major < 3:
+    # This is supposed to be bad practice, but is the only thing found to work.
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+
 
 def make_cm_url(url):
     """Turns a Geokey url into a Community Maps url."""
@@ -28,7 +35,7 @@ def get_link_title(properties):
     for title in possible_title_field_names:
         for k in properties.keys():
             if str.upper(title) in str.upper(str(k)):
-                return unicode(properties[k], encoding='utf-8')
+                return properties[k]
 
     # Fall back to the first items in the dict.
-    return ' '.join([unicode(str(a), encoding='utf-8') for a in properties.items()[0]])
+    return ' '.join([str(a) for a in properties.items()[0]])
