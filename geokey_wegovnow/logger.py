@@ -99,7 +99,7 @@ def make_event(class_name, instance, action):
     activity_objects = []
     visibility_details = []
     details = {}
-    if action == 'removed' or instance.isprivate or instance.status != 'active':
+    if action == 'removed' or instance.status != 'active':
         hidden = True
     else:
         hidden = False
@@ -111,6 +111,8 @@ def make_event(class_name, instance, action):
     if class_name == 'Project':
         external_url = '%s/api/projects/%s/' % (
             domain, instance.id)
+        if instance.isprivate:
+            hidden = True
 
         activity_objects.append({
             'type': 'Feature',
