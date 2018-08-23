@@ -26,7 +26,7 @@ def log_on_pre_save(sender, instance, **kwargs):
                 events.append(make_event(
                     instance._class_name,
                     instance,
-                    'deleted'))
+                    'removed'))
                 instance._logged = True
             else:
                 try:
