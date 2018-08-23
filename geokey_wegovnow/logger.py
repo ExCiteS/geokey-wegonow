@@ -297,7 +297,7 @@ def send_events(events):
     url = settings.ONTOMAP_URLS['EVENTS_URL']
 
     if events:
-        # Always make sure mapings are up-to-date before sending event
+        # Always make sure mappings are up-to-date before sending event
         check_mappings()
 
         data = {
