@@ -99,6 +99,10 @@ def make_event(class_name, instance, action):
     activity_objects = []
     visibility_details = []
     details = {}
+    if action == 'removed' or instance.status != 'active':
+        hidden = True
+    else:
+        hidden = False
 
     # ###########################
     # ADDITIONS FOR PROJECT
@@ -107,11 +111,8 @@ def make_event(class_name, instance, action):
     if class_name == 'Project':
         external_url = '%s/api/projects/%s/' % (
             domain, instance.id)
-
-        if action == 'deleted' or instance.isprivate:
+        if instance.isprivate:
             hidden = True
-        else:
-            hidden = instance.status == 'active'
 
         activity_objects.append({
             'type': 'Feature',
@@ -140,7 +141,8 @@ def make_event(class_name, instance, action):
     if class_name == 'Category':
         external_url = '%s/api/projects/%s/categories/%s/' % (
             domain, instance.project.id, instance.id)
-        hidden = True if action == 'deleted' else instance.status == 'active'
+        if instance.project.isprivate:
+            hidden = True
 
         activity_objects.append({
             'type': 'Feature',
@@ -170,17 +172,14 @@ def make_event(class_name, instance, action):
     if class_name == 'Observation':
         external_url = '%s/api/projects/%s/contributions/%s/' % (
             domain, instance.project.id, instance.id)
-        hidden = True if action == 'deleted' else instance.status == 'active'
+        if instance.project.isprivate:
+            hidden = True
 
         geometry = literal_eval(instance.location.geometry.geojson)
         additional_properties = literal_eval(json.dumps(instance.properties))
-        properties = {
-            'hasType': 'Contribution',
-            'external_url': make_cm_url(external_url),
-            'additionalProperties': additional_properties
-        }
-        if action != 'deleted':
-            properties['name'] = get_link_title(properties=instance.properties)
+        properties = {'hasType': 'Contribution', 'external_url': make_cm_url(external_url),
+                      'additionalProperties': additional_properties,
+                      'name': get_link_title(properties=instance.properties)}
 
         activity_objects.append({
             'type': 'Feature',
@@ -206,7 +205,8 @@ def make_event(class_name, instance, action):
 
         external_url = '%s/api/projects/%s/contributions/%s/comments' % (
             domain, contribution.project.id, contribution.id)
-        hidden = True if action == 'deleted' else instance.status == 'active'
+        if instance.project.isprivate:
+            hidden = True
 
         activity_objects.append({
             'type': 'Feature',
@@ -241,7 +241,8 @@ def make_event(class_name, instance, action):
 
         external_url = '%s/api/projects/%s/contributions/%s/media/%s' % (
             domain, contribution.project.id, contribution.id, instance.id)
-        hidden = True if action == 'deleted' else instance.status == 'active'
+        if instance.project.isprivate:
+            hidden = True
 
         if hasattr(instance, 'audio'):
             url = domain + instance.audio.url
@@ -297,7 +298,7 @@ def send_events(events):
     url = settings.ONTOMAP_URLS['EVENTS_URL']
 
     if events:
-        # Always make sure mapings are up-to-date before sending event
+        # Always make sure mappings are up-to-date before sending event
         check_mappings()
 
         data = {
