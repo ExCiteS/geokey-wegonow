@@ -14,22 +14,23 @@ class Command(BaseCommand):
 
     help = 'Set user as a superuser.'
 
-    option_list = BaseCommand.option_list + (
-        make_option(
+    def add_arguments(self, parser):
+
+        parser.add_argument(
             '--username',
             action='store',
             dest='username',
             default=None,
             help='Make a user with this username a superuser.'
-        ),
-        make_option(
+        )
+
+        parser.add_argument(
             '--email',
             action='store',
             dest='email',
             default=None,
             help='Make a user with this email address a superuser.'
-        ),
-    )
+        )
 
     def handle(self, *args, **options):
         """Handle the command."""
@@ -45,7 +46,7 @@ class Command(BaseCommand):
                 if (member.get('name') == options['username'] and
                     member.get('email') == options['email']):
                     user = account.user
-                    break;
+                    break
 
             if user:
                 if user.is_superuser:

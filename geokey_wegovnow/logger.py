@@ -205,7 +205,7 @@ def make_event(class_name, instance, action):
 
         external_url = '%s/api/projects/%s/contributions/%s/comments' % (
             domain, contribution.project.id, contribution.id)
-        if instance.project.isprivate:
+        if contribution.project.isprivate:
             hidden = True
 
         activity_objects.append({
@@ -241,7 +241,7 @@ def make_event(class_name, instance, action):
 
         external_url = '%s/api/projects/%s/contributions/%s/media/%s' % (
             domain, contribution.project.id, contribution.id, instance.id)
-        if instance.project.isprivate:
+        if contribution.project.isprivate:
             hidden = True
 
         if hasattr(instance, 'audio'):

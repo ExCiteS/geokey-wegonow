@@ -3,8 +3,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from optparse import make_option
-
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.contrib.sites.shortcuts import get_current_site
@@ -18,15 +16,14 @@ class Command(BaseCommand):
 
     help = 'Add UWUM app.'
 
-    option_list = BaseCommand.option_list + (
-        make_option(
+    def add_arguments(self, parser):
+        parser.add_argument(
             '--id',
             action='store',
             dest='id',
             default=None,
             help='Add UWUM app with this ID.'
         ),
-    )
 
     def handle(self, *args, **options):
         """Handle the command."""
