@@ -1,10 +1,11 @@
 """Methods for converting data between systems or formats."""
 
 import sys
+import imp
 
 if sys.version_info.major < 3:
     # This is supposed to be bad practice, but is the only thing found to work.
-    reload(sys)
+    imp.reload(sys)
     sys.setdefaultencoding('utf8')
 
 
@@ -33,9 +34,9 @@ def get_link_title(properties):
     # Try plausible fields for link titles.
     possible_title_field_names = ['name', 'title', 'heading', 'main']
     for title in possible_title_field_names:
-        for k in properties.keys():
+        for k in list(properties.keys()):
             if str.upper(title) in str.upper(str(k)):
                 return properties[k]
 
     # Fall back to the first items in the dict.
-    return ' '.join([str(a) for a in properties.items()[0]])
+    return ' '.join([str(a) for a in list(properties.items())[0]])

@@ -21,7 +21,7 @@ class UrlPatternsTests(TestCase):
         self.assertEqual(reversed_url, '/admin/profile/settings/')
 
         resolved_url = resolve('/admin/profile/settings/')
-        self.assertEqual(resolved_url.func.func_name, view.__name__)
+        self.assertEqual(resolved_url.func.__name__, view.__name__)
 
     # ###########################
     # TESTS FOR PUBLIC API
@@ -35,4 +35,4 @@ class UrlPatternsTests(TestCase):
         self.assertEqual(reversed_url, '/api/wegovnow/navigation/')
 
         resolved_url = resolve('/api/wegovnow/navigation/')
-        self.assertEqual(resolved_url.func.func_name, view.__name__)
+        self.assertEqual(resolved_url.func.__name__, view.__name__)

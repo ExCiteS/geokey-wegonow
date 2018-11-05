@@ -1,7 +1,7 @@
 """All views for the WeGovNow extension."""
 
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from requests import get
 

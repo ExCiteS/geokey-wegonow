@@ -2,7 +2,7 @@
 
 import sys
 
-from StringIO import StringIO
+from six import StringIO
 
 from django.conf import settings
 from django.test import TestCase
@@ -34,7 +34,7 @@ class AddUWUMAppCommandTest(TestCase):
             stdout=self.out,
             stderr=self.err,
             **options)
-        self.assertEquals(self.out.getvalue(), '')
+        self.assertEqual(self.out.getvalue(), '')
         self.assertTrue('Client ID not provided.' in self.err.getvalue())
 
     def test_when_social_app_was_not_added_yet(self):
@@ -49,14 +49,14 @@ class AddUWUMAppCommandTest(TestCase):
             'UWUM app `test-uwum-app` was added.' in self.out.getvalue())
         self.assertTrue(
             'Please configure UWUM in the settings.' in self.out.getvalue())
-        self.assertEquals(self.err.getvalue(), '')
-        self.assertEquals(SocialApp.objects.count(), 1)
+        self.assertEqual(self.err.getvalue(), '')
+        self.assertEqual(SocialApp.objects.count(), 1)
         social_app = SocialApp.objects.latest('pk')
-        self.assertEquals(social_app.provider, 'uwum')
-        self.assertEquals(social_app.name, 'UWUM')
-        self.assertEquals(social_app.client_id, 'test-uwum-app')
-        self.assertEquals(social_app.secret, '')
-        self.assertEquals(social_app.key, '')
+        self.assertEqual(social_app.provider, 'uwum')
+        self.assertEqual(social_app.name, 'UWUM')
+        self.assertEqual(social_app.client_id, 'test-uwum-app')
+        self.assertEqual(social_app.secret, '')
+        self.assertEqual(social_app.key, '')
 
     def test_when_social_app_was_already_added(self):
         """Test command when social app was already added."""
@@ -76,14 +76,14 @@ class AddUWUMAppCommandTest(TestCase):
             **options)
         self.assertTrue(
             'UWUM app was updated to `uwum-app-2`.' in self.out.getvalue())
-        self.assertEquals(self.err.getvalue(), '')
-        self.assertEquals(SocialApp.objects.count(), 1)
+        self.assertEqual(self.err.getvalue(), '')
+        self.assertEqual(SocialApp.objects.count(), 1)
         social_app = SocialApp.objects.get(pk=social_app.id)
-        self.assertEquals(social_app.provider, 'uwum')
-        self.assertEquals(social_app.name, 'UWUM')
-        self.assertEquals(social_app.client_id, 'uwum-app-2')
-        self.assertEquals(social_app.secret, '')
-        self.assertEquals(social_app.key, '')
+        self.assertEqual(social_app.provider, 'uwum')
+        self.assertEqual(social_app.name, 'UWUM')
+        self.assertEqual(social_app.client_id, 'uwum-app-2')
+        self.assertEqual(social_app.secret, '')
+        self.assertEqual(social_app.key, '')
 
 
 class SetSuperuserCommandTest(TestCase):
@@ -132,7 +132,7 @@ class SetSuperuserCommandTest(TestCase):
             stdout=self.out,
             stderr=self.err,
             **options)
-        self.assertEquals(self.out.getvalue(), '')
+        self.assertEqual(self.out.getvalue(), '')
         self.assertTrue('Username not provided.' in self.err.getvalue())
 
     def test_when_email_is_not_provided(self):
@@ -143,7 +143,7 @@ class SetSuperuserCommandTest(TestCase):
             stdout=self.out,
             stderr=self.err,
             **options)
-        self.assertEquals(self.out.getvalue(), '')
+        self.assertEqual(self.out.getvalue(), '')
         self.assertTrue('Email address not provided.' in self.err.getvalue())
 
     def test_when_user_is_not_found(self):
@@ -156,7 +156,7 @@ class SetSuperuserCommandTest(TestCase):
             stdout=self.out,
             stderr=self.err,
             **options)
-        self.assertEquals(self.out.getvalue(), '')
+        self.assertEqual(self.out.getvalue(), '')
         self.assertTrue('User was not found.' in self.err.getvalue())
 
         options = {
@@ -167,7 +167,7 @@ class SetSuperuserCommandTest(TestCase):
             stdout=self.out,
             stderr=self.err,
             **options)
-        self.assertEquals(self.out.getvalue(), '')
+        self.assertEqual(self.out.getvalue(), '')
         self.assertTrue('User was not found.' in self.err.getvalue())
 
     def test_when_user_is_already_superuser(self):
@@ -182,7 +182,7 @@ class SetSuperuserCommandTest(TestCase):
             stdout=self.out,
             stderr=self.err,
             **options)
-        self.assertEquals(self.out.getvalue(), '')
+        self.assertEqual(self.out.getvalue(), '')
         self.assertTrue('User is already a superuser.' in self.err.getvalue())
 
     def test_when_user_is_set_as_the_superuser(self):
@@ -196,6 +196,6 @@ class SetSuperuserCommandTest(TestCase):
             stderr=self.err,
             **options)
         self.assertTrue('User was set as a superuser.' in self.out.getvalue())
-        self.assertEquals(self.err.getvalue(), '')
+        self.assertEqual(self.err.getvalue(), '')
         user = User.objects.get(pk=self.user_1.id)
-        self.assertEquals(user.is_superuser, True)
+        self.assertEqual(user.is_superuser, True)

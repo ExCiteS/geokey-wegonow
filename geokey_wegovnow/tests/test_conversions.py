@@ -56,25 +56,25 @@ class GetTitleTests(TestCase):
         props = {}
         expected_title = "Unknown title"
         output = get_link_title(properties=props)
-        self.assertEquals(output, expected_title)
+        self.assertEqual(output, expected_title)
 
     def test_find_lc_name_field(self):
         props = {'name': 'It could be sweet'}
         expected_title = "It could be sweet"
         output = get_link_title(properties=props)
-        self.assertEquals(output, expected_title)
+        self.assertEqual(output, expected_title)
 
     def test_find_1cap_name_field(self):
         props = {'Name': 'It could be sweet'}
         expected_title = "It could be sweet"
         output = get_link_title(properties=props)
-        self.assertEquals(output, expected_title)
+        self.assertEqual(output, expected_title)
 
     def test_default_to_first_item(self):
         props = {'Strawberries': 'Wandering'}
         expected_title = "Strawberries Wandering"
         output = get_link_title(properties=props)
-        self.assertEquals(output, expected_title)
+        self.assertEqual(output, expected_title)
 
     def test_numeric_keys(self):
         props = {0: 'Two divided by', 1: 'With each other'}
@@ -99,27 +99,27 @@ class GetLinkTitleNonAsciiCharsTest(TestCase):
 
     def test_non_ascii_charts_in_value(self):
         props = {'Title': 'Ç-THàNG¡'}
-        expected_title = u'Ç-THàNG¡'
+        expected_title = 'Ç-THàNG¡'
         output = get_link_title(properties=props)
         self.assertEqual(expected_title, output)
 
     def test_non_ascii_charts_in_key(self):
         props = {'Title Çà¡': 'Thing!'}
-        expected_title = u'Thing!'
+        expected_title = 'Thing!'
         output = get_link_title(properties=props)
         self.assertEqual(expected_title, output)
 
     def test_non_ascii_charts_in_value_no_title(self):
         props = {'Start': 'Ç-THàNG¡'}
-        expected_title = u'Start Ç-THàNG¡'
+        expected_title = 'Start Ç-THàNG¡'
         output = get_link_title(properties=props)
         self.assertEqual(expected_title, output)
 
     def test_non_ascii_charts_in_value_descrizione(self):
-        props = {'Descrizione': u"Area dedicata ad attività atletiche a corpo libero con il supporto di sbarre, "
-                                u"parallele e anelli. Quest'area NON è oggetto di co-progettazione"}
-        expected_title = u"Descrizione Area dedicata ad attività atletiche a corpo libero con il supporto di " \
-                         u"sbarre, parallele e anelli. Quest'area NON è oggetto di co-progettazione"
+        props = {'Descrizione': "Area dedicata ad attività atletiche a corpo libero con il supporto di sbarre, "
+                                "parallele e anelli. Quest'area NON è oggetto di co-progettazione"}
+        expected_title = "Descrizione Area dedicata ad attività atletiche a corpo libero con il supporto di " \
+                         "sbarre, parallele e anelli. Quest'area NON è oggetto di co-progettazione"
         output = get_link_title(properties=props)
         self.assertEqual(expected_title, output)
 

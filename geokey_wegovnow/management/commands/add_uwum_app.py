@@ -1,7 +1,7 @@
 """Command `add_uwum_app`."""
 
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
