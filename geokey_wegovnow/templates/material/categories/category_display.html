@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block bodydata %}
+data-project-id="{{ project.id }}"
+data-project-locked="{{ project.islocked }}"
+data-category-id="{{ category.id }}"
+{% endblock %}
+
+{% block title %} | Project: {{ project.name }} - Category: {{ category.name }} - Display{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="smaller">
+            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+            <a href="{% url 'admin:project_overview' project.id %}">{{ project.name }}</a>
+        </h1>
+
+        {% include 'projects/navigation.html' %}
+    </div>
+</div>
+
+<div class="container">
+    {% include 'snippets/messages.html' %}
+
+    <div class="row">
+        <div class="col s4">
+            {% include 'categories/category_navigation.html' %}
+        </div>
+
+        <div class="col s8">
+            <div class="card">
+                <div class="card-content">
+                    <h4 class="header">Category display</h4>
+                    <form method="POST" action="{% url 'admin:category_display' category.project.id category.id %}" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        <input type="hidden" name="clear-symbol" id="symbol-clear" value="false">
+                        <b>Colour</b>
+                        <div class="input-field">                            
+                            <div class="input-group" id="colour">
+                                <input type="text" name="colour" value="{{ category.colour }}" class="form-control" />
+                                <span class="input-group-addon"><i></i></span>
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <b stule="">Symbol</b>
+                            <input type="file" id="symbol" name="symbol" data-target="symbol" {% if category.symbol %}data-preview="{{ category.symbol.url }}"{% endif %} />    
+                        </div>
+
+<!--                         <div class="file-field input-field">
+                            <div class="btn">
+                               <span>File666</span>
+                               <input type="file2">
+                            </div>
+                              <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                              </div>
+                        </div> -->
+
+
+                        <div class="card-action">
+                            <div class="right-align">                                
+                                <button type="reset" class="btn btn-small btn-flat">Reset</a>
+                                <button type="submit" class="btn btn-small waves-effect waves-light">Save</button> 
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block libraries %}
+<link rel="stylesheet" href="/static/lib/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+<script src="/static/lib/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+
+<link rel="stylesheet" href="/static/lib/bootstrap-fileinput/css/bootstrap-fileinput.min.css">
+<script src="/static/lib/bootstrap-fileinput/js/bootstrap-fileinput.min.js"></script>
+
+<script src="/static/material/js/admin.ui.fileinput.js"></script>
+<script src="/static/material/js/admin.ui.forms.validate.js"></script>
+<script src="/static/material/js/admin.ui.category.display.js"></script>
+{% endblock %}

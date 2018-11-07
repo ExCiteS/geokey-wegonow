@@ -22,3 +22,13 @@ def exclude_uwum_app(apps):
 def exclude_uwum_accounts(accounts):
     """Exclude UWUM accounts."""
     return accounts.exclude(provider='uwum')
+
+
+@register.filter()
+def is_twitter(socialinteraction):
+    """Exclude UWUM accounts."""
+    value = False
+    for sa in socialinteraction.socialaccounts.all():
+        if sa.provider == 'twitter':
+            value = True
+    return value

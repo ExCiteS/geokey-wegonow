@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load project_attributes %}
+
+{% block title %} | Dashboard{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div class="container">
+        <h4>Welcome, {{ user.display_name }}.</h4>
+    </div>
+</div>
+
+<div class="container">
+    {% include 'snippets/messages.html' %}
+    <div class="row">
+        <div class="col s12 l8">
+            <div class="card-content">
+                    <h5>  
+                        Manage your projects
+                        {% if projects %}    
+                            <a href="{% url 'admin:project_create' %}" class="btn-floating btn-large waves-effect waves-light tooltipped green" data-position="right" data-delay="50" data-tooltip="Create new project"><i class="material-icons">add</i></a>
+                        {% endif %}
+                    </h5>
+                    <ul class="collection">
+                    {% for project in projects %}
+                        {% if forloop.first %}
+
+                        {% endif %}
+
+                        <li class="collection-item">
+                            <h5>
+                                {% if project.islocked %}<i class="material-icons">lock</i></span>{% endif %}
+                                <a href="{% url 'admin:project_overview' project.id %}">{{ project.name }}</a>
+                            </h5>
+
+                            {% if project.description %}<p>{{ project.description }}</p>{% endif %}
+                            <p>{% project_attributes project %}</p>
+                        </li>
+
+                        {% if forloop.last %}
+                    </ul>
+                        {% endif %}
+                    {% empty %}
+                        <div class="well empty-list">
+                            <h7 class="lead">We couldn't find any projects you are eligible to manage.</h7>
+                            <p>You can create a new project if you want to start your own map.</p>
+                            <a href="{% url 'admin:project_create' %}" class="btn btn-success btn-lg">Create a new project</a>
+                        </div>
+                    {% endfor %}
+                </div>
+         </div>
+
+        <div class="col s12 l4">
+                <div class="collection">
+                    <a class="collection-item" href="{% url 'admin:app_overview' %}">Your applications</a>
+                    {% if user.is_superuser %}<a class="collection-item" href="{% url 'admin:superusertools_index' %}">Superuser tools</a>{% endif %}
+                    <a class="collection-item" href="{% url 'admin:projects_involved' %}">Other projects</a>
+                </div>
+
+            <div class="card">
+                <div class="card-header grey lighten-4">
+                    <h5 class="">Extensions</h5>
+                <div class="card content">
+                    <div class="collection">
+                        {% for extension in extensions %}
+                            <a href="{% url extension.index_url %}" class="collection-item clearfix">
+                                {{ extension.name }}
+                                {% if extension.version %}<span class="text-muted pull-right">v{{ extension.version }}</span>{% endif %}
+                            </a>
+                        {% empty %}
+                            <div class="collection-item">
+                                No extensions have been installed.
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

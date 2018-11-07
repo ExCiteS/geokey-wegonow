@@ -46,6 +46,7 @@ class UWUMNavigationAPIView(APIView):
 
     def get(self, request, format=None):
         """GET method for the view."""
+
         navigation_url = self.uwum_settings.get('NAVIGATION_URL')
         if not navigation_url:
             return Response(
@@ -72,7 +73,6 @@ class UWUMNavigationAPIView(APIView):
                 request.accepted_renderer.format,
                 client_id),
             headers=headers)
-
         if response.status_code == 200:
             if request.accepted_renderer.format != 'raw_html':
                 response = response.json()

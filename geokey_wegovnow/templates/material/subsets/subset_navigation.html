@@ -1,0 +1,15 @@
+<div class="card">
+    <div class="card heading grey lighten-3">
+        <h6 class="item-info">Subset</h6>
+
+        <h4>
+            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+            {{ subset.name }}
+        </h4>
+
+        <div class="collection">
+            <a href="{% url 'admin:subset_data' subset.project.id subset.id %}" class="collection-item {% if request.resolver_match.url_name == 'subset_data' %}active{% endif %}">Data</a>
+            <a href="{% url 'admin:subset_settings' subset.project.id subset.id %}" class="collection-item {% if request.resolver_match.url_name == 'subset_settings' %}active{% endif %}">Settings</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load social %}
+{% load wegovnow %}
+{% block title %} | Your profile{% endblock %}
+
+{% block main %}
+{% get_social_apps as all_social_apps %}
+{% with all_social_apps|exclude_uwum_app as social_apps %}
+    <div class="page-header">
+        <div class="container">
+            <h3>Your profile</h3>
+        </div>
+    </div>
+
+    <div class="container">
+        {% include 'snippets/messages.html' %}
+
+        <div class="row">
+            <div class="card">
+            {% if social_apps %}
+                <div class="col s6">
+                    <h4>Connect social accounts</h4>
+                    {% include 'snippets/social_apps.html' with process='connect' %}
+                    <div class="card content">
+                        {% with accounts|exclude_uwum_accounts as socialaccounts %}
+                    </div>
+                        {% if socialaccounts %}
+
+                            <h4 >Your connected accounts</h4>
+                             {% for socialaccount in socialaccounts %}
+                                {% with socialaccount.get_provider_account as provider_account %}
+                                    {% if forloop.first %}
+                                    <ul class="collection">
+                                    {% endif %}
+
+                                    <li class="collection-item">
+                                        <div>
+                                            <b>{{ provider_account }}</b><a href="#delete-socialaccount" class="secondary-content"><i class="material-icons">delete</i></a>
+                                            <!-- <i type="button" class="btn red lighten-2" >Disconnect</i></a> -->
+                                        </div>     <!-- <a href="{% url 'admin:account_disconnect' socialaccount.id %}" class="btn right blue-grey lighten-4">Disconnect</a> -->
+                                    </li>
+
+                                    {% if forloop.last %}
+                                        </ul>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+
+            {% endif %}
+
+            <div class="col s6 {% if not social_apps %}col-s8 offset-s2 offset-s3{% endif %}">
+                <h4 class="header">Profile settings</h4>
+
+                <div class="card-panel yellow lighten-4">
+                    <p>Please navigate to <a href="{% url 'geokey_wegovnow:uwum_profile_settings'%}" target="_blank">UWUM profile management</a> to change your user settings.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endwith %}
+{% endblock %}
+
+{% block modals %}
+
+<div id="delete-socialaccount" class="modal">
+               
+        <h4 class="modal-title amber lighten-4">Are you sure?</h4>
+        <div class="modal-content">
+            <b>Before you delete the social account, please read through the consequences of this action:</b>
+            <ul>
+                <li>If you remove this social account will affect the existing social interactions you have created</li>
+                <li></li>
+            </ul>
+            <div class="modal-footer">                
+                <a href="#"" ><button type="button" id="deactivate" class="btn red lighten-2" data-loading-text="Loading...">I'm absolutely sure, delete the social account!</button></a>
+                <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+            </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block libraries %}
+<script src="/static/js/admin.ui.forms.validate.js"></script>
+<script>
+$(document).ready(function(){
+    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+    $('.modal').modal();
+
+  });
+
+  </script>
+
+{% endblock %}
+

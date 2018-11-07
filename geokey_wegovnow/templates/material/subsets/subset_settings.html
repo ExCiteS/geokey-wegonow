@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block bodydata %}
+data-project-id="{{ project.id }}"
+data-project-locked="{{ project.islocked }}"
+data-subset-id="{{ subset.id }}"
+{% endblock %}
+
+{% block title %} | Project: {{ project.name }} - Subset: {{ subset.name }} - Settings{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div class="container">
+        <h3 class="smaller">
+            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+            <a href="{% url 'admin:project_overview' project.id %}">{{ project.name }}</a>
+        </h3>
+
+        {% include 'projects/navigation.html' %}
+    </div>
+</div>
+
+<div class="container">
+    {% include 'snippets/messages.html' %}
+
+    <div class="row">
+        <div class="col s4">
+            {% include 'subsets/subset_navigation.html' %}
+        </div>
+
+        <div class="col s8">
+            <form id="settings" method="POST" action="{% url 'admin:subset_settings' project.id subset.id %}" novalidate>
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-content">
+                         <h3 class="header">Subset settings</h3>
+                        <div class="input-field ">                    
+                            <input type="text" class="form-control input-lg" id="name" name="name" maxlength="100" value="{{ subset.name }}" required />
+                            <label for="name" class="control-label">Name (required)</label>
+                        </div>
+
+                        <div class="input-field ">                    
+                            <textarea class="materialize-textarea" rows="5" id="description" name="description">{{ subset.description }}</textarea>
+                            <label for="description" class="control-label">Description</label>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="right-align">                                
+                                <button type="reset" class="btn btn-large btn-flat">Reset</button>
+                                <button type="submit" class="btn btn-small waves-effect waves-light">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if not project.islocked %}
+  <div class="row">
+    <div class="col s8 offset-m4">
+        <div class="card">
+            <h4 class="card-title red lighten-3 red-text">Be careful!</h4> 
+            <div class="card-content">         
+                    <div class="panel-body becareful">
+                        <div>
+                            <b>Delete subset</b>
+                            <p>Deleting this subset cannot be undone.</p>
+                            <a href="#delete-confirm" class="text-danger" data-toggle="modal" data-target="#delete-confirm">Delete this subset</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+
+{% block modals %}
+
+<div id="delete-confirm" class="modal">
+               
+        <h4 class="modal-title amber lighten-4">Are you sure?</h4>
+        <div class="modal-content">
+            <b>Before you delete the subset, please read through the consequences of this action:</b>
+            <ul>
+                <li>Deleting a subset cannot be undone.</li>
+                <li>Data accessible through this subset will not be deleted.</li>
+            </ul>
+        <div class="modal-footer">                
+            <a href="{% url 'admin:subset_delete' project.id subset.id %}" ><button type="button" id="deactivate" class="btn red lighten-2" data-loading-text="Loading...">I'm absolutely sure, delete the subset!</button></a>
+            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block libraries %}
+<script src="/static/material/js/admin.ui.forms.validate.js"></script>
+<script>
+$(document).ready(function(){
+    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+    $('.modal').modal();
+
+  });
+
+// $(document).ready(function(){
+//   $('.modal-trigger').leanModal();
+// });
+</script>
+{% endblock %}

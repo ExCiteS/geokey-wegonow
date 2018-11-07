@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% load filter_fields %}
+
+{% block bodydata %}
+data-project-id="{{ project.id }}"
+data-project-locked="{{ project.islocked }}"
+data-category-id="{{ category.id }}"
+{% endblock %}
+
+{% block title %} | Project: {{ project.name }} - Category: {{ category.name }} - Settings{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div class="container">
+        <h3 class="smaller">
+            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+            <a href="{% url 'admin:project_overview' project.id %}">{{ project.name }}</a>
+        </h3>
+
+        {% include 'projects/navigation.html' %}
+    </div>
+</div>
+
+<div class="container">
+    {% include 'snippets/messages.html' %}
+
+    <div class="row">
+        <div class="col s4">
+            {% include 'categories/category_navigation.html' %}
+        </div>
+        <div class="col s8">
+           <div class="card">
+                <div class="card-content">
+
+            <form method="POST" action="{% url 'admin:category_settings' category.project.id category.id %}" novalidate>
+                {% csrf_token %}
+                <h4 class="form-title">Category settings</h4>
+                <div class="input-field">
+                    <input type="text" class="validate" id="name" name="name" maxlength="100" value="{{ category.name }}" required />
+                    <label for="name" >Name (required)</label>                    
+                </div>
+
+                <div class="input-field">
+                    <textarea class="materialize-textarea" rows="5" id="description" name="description">{{ category.description }}</textarea>
+                    <label for="description" class="control-label">Description</label>
+                    
+                </div>
+                 <b> Display field</b>                  
+                    {% with fields=category.fields.all %}                    
+                        {% if fields %} 
+                            <select name="display_field">                           
+                            {% for field in fields %}
+                            <option value="{{ field.id }}" {% if category.display_field.id == field.id%}selected{% endif %}>{{ field.name }}</option>
+                            {% endfor %}                         
+                            </select>
+                        {% else %}
+                            <p class="form-control-static">No fields have been added to the category. <a href="{% url 'admin:category_field_create' category.project.id category.id %}">Add a field</a> to make it the display field for this category.</p>
+                        {% endif %}                   
+                    {% endwith %}
+
+                <b> Expiry field </b>           
+
+                    {% with fields=category.fields.all|only_fields:'Date and Time, Date' %}
+                        {% if fields %}
+                         <select name="expiry_field">  
+                            {% for field in fields %}
+                                <option value="{{ field.id }}" {% if category.expiry_field.id == field.id%}selected{% endif %}>{{ field.name }}</option>
+                            {% endfor %}
+                        
+                        {% else %}
+                            <p class="form-control-static">No date fields have been added to the category. <a href="{% url 'admin:category_field_create' category.project.id category.id %}">Add a date field</a> to make it the expiry field for this category.</p>
+                        {% endif %}
+                        </select>
+                    {% endwith %}
+
+                    <b> Default status for new contributions </b>
+                    <p>  
+                      <input type="radio" class="with-gap" name="default_status" value="pending" id="pending" {% if category.default_status == 'pending' %}checked{% endif %}>
+                        <label for="pending">                            
+                            <b>Pending</b><br>A new contribution of this category will not appear on the map immediately. A moderate has to approve new contributions first.
+                        </label>
+                    </p>
+                    <p>
+                        <input type="radio" class="with-gap" name="default_status" value="active" id="active" {% if category.default_status == 'active' %}checked{% endif %}>
+                        <label for="active">
+                            
+                            <b>Active</b><br>A new contribution will appear on the map immediately.
+                        </label>
+                    </p>
+                </div>
+                <div class="card-action">
+                    <div class="right-align">
+                        <div class="right-align">
+                            <button type="reset" class="btn btn-large btn-flat">Reset</button>
+                            <button type="submit" class="btn btn-large waves-effect waves-light">Save</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- EIXTING IN ORIGINAL GEOKEY -->
+
+<!--     <div class="row">
+        <div class="col-sm-8 col-sm-offset-4">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Be careful!</h2>
+                </div>
+
+                <div class="panel-body becareful">
+                    <div class="toggle-active {% if category.status == status_types.inactive %} hidden{% endif %}">
+                        <strong>Make this category inactive</strong>
+                        <p>The category will no longer be available for data contribution.</p>
+                        <a href="#" class="text-danger" data-toggle="modal" data-target="#make-inactive-confirm">Make inactive</a>
+                    </div>
+
+                    <div class="toggle-active {% if category.status == status_types.active %} hidden{% endif %}">
+                        <strong>Make this category active</strong>
+                        <p>The category will be available for data contribution again.</p>
+                        <a href="#" class="text-danger" data-toggle="modal" data-target="#make-active-confirm">Make active</a>
+                    </div>
+
+                    {% if not project.islocked %}
+                        <div>
+                            <strong>Delete category</strong>
+                            <p>Deleting a category cannot be undone.</p>
+                            <a href="#" class="text-danger" data-toggle="modal" data-target="#delete-confirm">Delete this category</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+ -->
+ <!-- NEW MODALS -->
+    <div class="row">
+        <div class="col s8 offset-s4">
+            <div class="card">
+                    <h4 class="card title red lighten-3 red-text">Be careful!</h4>
+                    <div class="card content">
+                    {% if category.status == status_types.active %}
+                         
+                         <strong>Make this category inactive</strong>
+                            <p>The category will no longer be available for data contribution.</p>
+                            <a class="red-text" href="#make-inactive-confirm" data-toggle="modal" data-target="#make-inactive-confirm">Make inactive</a>
+                    {% endif%}
+                    {% if category.status == status_types.inactive %}
+                         <strong>Make this category active</strong>
+                        <p>The category will be available for data contribution again.</p>
+                        <a class="red-text" href="#make-active-confirm" data-toggle="modal" data-target="#make-active-confirm">Make active</a>
+                    {% endif%}
+                    <div class="divider red lighten-3"></div>
+                    {% if not project.islocked %}
+                        <div>
+                            <strong>Delete category</strong>
+                            <p>Deleting a category cannot be undone.</p>
+                            <a href="#delete-confirm" class="red-text" data-toggle="modal" data-target="#delete-confirm">Delete this category</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block modals %}
+
+<!-- NEW MODALS -->       
+
+
+<div id="make-inactive-confirm" class="modal">
+               
+            <h4 class="modal-title amber lighten-4">66Are you sure?</h4>
+        <div class="modal-content">
+            <p><strong>Before you make the category inactive, please read through the consequences of this action:</strong></p>
+
+            <ul>
+                <li>- Users will not be able to contribute new data using this category.</li>
+                <li>- However, data already contributed using this contribution type can be edited and the input will be validated against the category.</li>
+            </ul>
+
+        <div class="modal-footer">                
+            <a href="{% url 'admin:category_settings' category.project.id category.id %}" ><button type="button" id="deactivate" name="confirm" value="{{ status_types.inactive }}" class="btn btn-warning orange lighten-2" data-loading-text="Loading...">Yes, make the category inactive</button></a>
+            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+        </div>
+    </div>
+</div>
+
+<div  id="make-active-confirm" class="modal">
+
+        <div class="modal-title">        
+            <h4 class="modal-title amber lighten-4">Are you sure?</h4>
+        </div>
+        <div class="modal-content">
+            <p><strong>Before you make the category active, please read through the consequences of this action:</strong></p>
+
+            <ul>
+                <li>- The category can be used for data contribution and validation.</li>
+            </ul>
+        <div class="modal-footer">                
+            <a href="{% url 'admin:category_settings' category.project.id category.id  %}" ><button type="button" id="deactivate" name="confirm" value="{{ status_types.active }}" class="btn btn-warning orange lighten-2" data-loading-text="Loading...">Yes, make the category active</button></a>
+            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+        </div>
+    </div>
+</div>
+
+
+<div id="delete-confirm" class="modal">
+        <div class="modal-title">        
+            <h4 class="modal-title amber lighten-4">Are you sure?</h4>
+        </div>
+        <div class="modal-content">
+            <p><strong>Before you delete the category, please read through the consequences of this action:</strong></p>
+
+            <ul>
+                <li>- Users will not be able to contribute new data using this category.</li>
+                {% if num_contributions > 0 %}<li>- All data contributed using this category (<strong>{{ num_contributions }}</strong> in total) will be deleted as well.</li>{% endif %}
+                </ul>
+            </ul>
+
+        <div class="modal-footer">                
+            <a href="{% url 'admin:category_delete' category.project.id category.id %}" ><button  type="button" id="deactivate" class="btn red lighten-2">I'm absolutely sure, delete the category!</button></a>
+            <a  class="modal-action modal-close waves-effect waves-green btn-flat" >Cancel</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block libraries %}
+<script src="/static/js/admin.ui.updater.js"></script>
+<script src="/static/js/admin.ui.forms.validate.js"></script>
+<script src="/static/js/admin.control.ajax.js"></script>
+<script> 
+    $(document).ready(function(){
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+
+    });
+
+  </script>
+
+
+{% endblock %}

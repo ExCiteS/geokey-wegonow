@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %} | Superuser tools - Manage superusers{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div class="container">
+        <h3>Superuser tools</h3>
+        {% include 'superusertools/navigation.html' %}
+    </div>
+</div>
+
+<div class="container">
+    {% include 'snippets/messages.html' %}
+
+    <div class="row">
+        <div id="members" class="col s12">
+            <div class="card">
+                <div class="card-content">
+                    <div class="header">
+                        <div class="row">                    
+                            <div class="col s6">
+                                <h4>Manage superusers</h4>
+                            </div>
+
+                            <div class="col s6 dropdown">
+                                <input type="text" id="find-users" class="right form-control" placeholder="Search for users to add to the superusers group">
+                                <ul class="dropdown-menu type-away">
+                                    <li role="presentation" class="dropdown-header">Click on item to add user</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    {% if superusers|length %}
+                        <ul class="collection">
+                            {% for user in superusers %}
+                                <li class="collection-item">
+                                    {{ user.display_name }}
+                                    {% if superusers|length > 1 %}<a class="text-danger remove" data-user-id="{{ user.id }}" href="#"><small>remove</small></a>{% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No superusers were found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block libraries %}
+<script>
+url = 'superusertools/';
+</script>
+
+<script src="/static/lib/handlebars/handlebars.js"></script>
+<script src="/static/js/templates.js"></script>
+<script src="/static/js/admin.control.ajax.js"></script>
+<script src="/static/js/admin.ui.usergroup.users.js"></script>
+{% endblock %}

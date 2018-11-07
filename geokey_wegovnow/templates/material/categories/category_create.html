@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block bodydata %}
+data-project-id="{{ project.id }}"
+data-project-locked="{{ project.islocked }}"
+{% endblock %}
+
+{% block title %} | Project: {{ project.name }} - Create new category{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div class="container">
+        <h3 class="smaller">
+            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+            <a href="{% url 'admin:project_overview' project.id %}">{{ project.name }}</a>
+        </h3>
+
+        {% include 'projects/navigation.html' %}
+    </div>
+</div>
+
+<div class="container">
+    {% include 'snippets/messages.html' %}
+    <div class="row">
+        <div class="col m8 offset-m2">
+            <div class="card">
+                <form  method="POST" action="{% url 'admin:category_create' project.id %}" novalidate>
+                    {% csrf_token %}
+                    <div class="card-content">
+                        <h4 class="form-title">
+                            <span>Create new category</span>
+                            {% if project.islocked %}<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>{% endif %}
+                            
+                        </h4>
+
+                        <div class="row">
+                            <div class="col s6 input-field required">
+                                <input type="text" id="name" name="name" maxlength="100" required />
+                                <label for="name">Name (required)</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col s12 input-field">
+                                <textarea rows="5" id="description" name="description" class="materialize-textarea"></textarea>
+                                <label for="description">Description</label>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <b>Default status for new contributions</b>
+                                <p>
+                                    <input id="pending" type="radio" class="with-gap" name="default_status" value="pending" checked />
+                                      <label for="pending"> <b>Pending</b><br>A new contribution of this category will not appear on the map immediately. A moderate has to approve new contributions first.
+                                    </label>
+                                <p>
+                                <input id="active" type="radio" class="with-gap" name="default_status" value="active" />
+                                <label for="active">                                
+                                    <b>Active</b><br>A new contribution will appear on the map immediately.
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="card-action">
+                            <div class="right-align">
+                                <a role="button" href="{% url 'admin:category_list' project.id %}" class="btn btn-small btn-flat">Cancel</a>
+                                <button type="submit" class="btn btn-small waves-effect waves-light">Create category</button>                                
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block libraries %}
+<script src="/static/js/admin.ui.forms.validate.js"></script>
+{% endblock %}
